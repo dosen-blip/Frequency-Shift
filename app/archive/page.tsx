@@ -14,7 +14,7 @@ export default function ArchiveIndexPage() {
       <PageHeader
         eyebrow="Afterimage"
         title="Archive"
-        intro="Past events, preserved as visual records. Photography is being edited; the first archive structure is now in place."
+        intro="Eight past events, preserved as visual records. Dates, stories, and photography will be added as the archive is assembled."
       />
       <div className="archive-grid">
         {archives.map((entry, index) => (

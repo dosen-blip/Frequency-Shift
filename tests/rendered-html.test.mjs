@@ -41,8 +41,8 @@ test("renders the primary route scaffold", async () => {
   const routes = [
     ["/events", /Upcoming Frequency Shift events/],
     ["/events/next-frequency-shift", /Draft content record/],
-    ["/archive", /Frequency Fest Vol\. 1/],
-    ["/archive/frequency-fest-vol-1", /Photography placeholders \/ final edit pending/],
+    ["/archive", /Frequency Shift 001/],
+    ["/archive/frequency-shift-001", /Photography placeholders \/ final edit pending/],
     ["/about", /Why Frequency Shift exists/],
     ["/contact", /Contact Frequency Shift/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
@@ -53,5 +53,24 @@ test("renders the primary route scaffold", async () => {
     const response = await render(path);
     assert.equal(response.status, 200, path);
     assert.match(await response.text(), expected, path);
+  }
+});
+
+test("renders every requested archive slot", async () => {
+  const archiveRoutes = [
+    "/archive/frequency-shift-001",
+    "/archive/frequency-shift-002",
+    "/archive/frequency-shift-003",
+    "/archive/frequency-shift-004",
+    "/archive/frequency-shift-005",
+    "/archive/world-cup",
+    "/archive/solstice",
+    "/archive/dopamine",
+  ];
+
+  for (const path of archiveRoutes) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    assert.match(await response.text(), /12(?:<!-- -->)? image slots/i, path);
   }
 });
