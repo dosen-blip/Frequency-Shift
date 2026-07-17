@@ -29,8 +29,10 @@ test("server-renders the Frequency Shift homepage", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
-  assert.match(html, /A signal for people who move differently/);
+  assert.match(html, /Underground dance music rituals/);
   assert.match(html, /Next Frequency Shift/);
+  assert.match(html, /hero-crowd\.webp/);
+  assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });

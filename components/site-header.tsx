@@ -5,7 +5,14 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <Link className="wordmark" href="/" aria-label="Frequency Shift home">
-        Frequency <span>Shift</span>
+        <img
+          className="wordmark__mark"
+          src="/media/figma/fs-logo.png"
+          alt=""
+          width="443"
+          height="466"
+        />
+        <span>Frequency Shift</span>
       </Link>
       <nav className="site-nav" aria-label="Primary navigation">
         {primaryNavigation.map((item) => (
@@ -14,7 +21,10 @@ export function SiteHeader() {
           </Link>
         ))}
       </nav>
-      <p className="header-location">Ottawa, Canada</p>
+      <Link className="header-cta" href="/events/next-frequency-shift">
+        <img src="/media/figma/icon-ticket.svg" alt="" width="18" height="18" />
+        Next up
+      </Link>
       <details className="mobile-nav">
         <summary>Menu</summary>
         <nav className="mobile-nav__panel" aria-label="Mobile navigation">

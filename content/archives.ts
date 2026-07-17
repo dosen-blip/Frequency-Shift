@@ -1,4 +1,5 @@
 import type { ArchiveRecord } from "./types";
+import { momentGallery } from "./media";
 
 export const archives: ArchiveRecord[] = [
   {
@@ -12,7 +13,7 @@ export const archives: ArchiveRecord[] = [
       "The intended gallery is selective and responsive. It should privilege a concise edit over loading every full-resolution photograph at once.",
     ],
     eventSlug: null,
-    gallery: [],
+    gallery: [...momentGallery],
     draft: true,
   },
 ];

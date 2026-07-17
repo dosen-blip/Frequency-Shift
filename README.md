@@ -40,6 +40,8 @@ Draft records are explicitly marked and must not be treated as public announceme
 
 Global tokens are in `app/globals.css`: colour, type roles, spacing, page width, and motion preferences. The initial visual shell is deliberately directional but restrained; it establishes hierarchy and responsive behaviour without locking the redesign into a final art direction.
 
+The first visual pass is based on Figma frame `mdhZYjhB9Yj0ttf6tARaak / 6:2`. Exported photography, the FS mark, and utility icons live in `public/media/figma/`. Large source images were converted to metadata-free WebP files; the Figma file remains the source for future high-resolution exports.
+
 ## Media and release rules
 
 - Follow `public/media/README.md` for image format, widths, alt text, and rights checks.

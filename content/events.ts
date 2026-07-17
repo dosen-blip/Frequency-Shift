@@ -17,10 +17,12 @@ export const events: EventRecord[] = [
     city: "Ottawa, Canada",
     status: "announced",
     ticketUrl: null,
+    genre: "Tech house / techno",
     artistSlugs: [],
     featured: true,
     draft: true,
-    coverImage: null,
+    coverImage: "/media/figma/event-tech.webp",
+    coverAlt: "A Frequency Shift crowd dancing beneath red laser beams.",
   },
 ];
 

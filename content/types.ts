@@ -30,10 +30,12 @@ export type EventRecord = {
   city: string;
   status: EventStatus;
   ticketUrl: string | null;
+  genre: string | null;
   artistSlugs: string[];
   featured: boolean;
   draft: boolean;
   coverImage: string | null;
+  coverAlt: string;
 };
 
 export type ArtistRecord = {

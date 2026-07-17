@@ -31,9 +31,23 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          {entry.gallery.length === 0 ? (
+          {entry.gallery.length ? (
+            <div className="archive-gallery" aria-label={`${entry.title} gallery`}>
+              {entry.gallery.map((image) => (
+                <figure key={image.src}>
+                  <img
+                    src={image.src}
+                    alt={image.alt}
+                    width={image.width}
+                    height={image.height}
+                    loading="lazy"
+                  />
+                </figure>
+              ))}
+            </div>
+          ) : (
             <p className="empty-state">Selected event media will live here after the final edit and rights check.</p>
-          ) : null}
+          )}
         </div>
         <aside>
           <p className="notice">Draft archive record — copy, credits, and media remain to be approved.</p>

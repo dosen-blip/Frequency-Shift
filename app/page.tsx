@@ -3,6 +3,7 @@ import { EventCard } from "@/components/event-card";
 import { RouteHero } from "@/components/route-hero";
 import { archives } from "@/content/archives";
 import { events } from "@/content/events";
+import { momentGallery } from "@/content/media";
 
 export default function HomePage() {
   const featuredEvent = events.find((event) => event.featured);
@@ -11,63 +12,84 @@ export default function HomePage() {
   return (
     <>
       <RouteHero
-        eyebrow="Independent dance culture / Ottawa"
-        title="A signal for people who move differently."
-        body="Frequency Shift is an event platform for forward-facing electronic music, intentional rooms, and the community that forms around them."
+        eyebrow="Ottawa / independent dance culture"
+        title="Frequency Shift"
+        body="Underground dance music rituals"
+        detail="Raw energy / pure frequency"
+        imageSrc="/media/figma/hero-crowd.webp"
         actions={
-          <>
-            <Link className="button button--solid" href="/events">
-              See what’s next
-            </Link>
-            <Link className="button button--ghost" href="/archive">
-              Enter the archive
-            </Link>
-          </>
+          <Link className="button button--light" href="/events">
+            See what’s next
+          </Link>
         }
       />
 
-      <section className="section section--rule" aria-labelledby="next-event-title">
+      <section className="section signal-section" aria-labelledby="next-event-title">
         <div className="section-heading">
-          <p className="kicker">Current transmission</p>
-          <h2 id="next-event-title">Next event</h2>
+          <div>
+            <p className="kicker">Upcoming transmission</p>
+            <h2 id="next-event-title">
+              Next <span className="gradient-text">up</span>
+            </h2>
+          </div>
+          <Link className="button button--ghost" href="/events">
+            View all events
+          </Link>
         </div>
-        {featuredEvent ? (
-          <EventCard event={featuredEvent} />
-        ) : (
-          <p className="empty-state">The next date is being tuned. Check back soon.</p>
-        )}
+        <div className="event-grid">
+          {featuredEvent ? (
+            <EventCard event={featuredEvent} />
+          ) : (
+            <p className="empty-state">The next date is being tuned. Check back soon.</p>
+          )}
+        </div>
       </section>
 
-      <section className="split-section section--rule" aria-labelledby="manifesto-title">
+      <section className="memory-section" aria-labelledby="memory-title">
+        <div className="section-heading">
+          <div>
+            <p className="kicker">Moments from our last events</p>
+            <h2 id="memory-title">
+              In case you <span className="gradient-text">missed it</span>
+            </h2>
+          </div>
+          {featuredArchive ? (
+            <Link className="button button--ghost" href={`/archive/${featuredArchive.slug}`}>
+              Open the archive
+            </Link>
+          ) : null}
+        </div>
+        <div className="memory-strip" aria-label="Selected event moments">
+          {momentGallery.slice(0, 5).map((image) => (
+            <figure key={image.src}>
+              <img
+                src={image.src}
+                alt={image.alt}
+                width={image.width}
+                height={image.height}
+                loading="lazy"
+              />
+            </figure>
+          ))}
+        </div>
+      </section>
+
+      <section className="split-section about-teaser" aria-labelledby="manifesto-title">
         <div>
           <p className="kicker">Our frequency</p>
           <h2 id="manifesto-title">Built around the room, not the algorithm.</h2>
         </div>
         <div className="prose prose--large">
           <p>
-            The redesign treats every event as a living story: announcement,
-            lineup, ticket release, event day, and archive. The experience stays
-            fast and legible while the identity can become stranger, warmer, and
-            more expressive over time.
+            Every event becomes a living story: announcement, lineup, ticket
+            release, event day, and archive. Fast, legible, and expressive at
+            every stage.
           </p>
           <Link className="text-link" href="/about">
             Read our approach <span aria-hidden="true">↗</span>
           </Link>
         </div>
       </section>
-
-      {featuredArchive ? (
-        <section className="archive-teaser section--rule" aria-labelledby="archive-title">
-          <div>
-            <p className="kicker">Recently documented</p>
-            <h2 id="archive-title">{featuredArchive.title}</h2>
-            <p>{featuredArchive.summary}</p>
-          </div>
-          <Link className="button button--ghost" href={`/archive/${featuredArchive.slug}`}>
-            View the recap
-          </Link>
-        </section>
-      ) : null}
     </>
   );
 }

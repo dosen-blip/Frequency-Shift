@@ -16,7 +16,7 @@ export default function EventsPage() {
         title="Events"
         intro="One authoritative place for dates, lineups, ticket state, venue information, and event-day updates."
       />
-      <section className="stack" aria-label="Upcoming events">
+      <section className="event-grid" aria-label="Upcoming events">
         {events.length ? (
           events.map((event) => <EventCard event={event} key={event.slug} />)
         ) : (
