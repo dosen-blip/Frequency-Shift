@@ -41,8 +41,8 @@ test("renders the primary route scaffold", async () => {
   const routes = [
     ["/events", /Upcoming Frequency Shift events/],
     ["/events/next-frequency-shift", /Draft content record/],
-    ["/archive", /event recaps, images, credits, and history/i],
-    ["/archive/frequency-fest-vol-1", /Draft archive record/],
+    ["/archive", /Frequency Fest Vol\. 1/],
+    ["/archive/frequency-fest-vol-1", /Photography placeholders \/ final edit pending/],
     ["/about", /Why Frequency Shift exists/],
     ["/contact", /Contact Frequency Shift/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],

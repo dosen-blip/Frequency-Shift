@@ -51,9 +51,11 @@ export type ArchiveRecord = {
   slug: string;
   title: string;
   dateLabel: string;
+  locationLabel: string | null;
   summary: string;
   story: string[];
   eventSlug: string | null;
   gallery: Array<{ src: string; alt: string; width: number; height: number }>;
+  gallerySlotCount: number;
   draft: boolean;
 };

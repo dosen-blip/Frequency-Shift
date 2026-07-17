@@ -1,19 +1,20 @@
 import type { ArchiveRecord } from "./types";
-import { momentGallery } from "./media";
 
 export const archives: ArchiveRecord[] = [
   {
     slug: "frequency-fest-vol-1",
     title: "Frequency Fest Vol. 1",
-    dateLabel: "2026",
+    dateLabel: "July 2026",
+    locationLabel: "Ottawa, Canada",
     summary:
-      "A recap shell for the first Frequency Fest: editorial context, credits, selected media, and links back to participating artists.",
+      "The first Frequency Fest, preserved as an event record with space for the final photo edit, credits, and story.",
     story: [
-      "This archive entry establishes the publishing structure for past events. Final copy, credits, and media can be added without rebuilding the page layout.",
-      "The intended gallery is selective and responsive. It should privilege a concise edit over loading every full-resolution photograph at once.",
+      "Frequency Fest Vol. 1 is the first completed event album contained in the original Frequency Shift frames. This page preserves its title and date while the final editorial recap is being assembled.",
+      "The image sequence below is intentionally held as a set of placeholders. Photography, credits, and captions can be added to this record later without changing the archive layout.",
     ],
     eventSlug: null,
-    gallery: [...momentGallery],
+    gallery: [],
+    gallerySlotCount: 12,
     draft: true,
   },
 ];

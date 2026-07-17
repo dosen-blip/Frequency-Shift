@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { ArchiveCard } from "@/components/archive-card";
 import { PageHeader } from "@/components/page-header";
 import { archives } from "@/content/archives";
 
@@ -14,19 +14,13 @@ export default function ArchiveIndexPage() {
       <PageHeader
         eyebrow="Afterimage"
         title="Archive"
-        intro="The archive turns past events into durable editorial stories instead of letting them disappear beneath the next announcement."
+        intro="Past events, preserved as visual records. Photography is being edited; the first archive structure is now in place."
       />
-      <ol className="archive-list">
-        {archives.map((entry) => (
-          <li key={entry.slug}>
-            <Link href={`/archive/${entry.slug}`}>
-              <time>{entry.dateLabel}</time>
-              <strong>{entry.title}</strong>
-              <span aria-hidden="true">↗</span>
-            </Link>
-          </li>
+      <div className="archive-grid">
+        {archives.map((entry, index) => (
+          <ArchiveCard key={entry.slug} entry={entry} index={index} />
         ))}
-      </ol>
+      </div>
     </div>
   );
 }
