@@ -140,9 +140,9 @@ select {
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
+  transition: filter var(--motion-control) var(--motion-ease);
 }
 
-.wordmark::after,
 .site-nav a::after,
 .footer-links a::after,
 .text-link::after {
@@ -158,9 +158,6 @@ select {
   transition: transform var(--motion-control) var(--motion-ease);
 }
 
-.wordmark:hover::after,
-.wordmark:focus-visible::after,
-.wordmark.is-active::after,
 .site-nav a:hover::after,
 .site-nav a:focus-visible::after,
 .site-nav a.is-active::after,
@@ -169,6 +166,13 @@ select {
 .text-link:hover::after,
 .text-link:focus-visible::after {
   transform: scaleX(1);
+}
+
+.wordmark:hover,
+.wordmark:focus-visible {
+  filter:
+    drop-shadow(0 0 0.35rem rgba(255, 92, 194, 0.32))
+    drop-shadow(0 0 0.8rem rgba(225, 42, 251, 0.18));
 }
 
 .gradient-text {
@@ -188,7 +192,6 @@ select {
   width: 2rem;
   height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 0 0.45rem rgba(225, 42, 251, 0.45));
   transition: width var(--motion-control) var(--motion-ease);
 }
 
@@ -2200,6 +2203,7 @@ select {
 }
 
 @media (hover: none) and (pointer: coarse) {
+  .wordmark:hover:not(:focus-visible),
   .button:hover,
   .header-cta:hover,
   .archive-card a:hover .archive-card__visual,
