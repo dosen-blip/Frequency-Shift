@@ -29,6 +29,10 @@ export function SiteHeader() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const isMenuOpen = openMenuPath === pathname;
 
+  useEffect(() => {
+    document.documentElement.classList.add("nav-enhanced");
+  }, []);
+
   const closeMenu = useCallback((restoreFocus = false) => {
     setOpenMenuPath(null);
     if (restoreFocus) window.requestAnimationFrame(() => menuButtonRef.current?.focus());
@@ -77,16 +81,16 @@ export function SiteHeader() {
       <Link
         className={`wordmark${pathname === "/" ? " is-active" : ""}`}
         href="/"
-        prefetch={false}
         aria-label="Frequency Shift home"
         aria-current={pathname === "/" ? "page" : undefined}
       >
         <img
           className="wordmark__mark"
-          src="/media/figma/fs-logo.png"
+          src="/media/figma/fs-logo-80.webp"
           alt=""
           width="443"
           height="466"
+          decoding="async"
         />
         <span>Frequency Shift</span>
       </Link>
@@ -95,7 +99,6 @@ export function SiteHeader() {
           <Link
             className={isRouteActive(pathname, item.href) ? "is-active" : undefined}
             href={item.href}
-            prefetch={false}
             key={item.href}
             aria-current={isRouteActive(pathname, item.href) ? "page" : undefined}
           >
@@ -106,10 +109,15 @@ export function SiteHeader() {
       <Link
         className={`header-cta${latestActive ? " is-active" : ""}`}
         href="/archive/frequency-fest"
-        prefetch={false}
         aria-current={latestActive ? "page" : undefined}
       >
-        <img src="/media/figma/icon-ticket.svg" alt="" width="18" height="18" />
+        <img
+          src="/media/figma/icon-ticket.svg"
+          alt=""
+          width="18"
+          height="18"
+          decoding="async"
+        />
         Latest recap
       </Link>
       <div className={`mobile-nav${isMenuOpen ? " is-open" : ""}`}>
@@ -143,7 +151,6 @@ export function SiteHeader() {
               <Link
                 className={active ? "is-active" : undefined}
                 href={item.href}
-                prefetch={false}
                 key={item.href}
                 aria-current={active ? "page" : undefined}
                 tabIndex={isMenuOpen ? 0 : -1}
@@ -156,6 +163,25 @@ export function SiteHeader() {
           })}
         </nav>
       </div>
+      <details className="mobile-nav-fallback">
+        <summary>Menu</summary>
+        <nav className="mobile-nav-fallback__panel" aria-label="Mobile navigation fallback">
+          {primaryNavigation.map((item) => {
+            const active = isRouteActive(pathname, item.href);
+            return (
+              <Link
+                className={active ? "is-active" : undefined}
+                href={item.href}
+                key={item.href}
+                aria-current={active ? "page" : undefined}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+          <Link href="/archive/frequency-fest">Latest recap</Link>
+        </nav>
+      </details>
     </header>
   );
 }

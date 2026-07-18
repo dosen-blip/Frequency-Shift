@@ -7,17 +7,28 @@ type RouteHeroProps = {
   body: string;
   detail?: string;
   imageSrc?: string;
+  imageSrcSet?: string;
   actions?: ReactNode;
 };
 
-export function RouteHero({ eyebrow, title, titleLines, body, detail, imageSrc, actions }: RouteHeroProps) {
+export function RouteHero({ eyebrow, title, titleLines, body, detail, imageSrc, imageSrcSet, actions }: RouteHeroProps) {
   const lines = titleLines?.length ? titleLines : [title];
 
   return (
     <section className="route-hero">
       {imageSrc ? (
         <div className="route-hero__media" aria-hidden="true">
-          <img src={imageSrc} alt="" width="2400" height="1600" />
+          <img
+            src={imageSrc}
+            srcSet={imageSrcSet}
+            sizes="100vw"
+            alt=""
+            width="2400"
+            height="1600"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
         </div>
       ) : null}
       <div className="route-hero__lead">

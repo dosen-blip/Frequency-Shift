@@ -49,6 +49,13 @@ export default defineConfig(async () => {
 
   return {
     base: publicBase,
+    build: {
+      // Keep the client executable on older iPhones and embedded WebViews.
+      // The explicit CSS target also preserves legacy max-width media queries
+      // instead of emitting Media Queries Level 4 range syntax.
+      target: "safari13",
+      cssTarget: "safari13",
+    },
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,

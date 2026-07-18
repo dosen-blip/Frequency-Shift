@@ -71,13 +71,23 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
                   data-reveal="media"
                   style={{ "--reveal-delay": `${Math.min(index, 3) * 70}ms` } as React.CSSProperties}
                 >
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    width={image.width}
-                    height={image.height}
-                    loading="lazy"
-                  />
+                  <picture>
+                    <source
+                      media="(max-width: 760px)"
+                      srcSet={image.mobileSrcSet}
+                      sizes="calc(100vw - 2rem)"
+                    />
+                    <img
+                      src={image.src}
+                      srcSet={image.srcSet}
+                      sizes="(max-width: 1280px) 48vw, 600px"
+                      alt={image.alt}
+                      width={image.width}
+                      height={image.height}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
                 </figure>
               ))}
             </section>
@@ -126,7 +136,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
               </dd>
             </div>
           </dl>
-          <Link className="text-link" href="/archive" prefetch={false}>
+          <Link className="text-link" href="/archive">
             Back to archive
           </Link>
         </aside>

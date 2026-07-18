@@ -12,7 +12,7 @@ export default function NotFoundPage() {
         <h1 className="detail-title" data-reveal="clip">Nothing here.</h1>
         <div className="prose" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <p>The page may have moved, expired, or never existed.</p>
-          <Link className="button button--solid" href="/" prefetch={false}>
+          <Link className="button button--solid" href="/">
             Return home
           </Link>
         </div>

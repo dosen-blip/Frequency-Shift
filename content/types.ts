@@ -57,7 +57,14 @@ export type ArchiveRecord = {
   summary: string;
   story: string[];
   eventSlug: string | null;
-  gallery: Array<{ src: string; alt: string; width: number; height: number }>;
+  gallery: Array<{
+    src: string;
+    srcSet?: string;
+    mobileSrcSet?: string;
+    alt: string;
+    width: number;
+    height: number;
+  }>;
   gallerySlotCount: number;
   coverImageIndex: number;
   featured?: boolean;

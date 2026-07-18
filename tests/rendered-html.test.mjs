@@ -37,7 +37,7 @@ test("server-renders the Frequency Shift homepage", async () => {
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
   assert.match(html, /Raw energy\. Pure frequency\./);
   assert.match(html, /next date is being tuned/i);
-  assert.match(html, /hero-crowd\.webp/);
+  assert.match(html, /hero-crowd-960\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
@@ -48,7 +48,7 @@ test("renders the primary route scaffold", async () => {
     ["/events", /Upcoming Frequency Shift events/],
     ["/events/next-frequency-shift", /Draft content record/],
     ["/archive", /Frequency Shift 001/],
-    ["/archive/frequency-shift-001", /frequency-shift-001-01\.jpg/],
+    ["/archive/frequency-shift-001", /frequency-shift-001-01\.webp/],
     ["/about", /Not just another night out/],
     ["/contact", /Contact Frequency Shift/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
@@ -86,18 +86,18 @@ test("uses event photography for completed archive cards and galleries", async (
   const indexResponse = await render("/archive");
   const indexHtml = await indexResponse.text();
   assert.match(indexHtml, /archive-card archive-card--featured/);
-  assert.match(indexHtml, /frequency-fest-01\.jpg/);
+  assert.match(indexHtml, /frequency-fest-01\.webp/);
   assert.ok(
     indexHtml.indexOf("Frequency Fest Vol. 1") < indexHtml.indexOf("Frequency Shift 001"),
   );
-  assert.match(indexHtml, /frequency-shift-001-01\.jpg/);
-  assert.match(indexHtml, /world-cup-01\.jpg/);
-  assert.match(indexHtml, /dopamine-01\.jpg/);
+  assert.match(indexHtml, /frequency-shift-001-01\.webp/);
+  assert.match(indexHtml, /world-cup-01\.webp/);
+  assert.match(indexHtml, /dopamine-01\.webp/);
   assert.match(indexHtml, /two-stage mini festival at Club SAW/i);
 
   const photoArchive = await render("/archive/frequency-shift-003");
   const photoHtml = await photoArchive.text();
-  assert.match(photoHtml, /frequency-shift-003-16\.jpg/);
+  assert.match(photoHtml, /frequency-shift-003-16\.webp/);
   assert.doesNotMatch(photoHtml, /Photography placeholders \/ final edit pending/);
 
   const pendingArchive = await render("/archive/solstice");
@@ -146,7 +146,7 @@ test("keeps the internal draft event out of the public sitemap", async () => {
   assert.match(sitemap, /archive\/frequency-fest/);
 });
 
-test("ships every declared archive photograph as a valid JPEG asset", async () => {
+test("ships every declared archive photograph as responsive WebP assets", async () => {
   const expectedCounts = {
     "frequency-fest": 15,
     "frequency-shift-001": 20,
@@ -158,15 +158,23 @@ test("ships every declared archive photograph as a valid JPEG asset", async () =
 
   for (const [slug, count] of Object.entries(expectedCounts)) {
     const directory = `${builtArchiveRoot}${slug}`;
-    const filenames = (await readdir(directory)).toSorted();
+    const filenames = (await readdir(directory))
+      .filter((filename) => /-\d{2}\.webp$/.test(filename))
+      .toSorted();
     assert.equal(filenames.length, count, slug);
 
     for (let index = 1; index <= count; index += 1) {
-      const filename = `${slug}-${String(index).padStart(2, "0")}.jpg`;
+      const filename = `${slug}-${String(index).padStart(2, "0")}.webp`;
       assert.equal(filenames[index - 1], filename, `${slug} sequence`);
       const image = await readFile(`${directory}/${filename}`);
-      assert.ok(image.length > 3, filename);
-      assert.deepEqual([...image.subarray(0, 3)], [0xff, 0xd8, 0xff], filename);
+      assert.ok(image.length > 12, filename);
+      assert.equal(image.subarray(0, 4).toString("ascii"), "RIFF", filename);
+      assert.equal(image.subarray(8, 12).toString("ascii"), "WEBP", filename);
+
+      const mobileImage = await readFile(
+        `${directory}/${slug}-${String(index).padStart(2, "0")}-480.webp`,
+      );
+      assert.equal(mobileImage.subarray(8, 12).toString("ascii"), "WEBP", filename);
     }
   }
 });

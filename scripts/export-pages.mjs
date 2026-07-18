@@ -20,34 +20,38 @@ const pagesOrigin = (process.env.PAGES_ORIGIN ?? "https://dosen-blip.github.io")
   "",
 );
 
-const navigationFallback = `
-<script data-static-pages-navigation>
-document.addEventListener("click", function (event) {
-  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  if (!(event.target instanceof Element)) return;
-  const anchor = event.target.closest("a[href]");
-  if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
-  const url = new URL(anchor.href, window.location.href);
-  if (url.origin !== window.location.origin) return;
-  const basePath = ${JSON.stringify(basePath)};
-  if (basePath && url.pathname !== basePath && !url.pathname.startsWith(basePath + "/")) {
-    url.pathname = basePath + (url.pathname.startsWith("/") ? url.pathname : "/" + url.pathname);
-  }
-  const lastSegment = url.pathname.split("/").filter(Boolean).at(-1) || "";
-  if (!url.pathname.endsWith("/") && !lastSegment.includes(".")) url.pathname += "/";
-  anchor.href = url.href;
-  event.stopImmediatePropagation();
-}, true);
-</script>`;
-
 function prefixSrcset(value) {
   return value
     .split(",")
     .map((candidate) => {
       const match = candidate.match(/^(\s*)\/(?!\/)(.*)$/s);
-      return match ? `${match[1]}${basePath}/${match[2]}` : candidate;
+      if (!match) return candidate;
+      const baseSegment = basePath.slice(1);
+      if (
+        baseSegment &&
+        (match[2] === baseSegment || match[2].startsWith(`${baseSegment}/`))
+      ) {
+        return candidate;
+      }
+      return `${match[1]}${basePath}/${match[2]}`;
     })
     .join(",");
+}
+
+function stripClientRuntime(html) {
+  return html
+    .replace(
+      /<link\b(?=[^>]*\brel=["']modulepreload["'])[^>]*>/gi,
+      "",
+    )
+    .replace(
+      /<script\b[^>]*\bid=["']_R_["'][^>]*>[\s\S]*?<\/script>/gi,
+      "",
+    )
+    .replace(
+      /<script\b[^>]*>\s*self\.__VINEXT_[\s\S]*?<\/script>/gi,
+      "",
+    );
 }
 
 function addTrailingSlashesToRouteHrefs(html) {
@@ -66,7 +70,7 @@ function addTrailingSlashesToRouteHrefs(html) {
 }
 
 function rewriteHtml(html) {
-  let rewritten = html.replace(
+  let rewritten = stripClientRuntime(html).replace(
     /(\b(?:href|src|action|content|poster|data-rsc-css-href)=["'])\/(?!\/)/gi,
     (match, opening, offset, source) => {
       const remainder = source.slice(offset + match.length);
@@ -106,7 +110,10 @@ function rewriteHtml(html) {
 
   rewritten = rewritten.replace(/url\(\/(?!\/)/gi, `url(${basePath}/`);
   rewritten = addTrailingSlashesToRouteHrefs(rewritten);
-  return rewritten.replace("</head>", `${navigationFallback}\n</head>`);
+  return rewritten.replace(
+    "</body>",
+    `<script src="${basePath}/static-pages.js" defer data-static-pages-runtime></script></body>`,
+  );
 }
 
 function escapeXml(value) {
@@ -199,7 +206,7 @@ const deployedSitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${routes
   .map((route) => {
-    const suffix = route === "/" ? "/" : route;
+    const suffix = route === "/" ? "/" : `${route.replace(/\/+$/, "")}/`;
     return `  <url><loc>${escapeXml(`${pagesOrigin}${basePath}${suffix}`)}</loc></url>`;
   })
   .join("\n")}

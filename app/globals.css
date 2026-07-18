@@ -113,8 +113,7 @@ select {
   min-height: 4.5rem;
   padding-inline: var(--page-pad);
   border-bottom: 1px solid var(--line);
-  background: rgba(3, 3, 4, 0.78);
-  backdrop-filter: blur(18px);
+  background: rgba(3, 3, 4, 0.96);
   align-items: center;
   transition:
     min-height var(--motion-control) var(--motion-ease),
@@ -175,9 +174,18 @@ select {
 .wordmark span,
 .footer-brand strong,
 .gradient-text {
-  background: linear-gradient(90deg, var(--signal), var(--signal-mid) 52%, var(--cyan));
-  background-clip: text;
-  color: transparent;
+  color: var(--signal-mid);
+}
+
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .wordmark span,
+  .footer-brand strong,
+  .gradient-text {
+    background: linear-gradient(90deg, var(--signal), var(--signal-mid) 52%, var(--cyan));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 .wordmark__mark {
@@ -313,6 +321,10 @@ select {
   justify-self: end;
 }
 
+.mobile-nav-fallback {
+  display: none;
+}
+
 .mobile-nav__toggle {
   appearance: none;
   border: 0;
@@ -414,7 +426,7 @@ select {
 .route-hero {
   position: relative;
   display: flex;
-  min-height: min(72rem, calc(100svh - 4.5rem));
+  min-height: min(72rem, calc(100vh - 4.5rem));
   padding: var(--space-7) var(--content-pad);
   overflow: hidden;
   align-items: center;
@@ -1075,7 +1087,7 @@ select {
     radial-gradient(circle at 72% 28%, rgba(225, 42, 251, 0.42), transparent 18%),
     radial-gradient(circle at 18% 68%, rgba(0, 184, 219, 0.18), transparent 28%),
     #110914;
-  transition: transform 500ms ease, filter 500ms ease;
+  transition: transform 500ms ease;
 }
 
 .archive-card__visual--photo {
@@ -1086,7 +1098,13 @@ select {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.88) contrast(1.06) brightness(0.82);
+  opacity: 0.86;
+}
+
+.archive-card__visual--photo picture {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .archive-card__feature-mosaic {
@@ -1100,6 +1118,11 @@ select {
 
 .archive-card__feature-mosaic img {
   min-width: 0;
+}
+
+.archive-card__feature-mosaic picture {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .archive-card__visual::before,
@@ -1140,7 +1163,6 @@ select {
 
 .archive-card a:hover .archive-card__visual,
 .archive-card a:focus-visible .archive-card__visual {
-  filter: saturate(1.35) brightness(1.12);
   transform: scale(1.025);
 }
 
@@ -1409,6 +1431,10 @@ select {
   break-inside: avoid;
 }
 
+.archive-gallery picture {
+  display: block;
+}
+
 .archive-gallery img {
   height: auto;
 }
@@ -1570,13 +1596,16 @@ select {
   transform: translateY(14px);
   transition:
     opacity var(--reveal-duration) ease var(--reveal-delay),
-    transform var(--reveal-duration) var(--motion-ease) var(--reveal-delay),
-    clip-path var(--reveal-duration) var(--motion-ease) var(--reveal-delay);
+    transform var(--reveal-duration) var(--motion-ease) var(--reveal-delay);
 }
 
 .motion-enabled [data-reveal="clip"].is-reveal-pending {
   --reveal-duration: 620ms;
   clip-path: inset(0 0 100% 0);
+  transition:
+    opacity var(--reveal-duration) ease var(--reveal-delay),
+    transform var(--reveal-duration) var(--motion-ease) var(--reveal-delay),
+    clip-path var(--reveal-duration) var(--motion-ease) var(--reveal-delay);
 }
 
 .motion-enabled [data-reveal="card"].is-reveal-pending {
@@ -1624,8 +1653,75 @@ select {
     display: none;
   }
 
-  .mobile-nav {
+  .mobile-nav-fallback {
     display: block;
+    justify-self: end;
+  }
+
+  .nav-enhanced .mobile-nav {
+    display: block;
+  }
+
+  .nav-enhanced .mobile-nav-fallback {
+    display: none;
+  }
+
+  .mobile-nav-fallback summary {
+    display: inline-flex;
+    min-width: 3.5rem;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    list-style: none;
+    text-transform: uppercase;
+  }
+
+  .mobile-nav-fallback summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav-fallback[open] summary {
+    border-color: white;
+    background: white;
+    color: black;
+  }
+
+  .mobile-nav-fallback__panel {
+    position: fixed;
+    top: 4.75rem;
+    right: max(var(--page-pad), env(safe-area-inset-right));
+    left: max(var(--page-pad), env(safe-area-inset-left));
+    z-index: 23;
+    display: grid;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 1rem;
+    background: #09090b;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.5);
+  }
+
+  .mobile-nav-fallback__panel a {
+    display: flex;
+    min-height: 3.6rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--line);
+    align-items: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .mobile-nav-fallback__panel a.is-active {
+    color: var(--cyan);
   }
 
   .mobile-nav__toggle {
@@ -1666,7 +1762,6 @@ select {
     width: 100%;
     border: 0;
     background: rgba(0, 0, 0, 0.56);
-    backdrop-filter: blur(3px);
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--motion-control) ease;
@@ -1685,7 +1780,7 @@ select {
     z-index: 23;
     width: auto;
     min-width: 0;
-    max-height: calc(100svh - 5.5rem);
+    max-height: calc(100vh - 5.5rem);
     overflow-y: auto;
     border-radius: 1rem;
     background: rgba(9, 9, 11, 0.98);
@@ -1726,9 +1821,9 @@ select {
   }
 
   .route-hero {
-    min-height: calc(100svh - 4.25rem);
-    padding-top: clamp(3rem, 10svh, 5rem);
-    padding-bottom: clamp(2.5rem, 7svh, 3.5rem);
+    min-height: calc(100vh - 4.25rem);
+    padding-top: clamp(3rem, 10vh, 5rem);
+    padding-bottom: clamp(2.5rem, 7vh, 3.5rem);
     align-items: stretch;
   }
 
@@ -1896,11 +1991,11 @@ select {
     display: block;
   }
 
-  .archive-card__feature-mosaic img {
+  .archive-card__feature-mosaic picture {
     display: none;
   }
 
-  .archive-card__feature-mosaic img:first-child {
+  .archive-card__feature-mosaic picture:first-child {
     display: block;
   }
 

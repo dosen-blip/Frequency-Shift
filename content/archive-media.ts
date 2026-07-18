@@ -15,12 +15,27 @@ function buildGallery(
   title: string,
   dimensions: Array<readonly [number, number]>,
 ): ArchiveGallery {
-  return dimensions.map(([width, height], index) => ({
-    src: `/media/archive/${slug}/${slug}-${String(index + 1).padStart(2, "0")}.jpg`,
-    alt: `${title} event photograph ${index + 1} of ${dimensions.length}`,
-    width,
-    height,
-  }));
+  return dimensions.map(([width, height], index) => {
+    const stem = `/media/archive/${slug}/${slug}-${String(index + 1).padStart(2, "0")}`;
+    const responsiveSources = [
+      width > 480 ? `${stem}-480.webp 480w` : null,
+      width > 800 ? `${stem}-800.webp 800w` : null,
+      `${stem}.webp ${width}w`,
+    ].filter(Boolean);
+    const mobileSources = [
+      width > 480 ? `${stem}-480.webp 480w` : null,
+      width > 800 ? `${stem}-800.webp 800w` : `${stem}.webp ${width}w`,
+    ].filter(Boolean);
+
+    return {
+      src: `${stem}.webp`,
+      srcSet: responsiveSources.join(", "),
+      mobileSrcSet: mobileSources.join(", "),
+      alt: `${title} event photograph ${index + 1} of ${dimensions.length}`,
+      width,
+      height,
+    };
+  });
 }
 
 export const archiveGalleries = {

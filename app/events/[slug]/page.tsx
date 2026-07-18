@@ -59,7 +59,7 @@ export default async function EventPage({ params }: EventPageProps) {
             ) : (
               <button className="button button--disabled" type="button" disabled>Not yet available</button>
             )}
-            <Link className="button button--ghost" href="/events" prefetch={false}>
+            <Link className="button button--ghost" href="/events">
               All events
             </Link>
           </div>

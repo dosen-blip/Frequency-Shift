@@ -18,33 +18,51 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
       data-reveal="card"
       style={{ "--reveal-delay": `${Math.min(revealIndex, 3) * 70}ms` } as React.CSSProperties}
     >
-      <Link href={`/archive/${entry.slug}`} aria-label={`View ${entry.title} archive`} prefetch={false}>
+      <Link href={`/archive/${entry.slug}`} aria-label={`View ${entry.title} archive`}>
         <div
           className={`archive-card__visual${cover ? " archive-card__visual--photo" : ""}`}
           aria-hidden="true"
         >
           {featureImages.length ? (
             <div className="archive-card__feature-mosaic">
-              {featureImages.map((image, imageIndex) => (
-                <img
-                  key={image.src}
-                  src={image.src}
-                  alt=""
-                  width={image.width}
-                  height={image.height}
-                  loading={imageIndex === 0 ? "eager" : "lazy"}
-                  fetchPriority={imageIndex === 0 ? "high" : "auto"}
-                />
+              {featureImages.map((image) => (
+                <picture key={image.src}>
+                  <source
+                    media="(max-width: 760px)"
+                    srcSet={image.mobileSrcSet}
+                    sizes="calc(100vw - 2rem)"
+                  />
+                  <img
+                    src={image.src}
+                    srcSet={image.srcSet}
+                    sizes="30vw"
+                    alt=""
+                    width={image.width}
+                    height={image.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
               ))}
             </div>
           ) : cover ? (
-            <img
-              src={cover.src}
-              alt=""
-              width={cover.width}
-              height={cover.height}
-              loading="lazy"
-            />
+            <picture>
+              <source
+                media="(max-width: 760px)"
+                srcSet={cover.mobileSrcSet}
+                sizes="calc(100vw - 2rem)"
+              />
+              <img
+                src={cover.src}
+                srcSet={cover.srcSet}
+                sizes="48vw"
+                alt=""
+                width={cover.width}
+                height={cover.height}
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
           ) : null}
           <span className="archive-card__index">{entry.archiveLabel}</span>
           <span className="archive-card__pending">

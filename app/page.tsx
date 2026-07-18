@@ -17,9 +17,10 @@ export default function HomePage() {
         titleLines={["Frequency", "Shift"]}
         body="Raw energy. Pure frequency."
         detail="Freedom, self-expression, and connection through music."
-        imageSrc="/media/figma/hero-crowd.webp"
+        imageSrc="/media/figma/hero-crowd-960.webp"
+        imageSrcSet="/media/figma/hero-crowd-960.webp 960w, /media/figma/hero-crowd-1440.webp 1440w, /media/figma/hero-crowd.webp 2400w"
         actions={
-          <Link className="button button--light" href="/archive" prefetch={false}>
+          <Link className="button button--light" href="/archive">
             Enter the archive
           </Link>
         }
@@ -33,7 +34,7 @@ export default function HomePage() {
               Next <span className="gradient-text">up</span>
             </h2>
           </div>
-          <Link className="button button--ghost" href="/events" data-reveal="up" prefetch={false}>
+          <Link className="button button--ghost" href="/events" data-reveal="up">
             View all events
           </Link>
         </div>
@@ -55,7 +56,7 @@ export default function HomePage() {
             </h2>
           </div>
           {featuredArchive ? (
-            <Link className="button button--ghost" href={`/archive/${featuredArchive.slug}`} data-reveal="up" prefetch={false}>
+            <Link className="button button--ghost" href={`/archive/${featuredArchive.slug}`} data-reveal="up">
               Open the archive
             </Link>
           ) : null}
@@ -73,6 +74,7 @@ export default function HomePage() {
                 width={image.width}
                 height={image.height}
                 loading="lazy"
+                decoding="async"
               />
             </figure>
           ))}
@@ -91,7 +93,7 @@ export default function HomePage() {
             gatherings all serve the same idea: freedom, self-expression, and a
             community that connects through sound.
           </p>
-          <Link className="text-link" href="/about" prefetch={false}>
+          <Link className="text-link" href="/about">
             Read our story <span aria-hidden="true">↗</span>
           </Link>
         </div>
