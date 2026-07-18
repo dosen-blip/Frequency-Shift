@@ -50,12 +50,18 @@ export type ArtistRecord = {
 export type ArchiveRecord = {
   slug: string;
   title: string;
+  archiveLabel: string;
   dateLabel: string;
+  dateIso: string;
   locationLabel: string | null;
   summary: string;
   story: string[];
   eventSlug: string | null;
   gallery: Array<{ src: string; alt: string; width: number; height: number }>;
   gallerySlotCount: number;
+  coverImageIndex: number;
+  photoCredit: string | null;
+  sourceNote: string;
+  sourceLinks: Array<{ label: string; href: string }>;
   draft: boolean;
 };

@@ -14,11 +14,11 @@ export default function ArchiveIndexPage() {
       <PageHeader
         eyebrow="Afterimage"
         title="Archive"
-        intro="Eight past events, preserved as visual records. Dates, stories, and photography will be added as the archive is assembled."
+        intro="Eight past events, reconstructed from original announcements, recap captions, and photography. Five galleries are in place; three remain open for event stills."
       />
       <div className="archive-grid">
-        {archives.map((entry, index) => (
-          <ArchiveCard key={entry.slug} entry={entry} index={index} />
+        {archives.map((entry) => (
+          <ArchiveCard key={entry.slug} entry={entry} />
         ))}
       </div>
     </div>

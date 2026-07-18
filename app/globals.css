@@ -25,6 +25,17 @@
   --radius: 999px;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -650,6 +661,17 @@ select {
   transition: transform 500ms ease, filter 500ms ease;
 }
 
+.archive-card__visual--photo {
+  background: #080509;
+}
+
+.archive-card__visual--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(1.06) brightness(0.82);
+}
+
 .archive-card__visual::before,
 .archive-card__visual::after {
   position: absolute;
@@ -671,6 +693,19 @@ select {
   right: -2%;
   width: 48%;
   aspect-ratio: 1;
+}
+
+.archive-card__visual--photo::before {
+  inset: 0;
+  width: auto;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(3, 3, 4, 0.08), rgba(3, 3, 4, 0.58));
+  box-shadow: none;
+}
+
+.archive-card__visual--photo::after {
+  display: none;
 }
 
 .archive-card a:hover .archive-card__visual,
@@ -801,7 +836,42 @@ select {
 }
 
 .archive-detail-layout aside {
+  display: grid;
+  gap: var(--space-4);
   align-self: start;
+}
+
+.archive-provenance {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.archive-provenance dt {
+  color: #ed6aff;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.archive-provenance dd {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0.3rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.archive-provenance a {
+  width: fit-content;
+  color: white;
+  text-decoration-color: rgba(237, 106, 255, 0.55);
+  text-underline-offset: 0.25em;
 }
 
 .archive-summary {

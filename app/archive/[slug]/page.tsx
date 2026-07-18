@@ -31,7 +31,9 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
         <dl className="detail-meta">
           <div>
             <dt>Date</dt>
-            <dd>{entry.dateLabel}</dd>
+            <dd>
+              <time dateTime={entry.dateIso}>{entry.dateLabel}</time>
+            </dd>
           </div>
           {entry.locationLabel ? (
             <div>
@@ -41,7 +43,11 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
           ) : null}
           <div>
             <dt>Archive</dt>
-            <dd>{entry.gallerySlotCount} image slots</dd>
+            <dd>
+              {entry.gallery.length
+                ? `${entry.gallery.length} photographs`
+                : `${entry.gallerySlotCount} image slots`}
+            </dd>
           </div>
         </dl>
       </header>
@@ -55,7 +61,10 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
             ))}
           </div>
           {entry.gallery.length ? (
-            <div className="archive-gallery" aria-label={`${entry.title} gallery`}>
+            <section className="archive-gallery" aria-labelledby="gallery-heading">
+              <h2 id="gallery-heading" className="sr-only">
+                {entry.title} event gallery
+              </h2>
               {entry.gallery.map((image) => (
                 <figure key={image.src}>
                   <img
@@ -67,7 +76,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
                   />
                 </figure>
               ))}
-            </div>
+            </section>
           ) : (
             <section className="archive-placeholder-section" aria-labelledby="gallery-heading">
               <div className="archive-placeholder-heading">
@@ -86,7 +95,33 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
           )}
         </div>
         <aside>
-          <p className="notice">Archive record established. Final photography, captions, credits, and editorial copy remain to be approved.</p>
+          <p className="notice">
+            {entry.gallery.length
+              ? "Photography published in the event recaps is in place. Final captions and editorial sequencing remain open for review."
+              : "Archive record established. Original event photography remains to be supplied and approved."}
+          </p>
+          <dl className="archive-provenance">
+            {entry.photoCredit ? (
+              <div>
+                <dt>Photo credit</dt>
+                <dd>{entry.photoCredit}</dd>
+              </div>
+            ) : null}
+            <div>
+              <dt>Classification</dt>
+              <dd>{entry.sourceNote}</dd>
+            </div>
+            <div>
+              <dt>Sources</dt>
+              <dd>
+                {entry.sourceLinks.map((source) => (
+                  <a key={source.href} href={source.href} target="_blank" rel="noreferrer">
+                    {source.label} <span aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </dd>
+            </div>
+          </dl>
           <Link className="text-link" href="/archive">
             Back to archive
           </Link>
