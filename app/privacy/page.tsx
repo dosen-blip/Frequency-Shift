@@ -11,7 +11,7 @@ export default function PrivacyPage() {
         title="Privacy"
         intro="This route is reserved for the final privacy notice and data-handling commitments."
       />
-      <div className="prose">
+      <div className="prose" data-reveal="up">
         <p className="notice">
           Draft only. Define analytics, contact-form, ticket-provider, cookie, retention, and deletion practices before publishing legal copy.
         </p>

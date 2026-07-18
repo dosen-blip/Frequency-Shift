@@ -15,8 +15,8 @@ export default function AboutPage() {
         intro="Frequency Shift channels raw underground energy into Ottawa rooms built for freedom, self-expression, and connection through music."
       />
       <section className="split-section section--rule">
-        <h2>Not just another night out.</h2>
-        <div className="prose prose--large">
+        <h2 data-reveal="clip">Not just another night out.</h2>
+        <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <p>
             The idea began with house music and a clear ambition: bring the raw,
             communal spirit people chase in larger scenes into Ottawa on its own
@@ -40,8 +40,8 @@ export default function AboutPage() {
         </div>
       </section>
       <section className="split-section section--rule">
-        <h2>Built with the room.</h2>
-        <div className="prose prose--large">
+        <h2 data-reveal="clip">Built with the room.</h2>
+        <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <p>
             Artists shape the sound. Production crews build stages and systems.
             Venues host, photographers keep the memory, collaborators widen the

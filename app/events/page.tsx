@@ -21,9 +21,9 @@ export default function EventsPage() {
       />
       <section className="event-grid" aria-label="Upcoming events">
         {publicEvents.length ? (
-          publicEvents.map((event) => <EventCard event={event} key={event.slug} />)
+          publicEvents.map((event, index) => <EventCard event={event} key={event.slug} revealIndex={index} />)
         ) : (
-          <p className="empty-state">
+          <p className="empty-state" data-reveal="up">
             No new date is announced yet. Follow{" "}
             <a href={siteConfig.instagram.href} target="_blank" rel="noreferrer">
               {siteConfig.instagram.handle}

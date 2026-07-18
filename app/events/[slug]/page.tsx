@@ -23,20 +23,20 @@ export default async function EventPage({ params }: EventPageProps) {
 
   return (
     <article className="page-shell">
-      <p className="eyebrow">{eventStatusLabels[event.status]}</p>
+      <p className="eyebrow" data-reveal="up">{eventStatusLabels[event.status]}</p>
       <div className="detail-grid">
         <div className="detail-content">
-          <h1 className="detail-title">{event.title}</h1>
-          <div className="prose prose--large">
+          <h1 className="detail-title" data-reveal="clip">{event.title}</h1>
+          <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
             {event.description.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
           {event.draft ? (
-            <p className="notice">Draft content record — not a public event announcement.</p>
+            <p className="notice" data-reveal="up">Draft content record — not a public event announcement.</p>
           ) : null}
         </div>
-        <aside>
+        <aside data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <dl className="detail-meta">
             <div>
               <dt>Date</dt>

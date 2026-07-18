@@ -21,17 +21,17 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
 
   return (
     <article className="page-shell">
-      <p className="eyebrow">Artist</p>
+      <p className="eyebrow" data-reveal="up">Artist</p>
       <div className="detail-grid">
         <div className="detail-content">
-          <h1 className="detail-title">{artist.name}</h1>
-          <div className="prose prose--large">
+          <h1 className="detail-title" data-reveal="clip">{artist.name}</h1>
+          <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
             {artist.bio.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
         </div>
-        <aside>
+        <aside data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           {artist.city ? <p>{artist.city}</p> : null}
           {artist.links.map((link) => (
             <p key={link.href}>

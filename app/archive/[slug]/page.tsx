@@ -24,11 +24,11 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
   return (
     <article className="page-shell">
       <header className="archive-detail-hero">
-        <div>
+        <div data-reveal="group">
           <p className="eyebrow">Archive / {entry.dateLabel}</p>
-          <h1 className="detail-title">{entry.title}</h1>
+          <h1 className="detail-title" data-reveal="clip">{entry.title}</h1>
         </div>
-        <dl className="detail-meta">
+        <dl className="detail-meta" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <div>
             <dt>Date</dt>
             <dd>
@@ -54,8 +54,8 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
 
       <div className="archive-detail-layout">
         <div className="detail-content">
-          <p className="archive-summary">{entry.summary}</p>
-          <div className="prose prose--large">
+          <p className="archive-summary" data-reveal="up">{entry.summary}</p>
+          <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
             {entry.story.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
@@ -65,8 +65,12 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
               <h2 id="gallery-heading" className="sr-only">
                 {entry.title} event gallery
               </h2>
-              {entry.gallery.map((image) => (
-                <figure key={image.src}>
+              {entry.gallery.map((image, index) => (
+                <figure
+                  key={image.src}
+                  data-reveal="media"
+                  style={{ "--reveal-delay": `${Math.min(index, 3) * 70}ms` } as React.CSSProperties}
+                >
                   <img
                     src={image.src}
                     alt={image.alt}
@@ -79,7 +83,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
             </section>
           ) : (
             <section className="archive-placeholder-section" aria-labelledby="gallery-heading">
-              <div className="archive-placeholder-heading">
+              <div className="archive-placeholder-heading" data-reveal="up">
                 <div>
                   <p className="eyebrow">Contact sheet</p>
                   <h2 id="gallery-heading">Event images</h2>
@@ -94,7 +98,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
             </section>
           )}
         </div>
-        <aside>
+        <aside data-reveal="up" style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
           <p className="notice">
             {entry.gallery.length
               ? "Photography published in the event recaps is in place. Final captions and editorial sequencing remain open for review."

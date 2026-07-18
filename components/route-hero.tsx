@@ -3,13 +3,16 @@ import type { ReactNode } from "react";
 type RouteHeroProps = {
   eyebrow: string;
   title: string;
+  titleLines?: readonly string[];
   body: string;
   detail?: string;
   imageSrc?: string;
   actions?: ReactNode;
 };
 
-export function RouteHero({ eyebrow, title, body, detail, imageSrc, actions }: RouteHeroProps) {
+export function RouteHero({ eyebrow, title, titleLines, body, detail, imageSrc, actions }: RouteHeroProps) {
+  const lines = titleLines?.length ? titleLines : [title];
+
   return (
     <section className="route-hero">
       {imageSrc ? (
@@ -18,13 +21,19 @@ export function RouteHero({ eyebrow, title, body, detail, imageSrc, actions }: R
         </div>
       ) : null}
       <div className="route-hero__lead">
-        <p className="eyebrow">{eyebrow}</p>
-        <h1>{title}</h1>
+        <p className="eyebrow route-hero__eyebrow">{eyebrow}</p>
+        <h1 className="hero-title" aria-label={title}>
+          {lines.map((line) => (
+            <span className="hero-title__line" key={line}>
+              <span data-text={line}>{line}</span>
+            </span>
+          ))}
+        </h1>
       </div>
       <div className="route-hero__aside">
-        <p>{body}</p>
-        {detail ? <p className="hero-mantra">{detail}</p> : null}
-        {actions ? <div className="hero-actions">{actions}</div> : null}
+        <p className="route-hero__body">{body}</p>
+        {detail ? <p className="hero-mantra route-hero__mantra">{detail}</p> : null}
+        {actions ? <div className="hero-actions route-hero__actions">{actions}</div> : null}
       </div>
     </section>
   );

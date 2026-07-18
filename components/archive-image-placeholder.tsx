@@ -9,6 +9,8 @@ export function ArchiveImagePlaceholder({ eventTitle, index }: ArchiveImagePlace
   return (
     <div
       className="archive-image-placeholder"
+      data-reveal="media"
+      style={{ "--reveal-delay": `${Math.min(index, 3) * 70}ms` } as React.CSSProperties}
       role="img"
       aria-label={`${eventTitle} gallery image ${number} placeholder`}
     >

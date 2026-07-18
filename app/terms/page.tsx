@@ -11,7 +11,7 @@ export default function TermsPage() {
         title="Terms"
         intro="This route is reserved for site terms and any event-specific purchase or attendance conditions."
       />
-      <div className="prose">
+      <div className="prose" data-reveal="up">
         <p className="notice">
           Draft only. Align the final language with the ticket provider, refund policy, venue rules, photo policy, and applicable Ontario law.
         </p>

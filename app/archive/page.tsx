@@ -17,8 +17,8 @@ export default function ArchiveIndexPage() {
         intro="Nine gatherings, collaborations, and afterimages—from the first Ottawa night to Frequency Fest—kept with the artists, partners, photographers, and dancers who made them."
       />
       <div className="archive-grid">
-        {archives.map((entry) => (
-          <ArchiveCard key={entry.slug} entry={entry} />
+        {archives.map((entry, index) => (
+          <ArchiveCard key={entry.slug} entry={entry} revealIndex={index} />
         ))}
       </div>
     </div>

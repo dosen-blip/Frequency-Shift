@@ -2,9 +2,13 @@ import Link from "next/link";
 import type { EventRecord } from "@/content/types";
 import { eventStatusLabels } from "@/content/types";
 
-export function EventCard({ event }: { event: EventRecord }) {
+export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; revealIndex?: number }) {
   return (
-    <article className="event-card">
+    <article
+      className="event-card"
+      data-reveal="card"
+      style={{ "--reveal-delay": `${Math.min(revealIndex, 3) * 70}ms` } as React.CSSProperties}
+    >
       {event.coverImage ? (
         <img
           className="event-card__image"

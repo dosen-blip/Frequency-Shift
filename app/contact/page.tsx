@@ -16,8 +16,8 @@ export default function ContactPage() {
         intro="Bookings, collaborations, media, and ideas for the next room all start through the active Frequency Shift channel."
       />
       <section className="split-section section--rule">
-        <h2>Meet us on the frequency.</h2>
-        <div className="prose prose--large">
+        <h2 data-reveal="clip">Meet us on the frequency.</h2>
+        <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <p>
             Frequency Shift works with artists, promoters, photographers,
             production teams, venues, and community partners across Ottawa. Send

@@ -3,16 +3,21 @@ import type { ArchiveRecord } from "@/content/types";
 
 type ArchiveCardProps = {
   entry: ArchiveRecord;
+  revealIndex?: number;
 };
 
-export function ArchiveCard({ entry }: ArchiveCardProps) {
+export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
   const cover = entry.gallery[entry.coverImageIndex];
   const featureImages = (entry.featureImageIndices ?? [])
     .map((imageIndex) => entry.gallery[imageIndex])
     .filter(Boolean);
 
   return (
-    <article className={`archive-card${entry.featured ? " archive-card--featured" : ""}`}>
+    <article
+      className={`archive-card${entry.featured ? " archive-card--featured" : ""}`}
+      data-reveal="card"
+      style={{ "--reveal-delay": `${Math.min(revealIndex, 3) * 70}ms` } as React.CSSProperties}
+    >
       <Link href={`/archive/${entry.slug}`} aria-label={`View ${entry.title} archive`}>
         <div
           className={`archive-card__visual${cover ? " archive-card__visual--photo" : ""}`}
