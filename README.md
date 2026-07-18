@@ -2,6 +2,8 @@
 
 Ground-up redesign scaffold for Frequency Shift. The runtime is React 19 + TypeScript on the Sites-compatible vinext stack, with structured event, artist, and archive content kept separate from page layout.
 
+Public device-preview deployment: [dosen-blip.github.io/Frequency-Shift](https://dosen-blip.github.io/Frequency-Shift/)
+
 ## Run it
 
 ```bash
@@ -15,6 +17,8 @@ Production checks:
 npm run lint
 npm test
 ```
+
+Every push to `main` exports the dynamic build as a static project site and deploys it through GitHub Actions. To verify that export locally, run `npm run export:pages`; the generated `out/` directory is intentionally ignored by Git.
 
 ## Route map
 
