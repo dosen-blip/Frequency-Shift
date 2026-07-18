@@ -25,14 +25,15 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
         >
           {featureImages.length ? (
             <div className="archive-card__feature-mosaic">
-              {featureImages.map((image) => (
+              {featureImages.map((image, imageIndex) => (
                 <img
                   key={image.src}
                   src={image.src}
                   alt=""
                   width={image.width}
                   height={image.height}
-                  loading="eager"
+                  loading={imageIndex === 0 ? "eager" : "lazy"}
+                  fetchPriority={imageIndex === 0 ? "high" : "auto"}
                 />
               ))}
             </div>

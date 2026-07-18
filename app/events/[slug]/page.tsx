@@ -57,7 +57,7 @@ export default async function EventPage({ params }: EventPageProps) {
                 Buy tickets
               </a>
             ) : (
-              <span className="button button--disabled">Not yet available</span>
+              <button className="button button--disabled" type="button" disabled>Not yet available</button>
             )}
             <Link className="button button--ghost" href="/events">
               All events

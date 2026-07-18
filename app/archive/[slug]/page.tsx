@@ -24,9 +24,9 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
   return (
     <article className="page-shell">
       <header className="archive-detail-hero">
-        <div data-reveal="group">
-          <p className="eyebrow">Archive / {entry.dateLabel}</p>
-          <h1 className="detail-title" data-reveal="clip">{entry.title}</h1>
+        <div>
+          <p className="eyebrow" data-reveal="up">Archive / {entry.dateLabel}</p>
+          <h1 className="detail-title" data-reveal="clip" style={{ "--reveal-delay": "45ms" } as React.CSSProperties}>{entry.title}</h1>
         </div>
         <dl className="detail-meta" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <div>

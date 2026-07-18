@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+export const metadata = {
+  title: "Page not found",
+};
+
 export default function NotFoundPage() {
   return (
     <div className="page-shell">

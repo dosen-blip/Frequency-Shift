@@ -29,9 +29,14 @@ document.addEventListener("click", function (event) {
   if (!anchor || anchor.target === "_blank" || anchor.hasAttribute("download")) return;
   const url = new URL(anchor.href, window.location.href);
   if (url.origin !== window.location.origin) return;
-  event.preventDefault();
+  const basePath = ${JSON.stringify(basePath)};
+  if (basePath && url.pathname !== basePath && !url.pathname.startsWith(basePath + "/")) {
+    url.pathname = basePath + (url.pathname.startsWith("/") ? url.pathname : "/" + url.pathname);
+  }
+  const lastSegment = url.pathname.split("/").filter(Boolean).at(-1) || "";
+  if (!url.pathname.endsWith("/") && !lastSegment.includes(".")) url.pathname += "/";
+  anchor.href = url.href;
   event.stopImmediatePropagation();
-  window.location.href = url.href;
 }, true);
 </script>`;
 
@@ -45,6 +50,21 @@ function prefixSrcset(value) {
     .join(",");
 }
 
+function addTrailingSlashesToRouteHrefs(html) {
+  return html.replace(
+    /(\bhref=["'])(\/[^"'?#]*)([?#][^"']*)?(["'])/gi,
+    (match, opening, pathname, suffix = "", closing) => {
+      if (basePath && pathname !== basePath && !pathname.startsWith(`${basePath}/`)) {
+        return match;
+      }
+
+      const lastSegment = pathname.split("/").filter(Boolean).at(-1) ?? "";
+      if (!pathname.endsWith("/") && !lastSegment.includes(".")) pathname += "/";
+      return `${opening}${pathname}${suffix}${closing}`;
+    },
+  );
+}
+
 function rewriteHtml(html) {
   let rewritten = html.replace(
     /(\b(?:href|src|action|content|poster|data-rsc-css-href)=["'])\/(?!\/)/gi,
@@ -54,7 +74,7 @@ function rewriteHtml(html) {
   if (basePath) {
     const baseSegment = basePath.slice(1);
     rewritten = rewritten.replace(
-      /(["'])\/(?!\/)/g,
+      /(["'])\/(?![\/>\s])/g,
       (match, quote, offset, source) => {
         const remainder = source.slice(offset + 2);
         if (
@@ -75,6 +95,7 @@ function rewriteHtml(html) {
   );
 
   rewritten = rewritten.replace(/url\(\/(?!\/)/gi, `url(${basePath}/`);
+  rewritten = addTrailingSlashesToRouteHrefs(rewritten);
   return rewritten.replace("</head>", `${navigationFallback}\n</head>`);
 }
 

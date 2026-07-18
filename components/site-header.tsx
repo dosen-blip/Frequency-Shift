@@ -35,10 +35,22 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    const updateScrollState = () => setIsScrolled(window.scrollY > 24);
-    updateScrollState();
+    let scrollFrame = 0;
+    const commitScrollState = () => {
+      scrollFrame = 0;
+      const nextState = window.scrollY > 24;
+      setIsScrolled((currentState) => currentState === nextState ? currentState : nextState);
+    };
+    const updateScrollState = () => {
+      if (scrollFrame) return;
+      scrollFrame = window.requestAnimationFrame(commitScrollState);
+    };
+    commitScrollState();
     window.addEventListener("scroll", updateScrollState, { passive: true });
-    return () => window.removeEventListener("scroll", updateScrollState);
+    return () => {
+      window.removeEventListener("scroll", updateScrollState);
+      window.cancelAnimationFrame(scrollFrame);
+    };
   }, []);
 
   useEffect(() => {

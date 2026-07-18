@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 const output = (path) => fileURLToPath(new URL(`../out/${path}`, import.meta.url));
+const outputRoot = fileURLToPath(new URL("../out/", import.meta.url));
 
 test("exports the public routes and GitHub Pages control files", async () => {
   const expectedFiles = [
@@ -28,10 +29,15 @@ test("prefixes internal routes and assets with the project site path", async () 
 
   assert.match(homepage, /(?:href|src)="\/Frequency-Shift\/assets\//);
   assert.match(homepage, /(?:href|src)="\/Frequency-Shift\/media\//);
-  assert.match(homepage, /href="\/Frequency-Shift\/archive"/);
+  assert.match(homepage, /href="\/Frequency-Shift\/archive\/"/);
   assert.match(homepage, /import\("\/Frequency-Shift\/assets\//);
-  assert.match(archive, /href="\/Frequency-Shift\/archive\/frequency-fest"/);
+  assert.match(archive, /href="\/Frequency-Shift\/archive\/frequency-fest\/"/);
   assert.match(homepage, /data-static-pages-navigation/);
+  assert.match(homepage, /event\.stopImmediatePropagation\(\)/);
+  assert.doesNotMatch(homepage, /event\.preventDefault\(\)/);
+  assert.doesNotMatch(homepage, /window\.location\.href\s*=/);
+  assert.doesNotMatch(homepage, /\/Frequency-Shift\/>/);
+  assert.doesNotMatch(archive, /\/Frequency-Shift\/>/);
   assert.doesNotMatch(homepage, /(?:href|src)="\/(?:assets|media)\//);
   assert.doesNotMatch(homepage, /import\("\/assets\//);
   assert.doesNotMatch(archive, /href="\/archive(?:\/|\")/);
@@ -44,4 +50,25 @@ test("publishes a sitemap using the final GitHub Pages URLs", async () => {
     /https:\/\/dosen-blip\.github\.io\/Frequency-Shift\/archive\/frequency-fest/,
   );
   assert.doesNotMatch(sitemap, /frequency-shift\.local/);
+});
+
+test("keeps every exported document structurally intact", async () => {
+  const htmlFiles = (await readdir(outputRoot, { recursive: true }))
+    .filter((path) => path.endsWith(".html"));
+
+  assert.ok(htmlFiles.length >= 16);
+  for (const path of htmlFiles) {
+    const html = await readFile(output(path), "utf8");
+    assert.doesNotMatch(html, /\/Frequency-Shift\/>/, path);
+  }
+});
+
+test("preloads only the visible Frequency Fest feature image", async () => {
+  const archive = await readFile(output("archive/index.html"), "utf8");
+  const featurePreloads = (archive.match(
+    /<link[^>]+rel="preload"[^>]+frequency-fest[^>]+>/g,
+  ) ?? []);
+
+  assert.equal(featurePreloads.length, 1);
+  assert.match(featurePreloads[0], /frequency-fest-01\.jpg/);
 });
