@@ -6,20 +6,20 @@ import { events } from "@/content/events";
 import { momentGallery } from "@/content/media";
 
 export default function HomePage() {
-  const featuredEvent = events.find((event) => event.featured);
+  const featuredEvent = events.find((event) => event.featured && !event.draft);
   const featuredArchive = archives[0];
 
   return (
     <>
       <RouteHero
-        eyebrow="Ottawa / independent dance culture"
+        eyebrow="Ottawa / for the love of house"
         title="Frequency Shift"
-        body="Underground dance music rituals"
-        detail="Raw energy / pure frequency"
+        body="Raw energy. Pure frequency."
+        detail="Freedom, self-expression, and connection through music."
         imageSrc="/media/figma/hero-crowd.webp"
         actions={
-          <Link className="button button--light" href="/events">
-            See what’s next
+          <Link className="button button--light" href="/archive">
+            Enter the archive
           </Link>
         }
       />
@@ -77,16 +77,17 @@ export default function HomePage() {
       <section className="split-section about-teaser" aria-labelledby="manifesto-title">
         <div>
           <p className="kicker">Our frequency</p>
-          <h2 id="manifesto-title">Built around the room, not the algorithm.</h2>
+          <h2 id="manifesto-title">Ottawa’s underground, on its own frequency.</h2>
         </div>
         <div className="prose prose--large">
           <p>
-            Every event becomes a living story: announcement, lineup, ticket
-            release, event day, and archive. Fast, legible, and expressive at
-            every stage.
+            Frequency Shift channels the raw energy of a rave into Ottawa rooms
+            built for dancers. Solo nights, partner takeovers, and two-stage
+            gatherings all serve the same idea: freedom, self-expression, and a
+            community that connects through sound.
           </p>
           <Link className="text-link" href="/about">
-            Read our approach <span aria-hidden="true">↗</span>
+            Read our story <span aria-hidden="true">↗</span>
           </Link>
         </div>
       </section>

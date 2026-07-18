@@ -35,8 +35,8 @@ test("server-renders the Frequency Shift homepage", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
-  assert.match(html, /Underground dance music rituals/);
-  assert.match(html, /Next Frequency Shift/);
+  assert.match(html, /Raw energy\. Pure frequency\./);
+  assert.match(html, /next date is being tuned/i);
   assert.match(html, /hero-crowd\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
@@ -49,7 +49,7 @@ test("renders the primary route scaffold", async () => {
     ["/events/next-frequency-shift", /Draft content record/],
     ["/archive", /Frequency Shift 001/],
     ["/archive/frequency-shift-001", /frequency-shift-001-01\.jpg/],
-    ["/about", /Why Frequency Shift exists/],
+    ["/about", /Not just another night out/],
     ["/contact", /Contact Frequency Shift/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
     ["/terms", /<title>Terms — Frequency Shift<\/title>/i],
@@ -93,6 +93,7 @@ test("uses event photography for completed archive cards and galleries", async (
   assert.match(indexHtml, /frequency-shift-001-01\.jpg/);
   assert.match(indexHtml, /world-cup-01\.jpg/);
   assert.match(indexHtml, /dopamine-01\.jpg/);
+  assert.match(indexHtml, /two-stage mini festival at Club SAW/i);
 
   const photoArchive = await render("/archive/frequency-shift-003");
   const photoHtml = await photoArchive.text();
@@ -104,6 +105,45 @@ test("uses event photography for completed archive cards and galleries", async (
     await pendingArchive.text(),
     /Photography placeholders \/ final edit pending/,
   );
+});
+
+test("renders caption-grounded editorial and event facts", async () => {
+  const homepage = await render("/");
+  const homepageHtml = await homepage.text();
+  assert.match(homepageHtml, /Ottawa’s underground, on its own frequency/);
+  assert.match(homepageHtml, /freedom, self-expression, and a community/i);
+
+  const about = await render("/about");
+  const aboutHtml = await about.text();
+  assert.match(aboutHtml, /expecting\s*70 people/i);
+  assert.match(aboutHtml, /nearly\s*200/i);
+  assert.match(aboutHtml, /DMdwuDnvnKH/);
+
+  const contact = await render("/contact");
+  assert.match(await contact.text(), /@frequency___shift/);
+
+  const factChecks = [
+    ["/archive/frequency-shift-003", /GRIDWRKS/],
+    ["/archive/frequency-shift-004", /Maggie Tipenko/],
+    ["/archive/frequency-shift-005", /opened at 10 PM/],
+    ["/archive/world-cup", /free-entry edition ran from 9 PM to 2 AM/],
+    ["/archive/solstice", /222 Slater Street/],
+    ["/archive/dopamine", /8 PM opening/],
+  ];
+
+  for (const [path, expected] of factChecks) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    assert.match(await response.text(), expected, path);
+  }
+});
+
+test("keeps the internal draft event out of the public sitemap", async () => {
+  const response = await render("/sitemap.xml");
+  assert.equal(response.status, 200);
+  const sitemap = await response.text();
+  assert.doesNotMatch(sitemap, /next-frequency-shift/);
+  assert.match(sitemap, /archive\/frequency-fest/);
 });
 
 test("ships every declared archive photograph as a valid JPEG asset", async () => {

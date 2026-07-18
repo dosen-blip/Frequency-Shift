@@ -8,7 +8,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = ["", "/events", "/archive", "/about", "/contact", "/privacy", "/terms"];
   const routes = [
     ...staticRoutes,
-    ...events.map((event) => `/events/${event.slug}`),
+    ...events.filter((event) => !event.draft).map((event) => `/events/${event.slug}`),
     ...archives.map((entry) => `/archive/${entry.slug}`),
     ...artists.map((artist) => `/artists/${artist.slug}`),
   ];

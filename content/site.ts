@@ -2,9 +2,13 @@ export const siteConfig = {
   name: "Frequency Shift",
   location: "Ottawa, Canada",
   description:
-    "An independent Ottawa event platform for forward-facing electronic music, intentional rooms, and community.",
+    "For the love of house: raw underground energy, self-expression, and community on Ottawa dancefloors.",
   canonicalBase:
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://frequency-shift.figma.site",
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://dosen-blip.github.io/Frequency-Shift",
+  instagram: {
+    handle: "@frequency___shift",
+    href: "https://www.instagram.com/frequency___shift/",
+  },
 };
 
 export const primaryNavigation = [

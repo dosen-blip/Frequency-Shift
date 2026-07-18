@@ -56,6 +56,7 @@ export function ArchiveCard({ entry }: ArchiveCardProps) {
             </span>
           </div>
           <h2>{entry.title}</h2>
+          <p className="archive-card__summary">{entry.summary}</p>
           <span className="archive-card__action">View archive <span aria-hidden="true">↗</span></span>
         </div>
       </Link>

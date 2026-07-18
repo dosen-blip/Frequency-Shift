@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { footerNavigation } from "@/content/site";
+import { footerNavigation, siteConfig } from "@/content/site";
 
 export function SiteFooter() {
   return (
@@ -16,6 +16,9 @@ export function SiteFooter() {
               {item.label}
             </Link>
           ))}
+          <a href={siteConfig.instagram.href} target="_blank" rel="noreferrer">
+            Instagram
+          </a>
         </nav>
       </div>
     </footer>

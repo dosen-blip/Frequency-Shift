@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Why Frequency Shift exists and how it approaches events.",
+  description: "Why Frequency Shift is building Ottawa’s underground through house music, freedom, and community.",
 };
 
 export default function AboutPage() {
@@ -12,20 +12,46 @@ export default function AboutPage() {
       <PageHeader
         eyebrow="Why we gather"
         title="About"
-        intro="Frequency Shift creates room for exploratory dance music and the people who keep local culture moving."
+        intro="Frequency Shift channels raw underground energy into Ottawa rooms built for freedom, self-expression, and connection through music."
       />
       <section className="split-section section--rule">
-        <h2>Intentional by design.</h2>
+        <h2>Not just another night out.</h2>
         <div className="prose prose--large">
           <p>
-            The site is structured around clarity first: a real event lifecycle,
-            direct ticket state, accessible navigation, and useful information at
-            every screen size.
+            The idea began with house music and a clear ambition: bring the raw,
+            communal spirit people chase in larger scenes into Ottawa on its own
+            terms. A Frequency Shift room should feel free, expressive, and fully
+            connected to the dancefloor—not like a routine night at the club.
           </p>
           <p>
-            The visual system can still flex from edition to edition through art
-            direction, typography, colour, photography, and motion—without making
-            the experience harder to use.
+            Before the OGS018 collaboration, the collective remembered expecting
+            70 people at the previous event and seeing nearly 200 arrive. That
+            response turned an idea into a growing series of solo nights, partner
+            takeovers, and the first two-stage Frequency Fest at Club SAW.
+          </p>
+          <a
+            className="text-link"
+            href="https://www.instagram.com/p/DMdwuDnvnKH/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Read the original statement <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
+      <section className="split-section section--rule">
+        <h2>Built with the room.</h2>
+        <div className="prose prose--large">
+          <p>
+            Artists shape the sound. Production crews build stages and systems.
+            Venues host, photographers keep the memory, collaborators widen the
+            circle, and dancers complete the night. Frequency Shift is the signal
+            that passes between all of them.
+          </p>
+          <p>
+            The archive keeps those relationships visible alongside the images:
+            names, lineups, places, credits, and source posts remain part of each
+            event story rather than disappearing after the final track.
           </p>
         </div>
       </section>

@@ -804,6 +804,19 @@ select {
   font-size: clamp(4rem, 9vw, 8rem);
 }
 
+.archive-card__summary {
+  max-width: 48ch;
+  margin: 1rem 0 0;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: clamp(0.85rem, 1.3vw, 1rem);
+  line-height: 1.45;
+}
+
+.archive-card--featured .archive-card__summary {
+  max-width: 54ch;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+}
+
 .archive-card--featured .archive-card__overlay {
   background: linear-gradient(180deg, rgba(3, 3, 4, 0.08) 18%, rgba(3, 3, 4, 0.94) 100%);
 }

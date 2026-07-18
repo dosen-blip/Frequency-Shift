@@ -21,9 +21,9 @@ export function SiteHeader() {
           </Link>
         ))}
       </nav>
-      <Link className="header-cta" href="/events/next-frequency-shift">
+      <Link className="header-cta" href="/archive/frequency-fest">
         <img src="/media/figma/icon-ticket.svg" alt="" width="18" height="18" />
-        Next up
+        Latest recap
       </Link>
       <details className="mobile-nav">
         <summary>Menu</summary>

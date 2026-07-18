@@ -111,7 +111,16 @@ const routes = [
   ...new Set([
     "/",
     ...[...sourceSitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map(
-      ([, location]) => new URL(location).pathname,
+      ([, location]) => {
+        const pathname = new URL(location).pathname;
+        if (
+          basePath &&
+          (pathname === basePath || pathname.startsWith(`${basePath}/`))
+        ) {
+          return pathname.slice(basePath.length) || "/";
+        }
+        return pathname;
+      },
     ),
   ]),
 ];

@@ -14,7 +14,7 @@ export default function ArchiveIndexPage() {
       <PageHeader
         eyebrow="Afterimage"
         title="Archive"
-        intro="Frequency Fest stays pinned as the permanent lead feature, followed by eight numbered and special-event records reconstructed from original captions and photography."
+        intro="Nine gatherings, collaborations, and afterimages—from the first Ottawa night to Frequency Fest—kept with the artists, partners, photographers, and dancers who made them."
       />
       <div className="archive-grid">
         {archives.map((entry) => (
