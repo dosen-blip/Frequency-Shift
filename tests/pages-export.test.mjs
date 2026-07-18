@@ -40,6 +40,7 @@ test("prefixes internal routes and assets with the project site path", async () 
   assert.doesNotMatch(archive, /\/Frequency-Shift\/>/);
   assert.doesNotMatch(homepage, /(?:href|src)="\/(?:assets|media)\//);
   assert.doesNotMatch(homepage, /import\("\/assets\//);
+  assert.doesNotMatch(homepage, /\/Frequency-Shift\/Frequency-Shift\//);
   assert.doesNotMatch(archive, /href="\/archive(?:\/|\")/);
 });
 
@@ -71,4 +72,22 @@ test("preloads only the visible Frequency Fest feature image", async () => {
 
   assert.equal(featurePreloads.length, 1);
   assert.match(featurePreloads[0], /frequency-fest-01\.jpg/);
+});
+
+test("builds lazy client chunks against the Pages base path", async () => {
+  const assetFiles = await readdir(output("assets"));
+  const entryCandidates = assetFiles.filter((path) => /^index-.*\.js$/.test(path));
+  let clientEntry = "";
+
+  for (const path of entryCandidates) {
+    const source = await readFile(output(`assets/${path}`), "utf8");
+    if (source.includes("__vite__mapDeps")) {
+      clientEntry = source;
+      break;
+    }
+  }
+
+  assert.ok(clientEntry);
+  assert.match(clientEntry, /Frequency-Shift/);
+  assert.doesNotMatch(clientEntry, /return`\/`\+e/);
 });

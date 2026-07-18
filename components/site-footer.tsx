@@ -12,7 +12,7 @@ export function SiteFooter() {
         <p className="footer-meta">© 2026 Frequency Shift Ottawa</p>
         <nav className="footer-links" aria-label="Footer navigation">
           {footerNavigation.map((item) => (
-            <Link href={item.href} key={item.href}>
+            <Link href={item.href} key={item.href} prefetch={false}>
               {item.label}
             </Link>
           ))}

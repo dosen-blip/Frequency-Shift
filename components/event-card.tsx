@@ -24,7 +24,7 @@ export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; reve
       <div className="event-card__body">
         <p className="status">{eventStatusLabels[event.status]}</p>
         <h2>
-          <Link href={`/events/${event.slug}`}>{event.title}</Link>
+          <Link href={`/events/${event.slug}`} prefetch={false}>{event.title}</Link>
         </h2>
         <div className="event-card__facts">
           <span>
@@ -37,7 +37,7 @@ export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; reve
           </span>
         </div>
         <div className="card-actions">
-          <Link className="button button--ghost" href={`/events/${event.slug}`}>
+          <Link className="button button--ghost" href={`/events/${event.slug}`} prefetch={false}>
             Event details
           </Link>
           {event.ticketUrl ? (

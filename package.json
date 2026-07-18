@@ -8,9 +8,10 @@
   "scripts": {
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
     "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
-    "export:pages": "npm run build && node scripts/export-pages.mjs",
+    "build:pages": "PAGES_BASE_PATH=/Frequency-Shift npm run build",
+    "export:pages": "npm run build:pages && node scripts/export-pages.mjs",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs && node scripts/export-pages.mjs && node --test tests/pages-export.test.mjs",
+    "test": "npm run build && node --test tests/rendered-html.test.mjs && npm run export:pages && node --test tests/pages-export.test.mjs && npm run build",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
   "dependencies": {

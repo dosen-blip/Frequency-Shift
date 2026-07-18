@@ -126,7 +126,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
               </dd>
             </div>
           </dl>
-          <Link className="text-link" href="/archive">
+          <Link className="text-link" href="/archive" prefetch={false}>
             Back to archive
           </Link>
         </aside>

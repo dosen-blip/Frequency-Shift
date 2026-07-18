@@ -19,7 +19,7 @@ export default function HomePage() {
         detail="Freedom, self-expression, and connection through music."
         imageSrc="/media/figma/hero-crowd.webp"
         actions={
-          <Link className="button button--light" href="/archive">
+          <Link className="button button--light" href="/archive" prefetch={false}>
             Enter the archive
           </Link>
         }
@@ -33,7 +33,7 @@ export default function HomePage() {
               Next <span className="gradient-text">up</span>
             </h2>
           </div>
-          <Link className="button button--ghost" href="/events" data-reveal="up">
+          <Link className="button button--ghost" href="/events" data-reveal="up" prefetch={false}>
             View all events
           </Link>
         </div>
@@ -55,7 +55,7 @@ export default function HomePage() {
             </h2>
           </div>
           {featuredArchive ? (
-            <Link className="button button--ghost" href={`/archive/${featuredArchive.slug}`} data-reveal="up">
+            <Link className="button button--ghost" href={`/archive/${featuredArchive.slug}`} data-reveal="up" prefetch={false}>
               Open the archive
             </Link>
           ) : null}
@@ -91,7 +91,7 @@ export default function HomePage() {
             gatherings all serve the same idea: freedom, self-expression, and a
             community that connects through sound.
           </p>
-          <Link className="text-link" href="/about">
+          <Link className="text-link" href="/about" prefetch={false}>
             Read our story <span aria-hidden="true">↗</span>
           </Link>
         </div>

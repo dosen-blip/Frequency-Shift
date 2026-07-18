@@ -18,7 +18,7 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
       data-reveal="card"
       style={{ "--reveal-delay": `${Math.min(revealIndex, 3) * 70}ms` } as React.CSSProperties}
     >
-      <Link href={`/archive/${entry.slug}`} aria-label={`View ${entry.title} archive`}>
+      <Link href={`/archive/${entry.slug}`} aria-label={`View ${entry.title} archive`} prefetch={false}>
         <div
           className={`archive-card__visual${cover ? " archive-card__visual--photo" : ""}`}
           aria-hidden="true"

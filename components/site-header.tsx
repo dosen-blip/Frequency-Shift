@@ -77,6 +77,7 @@ export function SiteHeader() {
       <Link
         className={`wordmark${pathname === "/" ? " is-active" : ""}`}
         href="/"
+        prefetch={false}
         aria-label="Frequency Shift home"
         aria-current={pathname === "/" ? "page" : undefined}
       >
@@ -94,6 +95,7 @@ export function SiteHeader() {
           <Link
             className={isRouteActive(pathname, item.href) ? "is-active" : undefined}
             href={item.href}
+            prefetch={false}
             key={item.href}
             aria-current={isRouteActive(pathname, item.href) ? "page" : undefined}
           >
@@ -104,6 +106,7 @@ export function SiteHeader() {
       <Link
         className={`header-cta${latestActive ? " is-active" : ""}`}
         href="/archive/frequency-fest"
+        prefetch={false}
         aria-current={latestActive ? "page" : undefined}
       >
         <img src="/media/figma/icon-ticket.svg" alt="" width="18" height="18" />
@@ -140,6 +143,7 @@ export function SiteHeader() {
               <Link
                 className={active ? "is-active" : undefined}
                 href={item.href}
+                prefetch={false}
                 key={item.href}
                 aria-current={active ? "page" : undefined}
                 tabIndex={isMenuOpen ? 0 : -1}

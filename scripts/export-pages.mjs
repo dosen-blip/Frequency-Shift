@@ -68,7 +68,17 @@ function addTrailingSlashesToRouteHrefs(html) {
 function rewriteHtml(html) {
   let rewritten = html.replace(
     /(\b(?:href|src|action|content|poster|data-rsc-css-href)=["'])\/(?!\/)/gi,
-    `$1${basePath}/`,
+    (match, opening, offset, source) => {
+      const remainder = source.slice(offset + match.length);
+      const baseSegment = basePath.slice(1);
+      if (
+        baseSegment &&
+        (remainder === baseSegment || remainder.startsWith(`${baseSegment}/`))
+      ) {
+        return match;
+      }
+      return `${opening}${basePath}/`;
+    },
   );
 
   if (basePath) {
