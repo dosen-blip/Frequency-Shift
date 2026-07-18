@@ -94,7 +94,7 @@ export default function HomePage() {
             community that connects through sound.
           </p>
           <Link className="text-link" href="/about">
-            Read our story <span aria-hidden="true">↗</span>
+            Read our story
           </Link>
         </div>
       </section>

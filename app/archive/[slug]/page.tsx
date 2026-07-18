@@ -130,7 +130,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
               <dd>
                 {entry.sourceLinks.map((source) => (
                   <a key={source.href} href={source.href} target="_blank" rel="noreferrer">
-                    {source.label} <span aria-hidden="true">↗</span>
+                    {source.label}
                   </a>
                 ))}
               </dd>

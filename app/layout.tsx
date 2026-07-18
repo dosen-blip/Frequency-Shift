@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/media/figma/fs-logo.png",
-    shortcut: "/media/figma/fs-logo.png",
+    icon: "/media/brand/fs-icon-128.png",
+    shortcut: "/media/brand/fs-icon-128.png",
   },
   openGraph: {
     title: siteConfig.name,

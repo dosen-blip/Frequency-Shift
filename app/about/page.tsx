@@ -35,7 +35,7 @@ export default function AboutPage() {
             target="_blank"
             rel="noreferrer"
           >
-            Read the original statement <span aria-hidden="true">↗</span>
+            Read the original statement
           </a>
         </div>
       </section>

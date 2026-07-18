@@ -86,13 +86,20 @@ export function SiteHeader() {
       >
         <img
           className="wordmark__mark"
-          src="/media/figma/fs-logo-80.webp"
+          src="/media/brand/fs-icon.webp"
           alt=""
-          width="443"
-          height="466"
+          width="404"
+          height="410"
           decoding="async"
         />
-        <span>Frequency Shift</span>
+        <img
+          className="wordmark__type"
+          src="/media/brand/frequency-shift-wordmark.webp"
+          alt=""
+          width="1111"
+          height="81"
+          decoding="async"
+        />
       </Link>
       <nav className="site-nav" aria-label="Primary navigation">
         {primaryNavigation.map((item) => (
@@ -111,13 +118,6 @@ export function SiteHeader() {
         href="/archive/frequency-fest"
         aria-current={latestActive ? "page" : undefined}
       >
-        <img
-          src="/media/figma/icon-ticket.svg"
-          alt=""
-          width="18"
-          height="18"
-          decoding="async"
-        />
         Latest recap
       </Link>
       <div className={`mobile-nav${isMenuOpen ? " is-open" : ""}`}>

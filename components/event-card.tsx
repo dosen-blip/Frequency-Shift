@@ -29,11 +29,9 @@ export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; reve
         </h2>
         <div className="event-card__facts">
           <span>
-            <img src="/media/figma/icon-calendar.svg" alt="" width="16" height="16" />
             {event.dateLabel}
           </span>
           <span>
-            <img src="/media/figma/icon-location.svg" alt="" width="16" height="16" />
             {event.venue ? `${event.venue}, ${event.city}` : event.city}
           </span>
         </div>
