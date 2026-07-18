@@ -7,15 +7,31 @@ type ArchiveCardProps = {
 
 export function ArchiveCard({ entry }: ArchiveCardProps) {
   const cover = entry.gallery[entry.coverImageIndex];
+  const featureImages = (entry.featureImageIndices ?? [])
+    .map((imageIndex) => entry.gallery[imageIndex])
+    .filter(Boolean);
 
   return (
-    <article className="archive-card">
+    <article className={`archive-card${entry.featured ? " archive-card--featured" : ""}`}>
       <Link href={`/archive/${entry.slug}`} aria-label={`View ${entry.title} archive`}>
         <div
           className={`archive-card__visual${cover ? " archive-card__visual--photo" : ""}`}
           aria-hidden="true"
         >
-          {cover ? (
+          {featureImages.length ? (
+            <div className="archive-card__feature-mosaic">
+              {featureImages.map((image) => (
+                <img
+                  key={image.src}
+                  src={image.src}
+                  alt=""
+                  width={image.width}
+                  height={image.height}
+                  loading="eager"
+                />
+              ))}
+            </div>
+          ) : cover ? (
             <img
               src={cover.src}
               alt=""
@@ -25,7 +41,9 @@ export function ArchiveCard({ entry }: ArchiveCardProps) {
             />
           ) : null}
           <span className="archive-card__index">{entry.archiveLabel}</span>
-          <span className="archive-card__pending">{cover ? "Photo archive" : "Image pending"}</span>
+          <span className="archive-card__pending">
+            {entry.featured ? "Pinned archive" : cover ? "Photo archive" : "Image pending"}
+          </span>
           {cover ? null : <span className="archive-card__mark">F/S</span>}
         </div>
         <div className="archive-card__overlay">

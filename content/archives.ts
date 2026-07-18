@@ -3,6 +3,32 @@ import { archiveGalleries } from "./archive-media";
 
 export const archives: ArchiveRecord[] = [
   {
+    slug: "frequency-fest",
+    title: "Frequency Fest Vol. 1",
+    archiveLabel: "Permanent feature",
+    dateLabel: "July 10, 2026",
+    dateIso: "2026-07-10",
+    locationLabel: "Club SAW · 67 Nicholas St, Ottawa",
+    summary: "Frequency Fest expanded the signal across two stages for a full-scale Frequency Shift takeover.",
+    story: [
+      "The first Frequency Fest brought an open-air stage and main room together at Club SAW, moving from daylight into a late-night indoor session across one continuous takeover.",
+      "All fifteen photographs from the published event recap are preserved here. The gallery is credited in the original post to Catherine Archambault.",
+    ],
+    eventSlug: null,
+    gallery: archiveGalleries["frequency-fest"],
+    gallerySlotCount: archiveGalleries["frequency-fest"].length,
+    coverImageIndex: 0,
+    featured: true,
+    featureImageIndices: [0, 8, 3],
+    photoCredit: "@catherine.archambault",
+    sourceNote: "The event title and photographer are stated in the recap; the date, two-stage format, and venue come from the original announcement.",
+    sourceLinks: [
+      { label: "Event announcement", href: "https://www.instagram.com/p/DZBHCnzn8Sx/" },
+      { label: "Original event recap", href: "https://www.instagram.com/p/Das9FdvCfZt/" },
+    ],
+    draft: true,
+  },
+  {
     slug: "frequency-shift-001",
     title: "Frequency Shift 001",
     archiveLabel: "FS / 001",

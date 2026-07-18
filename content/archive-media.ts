@@ -3,6 +3,7 @@ import type { ArchiveRecord } from "./types";
 type ArchiveGallery = ArchiveRecord["gallery"];
 
 export type PopulatedArchiveSlug =
+  | "frequency-fest"
   | "frequency-shift-001"
   | "frequency-shift-002"
   | "frequency-shift-003"
@@ -23,6 +24,11 @@ function buildGallery(
 }
 
 export const archiveGalleries = {
+  "frequency-fest": buildGallery(
+    "frequency-fest",
+    "Frequency Fest Vol. 1",
+    [[1052,1402],[1179,1571],[1179,1571],[1440,1920],[1179,1571],[1179,1571],[1179,1571],[1179,1571],[1440,1920],[1179,1571],[1179,1571],[1179,1571],[1440,1918],[1069,1425],[1179,1571]],
+  ),
   "frequency-shift-001": buildGallery(
     "frequency-shift-001",
     "Frequency Shift 001",

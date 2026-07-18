@@ -60,6 +60,8 @@ export type ArchiveRecord = {
   gallery: Array<{ src: string; alt: string; width: number; height: number }>;
   gallerySlotCount: number;
   coverImageIndex: number;
+  featured?: boolean;
+  featureImageIndices?: number[];
   photoCredit: string | null;
   sourceNote: string;
   sourceLinks: Array<{ label: string; href: string }>;

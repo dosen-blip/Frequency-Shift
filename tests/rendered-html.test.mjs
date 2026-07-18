@@ -64,6 +64,7 @@ test("renders the primary route scaffold", async () => {
 
 test("renders every requested archive slot", async () => {
   const archiveRoutes = [
+    ["/archive/frequency-fest", /15(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-001", /20(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-002", /11(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-003", /16(?:<!-- -->)? photographs/i],
@@ -84,6 +85,11 @@ test("renders every requested archive slot", async () => {
 test("uses event photography for completed archive cards and galleries", async () => {
   const indexResponse = await render("/archive");
   const indexHtml = await indexResponse.text();
+  assert.match(indexHtml, /archive-card archive-card--featured/);
+  assert.match(indexHtml, /frequency-fest-01\.jpg/);
+  assert.ok(
+    indexHtml.indexOf("Frequency Fest Vol. 1") < indexHtml.indexOf("Frequency Shift 001"),
+  );
   assert.match(indexHtml, /frequency-shift-001-01\.jpg/);
   assert.match(indexHtml, /world-cup-01\.jpg/);
   assert.match(indexHtml, /dopamine-01\.jpg/);
@@ -102,6 +108,7 @@ test("uses event photography for completed archive cards and galleries", async (
 
 test("ships every declared archive photograph as a valid JPEG asset", async () => {
   const expectedCounts = {
+    "frequency-fest": 15,
     "frequency-shift-001": 20,
     "frequency-shift-002": 11,
     "frequency-shift-003": 16,

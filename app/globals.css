@@ -636,6 +636,10 @@ select {
   min-width: 0;
 }
 
+.archive-card--featured {
+  grid-column: 1 / -1;
+}
+
 .archive-card a {
   position: relative;
   display: block;
@@ -646,6 +650,10 @@ select {
   background: #0c0710;
   text-decoration: none;
   isolation: isolate;
+}
+
+.archive-card--featured a {
+  min-height: clamp(38rem, 62vw, 52rem);
 }
 
 .archive-card__visual {
@@ -670,6 +678,19 @@ select {
   height: 100%;
   object-fit: cover;
   filter: saturate(0.88) contrast(1.06) brightness(0.82);
+}
+
+.archive-card__feature-mosaic {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr 1fr;
+  gap: 1px;
+  background: #050305;
+}
+
+.archive-card__feature-mosaic img {
+  min-width: 0;
 }
 
 .archive-card__visual::before,
@@ -776,6 +797,15 @@ select {
   letter-spacing: -0.065em;
   line-height: 0.88;
   text-transform: uppercase;
+}
+
+.archive-card--featured h2 {
+  max-width: 12ch;
+  font-size: clamp(4rem, 9vw, 8rem);
+}
+
+.archive-card--featured .archive-card__overlay {
+  background: linear-gradient(180deg, rgba(3, 3, 4, 0.08) 18%, rgba(3, 3, 4, 0.94) 100%);
 }
 
 .archive-card__action {
@@ -1114,6 +1144,22 @@ select {
 
   .archive-card a {
     min-height: 32rem;
+  }
+
+  .archive-card--featured a {
+    min-height: 38rem;
+  }
+
+  .archive-card__feature-mosaic {
+    display: block;
+  }
+
+  .archive-card__feature-mosaic img {
+    display: none;
+  }
+
+  .archive-card__feature-mosaic img:first-child {
+    display: block;
   }
 
   .archive-gallery {

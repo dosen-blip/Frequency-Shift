@@ -14,7 +14,7 @@ export default function ArchiveIndexPage() {
       <PageHeader
         eyebrow="Afterimage"
         title="Archive"
-        intro="Eight past events, reconstructed from original announcements, recap captions, and photography. Five galleries are in place; three remain open for event stills."
+        intro="Frequency Fest stays pinned as the permanent lead feature, followed by eight numbered and special-event records reconstructed from original captions and photography."
       />
       <div className="archive-grid">
         {archives.map((entry) => (
