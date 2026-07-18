@@ -51,6 +51,23 @@ function rewriteHtml(html) {
     `$1${basePath}/`,
   );
 
+  if (basePath) {
+    const baseSegment = basePath.slice(1);
+    rewritten = rewritten.replace(
+      /(["'])\/(?!\/)/g,
+      (match, quote, offset, source) => {
+        const remainder = source.slice(offset + 2);
+        if (
+          remainder === baseSegment ||
+          remainder.startsWith(`${baseSegment}/`)
+        ) {
+          return match;
+        }
+        return `${quote}${basePath}/`;
+      },
+    );
+  }
+
   rewritten = rewritten.replace(
     /(\b(?:srcset|imagesrcset)=["'])([^"']*)(["'])/gi,
     (_match, opening, value, closing) =>

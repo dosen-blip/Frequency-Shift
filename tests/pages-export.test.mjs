@@ -29,9 +29,11 @@ test("prefixes internal routes and assets with the project site path", async () 
   assert.match(homepage, /(?:href|src)="\/Frequency-Shift\/assets\//);
   assert.match(homepage, /(?:href|src)="\/Frequency-Shift\/media\//);
   assert.match(homepage, /href="\/Frequency-Shift\/archive"/);
+  assert.match(homepage, /import\("\/Frequency-Shift\/assets\//);
   assert.match(archive, /href="\/Frequency-Shift\/archive\/frequency-fest"/);
   assert.match(homepage, /data-static-pages-navigation/);
   assert.doesNotMatch(homepage, /(?:href|src)="\/(?:assets|media)\//);
+  assert.doesNotMatch(homepage, /import\("\/assets\//);
   assert.doesNotMatch(archive, /href="\/archive(?:\/|\")/);
 });
 
