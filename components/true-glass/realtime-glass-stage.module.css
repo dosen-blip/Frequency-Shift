@@ -1,0 +1,102 @@
+.stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #09080d;
+}
+
+.backdrop,
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.backdrop {
+  z-index: 0;
+  object-fit: cover;
+  user-select: none;
+}
+
+.canvas {
+  z-index: 1;
+  display: block;
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.stage[data-realtime-glass-status="ready"] .canvas {
+  opacity: 1;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.stage [data-realtime-glass-lens="true"] {
+  isolation: isolate;
+  background: rgba(255, 255, 255, 0.012);
+  box-shadow:
+    0 2px 5px rgba(205, 225, 242, 0.075) inset,
+    0 -3px 7px rgba(4, 6, 12, 0.12) inset,
+    0 16px 42px rgba(0, 0, 0, 0.18);
+}
+
+.stage:is(
+  [data-realtime-glass-status="unsupported"],
+  [data-realtime-glass-status="context-lost"],
+  [data-realtime-glass-status="error"]
+) [data-realtime-glass-lens="true"] {
+  background:
+    linear-gradient(145deg, rgba(205, 225, 242, 0.065), transparent 38% 70%, rgba(3, 7, 14, 0.13)),
+    rgba(28, 30, 40, 0.18);
+  box-shadow:
+    0 0 0 0.75px rgba(205, 225, 242, 0.22) inset,
+    0 18px 48px rgba(0, 0, 0, 0.24);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  backdrop-filter: blur(12px) saturate(135%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  .canvas {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .stage [data-realtime-glass-lens="true"] {
+    background: rgba(14, 13, 19, 0.94);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.58) inset,
+      0 18px 48px rgba(0, 0, 0, 0.28);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .stage [data-realtime-glass-lens="true"] {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.88) inset,
+      0 18px 48px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@media (forced-colors: active) {
+  .stage [data-realtime-glass-lens="true"] {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}

@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 const builtArchiveRoot = fileURLToPath(
   new URL("../dist/client/media/archive/", import.meta.url),
 );
+const builtClientRoot = fileURLToPath(new URL("../dist/client/", import.meta.url));
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -144,6 +145,29 @@ test("keeps the internal draft event out of the public sitemap", async () => {
   const sitemap = await response.text();
   assert.doesNotMatch(sitemap, /next-frequency-shift/);
   assert.match(sitemap, /archive\/frequency-fest/);
+});
+
+test("keeps the glass material lab local-only", async () => {
+  const response = await render("/glass-lab");
+  assert.equal(response.status, 404);
+
+  const sitemapResponse = await render("/sitemap.xml");
+  assert.doesNotMatch(await sitemapResponse.text(), /glass-lab/);
+
+  const clientFiles = await readdir(builtClientRoot, { recursive: true });
+  assert.doesNotMatch(
+    clientFiles.join("\n"),
+    /(?:glass-demo|glass-lab|realtime-glass-stage|realtime-glass-engine)/i,
+  );
+
+  const clientText = (
+    await Promise.all(
+      clientFiles
+        .filter((path) => /\.(?:js|css)$/.test(path))
+        .map((path) => readFile(`${builtClientRoot}${path}`, "utf8")),
+    )
+  ).join("\n");
+  assert.doesNotMatch(clientText, /True glass system|realtimeGlassLens|glass-lab-root/);
 });
 
 test("ships every declared archive photograph as responsive WebP assets", async () => {

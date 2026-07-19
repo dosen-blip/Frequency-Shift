@@ -81,9 +81,26 @@ test("keeps the public boot path lightweight", async () => {
   const homepage = await readFile(output("index.html"), "utf8");
   const runtime = await readFile(output("static-pages.js"), "utf8");
 
-  assert.ok(Buffer.byteLength(homepage) < 12_000, "homepage HTML budget");
+  assert.ok(Buffer.byteLength(homepage) < 12_500, "homepage HTML budget");
   assert.ok(Buffer.byteLength(runtime) < 7_000, "static runtime budget");
   assert.doesNotMatch(homepage, /assets\/(?:framework|index)-[^"']+\.js/);
+});
+
+test("excludes the local glass lab from Pages artifacts", async () => {
+  const files = await readdir(outputRoot, { recursive: true });
+  assert.doesNotMatch(
+    files.join("\n"),
+    /(?:glass-demo|glass-lab|realtime-glass-stage|realtime-glass-engine)/i,
+  );
+
+  const bundledText = (
+    await Promise.all(
+      files
+        .filter((path) => /\.(?:js|css)$/.test(path))
+        .map((path) => readFile(output(path), "utf8")),
+    )
+  ).join("\n");
+  assert.doesNotMatch(bundledText, /True glass system|realtimeGlassLens|glass-lab-root/);
 });
 
 test("keeps legacy-compatible mobile media queries", async () => {

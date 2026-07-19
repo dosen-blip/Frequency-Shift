@@ -1,0 +1,1010 @@
+.lab {
+  min-height: 100vh;
+  padding: clamp(2.5rem, 6vw, 5rem) var(--content-pad) 7rem;
+  background:
+    radial-gradient(circle at 8% 7%, rgba(225, 42, 251, 0.16), transparent 28rem),
+    radial-gradient(circle at 92% 42%, rgba(0, 184, 219, 0.1), transparent 34rem),
+    #050407;
+}
+
+.intro,
+.section {
+  width: min(100%, 86rem);
+  margin-inline: auto;
+}
+
+.intro {
+  padding: clamp(2rem, 5vw, 5rem) 0 clamp(4rem, 9vw, 8rem);
+}
+
+.eyebrow,
+.materialReadout,
+.contextLabel,
+.matrixLabel {
+  margin: 0 0 0.7rem;
+  color: #ff73df;
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.intro h1 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(3.2rem, 9vw, 8rem);
+  letter-spacing: -0.065em;
+  line-height: 0.84;
+  text-transform: uppercase;
+}
+
+.intro > p:nth-of-type(2) {
+  max-width: 47rem;
+  margin: 1.75rem 0 0;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+}
+
+.intro .compatibilityNote {
+  max-width: 43rem;
+  margin-top: 1rem;
+  padding-left: 0.85rem;
+  border-left: 2px solid rgba(0, 220, 255, 0.55);
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.75rem;
+}
+
+.jumpNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 2rem;
+}
+
+.jumpNav a,
+.restoreNotice {
+  display: inline-flex;
+  min-height: 2.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  padding: 0.72rem 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color 180ms ease, color 180ms ease, background 180ms ease;
+  align-items: center;
+  justify-content: center;
+}
+
+.jumpNav a:hover,
+.jumpNav a:focus-visible,
+.restoreNotice:hover,
+.restoreNotice:focus-visible {
+  border-color: rgba(0, 220, 255, 0.65);
+  background: rgba(0, 220, 255, 0.08);
+  color: #fff;
+}
+
+.section {
+  padding: clamp(4rem, 9vw, 8rem) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+  scroll-margin-top: 5rem;
+}
+
+.sectionHeading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(16rem, 28rem);
+  gap: 1.5rem 4rem;
+  margin-bottom: 2rem;
+  align-items: end;
+}
+
+.sectionHeading .eyebrow {
+  grid-column: 1 / -1;
+  margin-bottom: -0.5rem;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  font-size: clamp(2.6rem, 6vw, 5.6rem);
+  letter-spacing: -0.055em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.sectionHeading > p:last-child {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.labControls {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.opticalControls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+}
+
+.realtimeMeta {
+  display: flex;
+  gap: 0.75rem 1.5rem;
+  margin: 0 0 0.8rem;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  justify-content: space-between;
+}
+
+.realtimeStage {
+  min-height: clamp(39rem, 69vw, 58rem);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: clamp(1.5rem, 4vw, 3rem);
+}
+
+.realtimeScene {
+  position: relative;
+  display: grid;
+  min-height: clamp(39rem, 69vw, 58rem);
+  padding: clamp(1rem, 5vw, 5rem);
+  overflow: hidden;
+  align-items: end;
+}
+
+.realtimeScene::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgba(13, 4, 18, 0.08) 18%, rgba(9, 3, 13, 0.68) 100%),
+    radial-gradient(circle at 24% 18%, rgba(236, 36, 215, 0.18), transparent 38%);
+  content: "";
+  pointer-events: none;
+}
+
+.realtimeBackdropType {
+  position: absolute;
+  top: 6%;
+  right: -0.035em;
+  z-index: 1;
+  color: rgba(255, 255, 255, 0.12);
+  font-size: clamp(6rem, 18vw, 17rem);
+  font-weight: 900;
+  letter-spacing: -0.09em;
+  line-height: 0.68;
+  text-align: right;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.realtimeLens {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 44rem);
+  min-height: 22rem;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 0;
+  border-radius: 2rem;
+  outline: none;
+}
+
+.realtimeLens::after {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse at 14% 5%, rgba(205, 225, 242, 0.065), transparent 38%),
+    linear-gradient(145deg, rgba(205, 225, 242, 0.035), transparent 26% 74%, rgba(8, 6, 15, 0.045));
+  box-shadow:
+    0 2px 6px rgba(205, 225, 242, 0.075) inset,
+    0 -4px 9px rgba(10, 6, 15, 0.14) inset,
+    0 24px 70px rgba(0, 0, 0, 0.22);
+  content: "";
+  pointer-events: none;
+}
+
+.realtimeLens:focus-visible {
+  outline: 2px solid rgba(112, 230, 255, 0.95);
+  outline-offset: 5px;
+}
+
+.realtimeLens h3 {
+  max-width: 9ch;
+  margin: 0;
+  font-size: clamp(3rem, 7vw, 6.4rem);
+  letter-spacing: -0.065em;
+  line-height: 0.84;
+  text-transform: uppercase;
+}
+
+.realtimeLens > p:not(.materialReadout) {
+  max-width: 34rem;
+  margin: 1.15rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.realtimePrompt {
+  display: inline-flex;
+  min-height: 2.75rem;
+  margin-top: 1.4rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  align-items: center;
+}
+
+.realtimeBoundary {
+  position: absolute;
+  right: clamp(1rem, 4vw, 3rem);
+  bottom: clamp(1rem, 4vw, 3rem);
+  z-index: 2;
+  width: min(23rem, 32%);
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.68rem;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.metrics {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  max-width: calc(100% - 2rem);
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.6rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.metrics span {
+  padding: 0.38rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(4, 4, 8, 0.55);
+  backdrop-filter: blur(8px);
+}
+
+.metrics strong {
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.diagnosticStage {
+  min-height: clamp(42rem, 70vw, 62rem);
+  margin-top: 1rem;
+}
+
+.diagnosticScene {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2.5rem);
+  min-height: clamp(42rem, 70vw, 62rem);
+  padding: clamp(5rem, 8vw, 7rem) clamp(1rem, 5vw, 5rem) clamp(2rem, 5vw, 5rem);
+  align-content: center;
+  align-items: center;
+}
+
+.stressGrid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: clamp(4rem, 13vw, 12rem);
+  font-weight: 900;
+  letter-spacing: -0.08em;
+  line-height: 0.82;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
+
+.calibration-capsule,
+.calibration-control,
+.calibration-panel {
+  align-self: center;
+  justify-self: center;
+}
+
+.calibration-capsule {
+  grid-column: 1;
+  width: min(100%, 26rem);
+  min-height: 5.5rem;
+  padding: 1.2rem 1.6rem;
+  border-radius: 999px;
+}
+
+.calibration-control {
+  grid-column: 2;
+  width: min(100%, 25rem);
+  min-height: 10rem;
+  padding: 1.5rem;
+  border-radius: 1.6rem 3.2rem 1.6rem 3.2rem;
+}
+
+.calibration-panel {
+  grid-column: 1 / -1;
+}
+
+.calibration-capsule h3,
+.calibration-control h3 {
+  max-width: none;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: 0.9;
+}
+
+.calibration-capsule > p:not(.materialReadout),
+.calibration-control > p:not(.materialReadout),
+.calibration-capsule .realtimePrompt,
+.calibration-control .realtimePrompt {
+  display: none;
+}
+
+.rangeControl {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.rangeControl > span {
+  display: flex;
+  color: rgba(255, 255, 255, 0.53);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  justify-content: space-between;
+}
+
+.rangeControl output {
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.rangeControl input {
+  width: 100%;
+  accent-color: #ef36c7;
+}
+
+.picker {
+  min-width: 0;
+  margin: 0;
+  padding: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.picker legend {
+  padding: 0 0.35rem;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.picker > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.picker button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 750;
+  text-transform: capitalize;
+}
+
+.picker button:hover,
+.picker button:focus-visible {
+  color: #fff;
+}
+
+.picker .pickerActive {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 62, 209, 0.1);
+}
+
+.playground {
+  position: relative;
+  display: grid;
+  min-height: clamp(38rem, 72vw, 60rem);
+  padding: clamp(1rem, 5vw, 5rem);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: clamp(1.5rem, 4vw, 3rem);
+  background-position: center;
+  background-size: cover;
+  align-items: end;
+  transition: background 350ms ease;
+}
+
+.playground::after,
+.context::after {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, transparent 38%, rgba(4, 3, 7, 0.62));
+  content: "";
+  pointer-events: none;
+}
+
+.background-club {
+  background-image: url("/media/figma/hero-crowd-1440.webp");
+}
+
+.background-portrait {
+  background-image: url("/media/archive/dopamine/dopamine-15-800.webp");
+}
+
+.background-mesh {
+  background:
+    radial-gradient(circle at 20% 20%, #ef24d2, transparent 28%),
+    radial-gradient(circle at 77% 68%, #00d4ff, transparent 26%),
+    repeating-linear-gradient(112deg, transparent 0 4rem, rgba(255, 255, 255, 0.11) 4.05rem 4.12rem),
+    #1a0725;
+}
+
+.background-light {
+  background:
+    radial-gradient(circle at 70% 18%, rgba(0, 206, 242, 0.7), transparent 22%),
+    radial-gradient(circle at 22% 78%, rgba(255, 45, 196, 0.5), transparent 24%),
+    linear-gradient(135deg, #ffffff, #eae8f1 55%, #c7c3d4);
+}
+
+.sceneType {
+  position: absolute;
+  top: 7%;
+  right: -0.04em;
+  z-index: 0;
+  color: rgba(255, 255, 255, 0.12);
+  font-size: clamp(5rem, 16vw, 15rem);
+  font-weight: 900;
+  letter-spacing: -0.08em;
+  line-height: 0.68;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.background-light .sceneType {
+  color: rgba(18, 9, 24, 0.12);
+}
+
+.playgroundGlass {
+  z-index: 1;
+  width: min(100%, 46rem);
+  padding: clamp(1.4rem, 4vw, 3.2rem);
+}
+
+.playgroundGlass h3 {
+  max-width: 11ch;
+  margin: 0;
+  font-size: clamp(2.8rem, 7vw, 6.3rem);
+  letter-spacing: -0.06em;
+  line-height: 0.86;
+  text-transform: uppercase;
+}
+
+.playgroundGlass > div > p:not(.materialReadout) {
+  max-width: 34rem;
+  margin: 1rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+}
+
+.materialMatrix {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.matrixScene {
+  position: relative;
+  display: grid;
+  min-height: 22rem;
+  padding: 1rem;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(220, 33, 240, 0.75), transparent 28%),
+    radial-gradient(circle at 80% 80%, rgba(0, 201, 235, 0.65), transparent 30%),
+    #111016;
+  place-items: center;
+}
+
+.matrixScene:nth-child(2n) {
+  background:
+    repeating-linear-gradient(120deg, transparent 0 2.8rem, rgba(255, 255, 255, 0.1) 2.85rem 2.92rem),
+    linear-gradient(135deg, #281132, #0a1f25);
+}
+
+.orb {
+  position: absolute;
+  top: 14%;
+  right: 8%;
+  width: 9rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d2ef, #f424d0);
+  filter: blur(2px);
+  opacity: 0.8;
+}
+
+.matrixLines {
+  position: absolute;
+  bottom: 8%;
+  left: -10%;
+  width: 80%;
+  height: 4rem;
+  border-block: 1px solid rgba(255, 255, 255, 0.28);
+  transform: rotate(-12deg);
+}
+
+.matrixGlass {
+  width: min(100%, 18rem);
+  min-height: 13rem;
+  padding: 1.35rem;
+}
+
+.matrixGlass strong {
+  display: block;
+  font-size: 1.25rem;
+  text-transform: capitalize;
+}
+
+.matrixGlass p {
+  margin: 0.75rem 0 0;
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.83rem;
+}
+
+.contextGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.context {
+  position: relative;
+  display: grid;
+  min-height: 34rem;
+  padding: clamp(1rem, 3vw, 2rem);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.75rem;
+}
+
+.contextLabel {
+  position: absolute;
+  top: 1.3rem;
+  left: 1.4rem;
+  z-index: 3;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.navContext {
+  background:
+    radial-gradient(circle at 72% 22%, #00c7e6, transparent 29%),
+    radial-gradient(circle at 23% 70%, #d51add, transparent 32%),
+    #13051c;
+  align-items: center;
+}
+
+.glassNav {
+  z-index: 1;
+  width: 100%;
+  padding: 0.55rem 0.6rem 0.55rem 1rem;
+}
+
+.glassNavContent {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: center;
+}
+
+.glassNav nav {
+  display: flex;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+.glassNav nav a {
+  display: inline-flex;
+  min-height: 2.75rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  align-items: center;
+}
+
+.posterContext {
+  background: url("/media/archive/frequency-shift-003/frequency-shift-003-09-800.webp") center / cover;
+  align-items: end;
+}
+
+.eventCard {
+  z-index: 1;
+  width: min(100%, 26rem);
+  padding: 1.5rem;
+}
+
+.eventCard > div > span,
+.captionCard span,
+.lightCard > div > span {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eventCard h3,
+.lightCard h3 {
+  margin: 0.7rem 0;
+  font-size: clamp(2rem, 4vw, 3.7rem);
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.eventCard p {
+  margin: 0 0 1.25rem;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.captionContext {
+  background: url("/media/archive/dopamine/dopamine-02-800.webp") center / cover;
+  align-items: end;
+}
+
+.captionCard {
+  z-index: 1;
+  width: 100%;
+  padding: 1rem 1.15rem;
+}
+
+.captionCardContent {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.captionCard strong {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.25rem;
+}
+
+.typeContext {
+  background: #f0edf3;
+  align-items: end;
+}
+
+.typeContext::after,
+.lightContext::after {
+  display: none;
+}
+
+.giantType {
+  position: absolute;
+  top: 18%;
+  left: -0.05em;
+  color: #120b16;
+  font-size: clamp(7rem, 17vw, 14rem);
+  font-weight: 950;
+  letter-spacing: -0.09em;
+  line-height: 0.8;
+}
+
+.dock {
+  z-index: 1;
+  width: max-content;
+  max-width: 100%;
+  padding: 0.55rem;
+}
+
+.dockContent {
+  display: flex;
+  gap: 0.7rem;
+  width: 100%;
+  align-items: center;
+}
+
+.dockContent > span {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.lightContext {
+  background:
+    radial-gradient(circle at 70% 20%, rgba(0, 208, 240, 0.65), transparent 23%),
+    radial-gradient(circle at 20% 80%, rgba(255, 45, 200, 0.42), transparent 24%),
+    linear-gradient(145deg, #fff, #dedce6);
+  align-items: center;
+}
+
+.lightContext .contextLabel {
+  color: rgba(20, 12, 25, 0.6);
+}
+
+.lightCard {
+  z-index: 1;
+  width: min(100%, 28rem);
+  padding: 1.6rem;
+}
+
+.lightCard p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.noticeContext {
+  background: url("/media/archive/frequency-shift-002/frequency-shift-002-06-800.webp") center / cover;
+  align-items: end;
+}
+
+.notice {
+  z-index: 1;
+  width: 100%;
+  padding: 1rem;
+}
+
+.noticeContent {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notice strong,
+.notice span {
+  display: block;
+}
+
+.notice span {
+  margin-top: 0.2rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.76rem;
+}
+
+.restoreNotice {
+  z-index: 1;
+  width: max-content;
+  cursor: pointer;
+}
+
+.controlScene {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-height: 22rem;
+  padding: clamp(1.5rem, 5vw, 5rem);
+  border-radius: 2rem;
+  background:
+    radial-gradient(circle at 13% 22%, rgba(239, 36, 210, 0.75), transparent 23%),
+    radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.65), transparent 26%),
+    repeating-linear-gradient(115deg, transparent 0 4rem, rgba(255, 255, 255, 0.08) 4.05rem 4.1rem),
+    #12091a;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.note {
+  width: min(100%, 86rem);
+  margin: 0 auto;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.11);
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.76rem;
+}
+
+@media (max-width: 1050px) {
+  .realtimeScene {
+    align-content: end;
+  }
+
+  .realtimeBoundary {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    z-index: 2;
+    width: min(100%, 25rem);
+    margin-top: 1rem;
+    text-align: left;
+  }
+}
+
+@media (max-width: 900px) {
+  .labControls,
+  .opticalControls,
+  .sectionHeading {
+    grid-template-columns: 1fr;
+  }
+
+  .materialMatrix {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sectionHeading .eyebrow {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  .lab {
+    padding-top: 1.5rem;
+  }
+
+  .intro {
+    padding-top: 1.5rem;
+  }
+
+  .contextGrid,
+  .materialMatrix {
+    grid-template-columns: 1fr;
+  }
+
+  .playground {
+    min-height: 42rem;
+    padding: 1rem;
+  }
+
+  .realtimeStage,
+  .realtimeScene {
+    min-height: 43rem;
+  }
+
+  .realtimeScene {
+    padding: 1rem;
+  }
+
+  .diagnosticStage,
+  .diagnosticScene {
+    min-height: 58rem;
+  }
+
+  .diagnosticScene {
+    grid-template-columns: 1fr;
+    padding: 6.5rem 1rem 2rem;
+  }
+
+  .calibration-capsule,
+  .calibration-control,
+  .calibration-panel {
+    grid-column: 1;
+  }
+
+  .calibration-capsule,
+  .calibration-control {
+    min-height: 7rem;
+  }
+
+  .calibration-panel {
+    min-height: 23rem;
+  }
+
+  .realtimeLens {
+    min-height: 25rem;
+    padding: 1.35rem;
+  }
+
+  .context {
+    min-height: 29rem;
+  }
+
+  .glassNav nav a:nth-child(2) {
+    display: none;
+  }
+
+  .glassNavContent {
+    gap: 0.6rem;
+  }
+
+  .glassNav nav {
+    gap: 0.65rem;
+  }
+
+  .dock,
+  .notice {
+    width: 100%;
+  }
+
+  .dockContent {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 430px) {
+  .realtimeMeta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .realtimeLens h3 {
+    font-size: 3.25rem;
+  }
+
+  .picker > div {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .picker button {
+    width: 100%;
+  }
+
+  .playgroundGlass h3 {
+    font-size: 2.75rem;
+  }
+
+  .glassNav > div > strong {
+    display: none;
+  }
+
+  .glassNav nav {
+    margin-left: 0;
+  }
+
+  .noticeContent {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .playground {
+    transition: none;
+  }
+}

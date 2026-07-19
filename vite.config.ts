@@ -15,6 +15,46 @@ const publicBase = pagesBasePath
   ? `/${pagesBasePath.replace(/^\/+|\/+$/g, "")}/`
   : "/";
 
+function localGlassLab() {
+  return {
+    name: "frequency-shift-local-glass-lab",
+    apply: "serve" as const,
+    configureServer(server: import("vite").ViteDevServer) {
+      server.middlewares.use(async (request, response, next) => {
+        const pathname = new URL(request.url ?? "/", "http://localhost").pathname
+          .replace(/\/+$/, "") || "/";
+        if (pathname !== "/glass-lab") {
+          next();
+          return;
+        }
+
+        try {
+          const source = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Glass Material Lab</title>
+  </head>
+  <body>
+    <div id="glass-lab-root"></div>
+    <script type="module" src="/app/glass-lab/dev-entry.tsx"></script>
+  </body>
+</html>`;
+          const html = await server.transformIndexHtml(request.url ?? "/glass-lab", source);
+          response.statusCode = 200;
+          response.setHeader("Content-Type", "text/html; charset=utf-8");
+          response.setHeader("Cache-Control", "no-store");
+          response.end(html);
+        } catch (error) {
+          next(error);
+        }
+      });
+    },
+  };
+}
+
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
@@ -60,6 +100,7 @@ export default defineConfig(async () => {
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,
     plugins: [
+      localGlassLab(),
       vinext(),
       sites(),
       cloudflare({

@@ -1,6 +1,7 @@
-import Link from "next/link";
 import type { EventRecord } from "@/content/types";
 import { eventStatusLabels } from "@/content/types";
+import { SiteGlassAnchor, SiteGlassButton, SiteGlassLink } from "@/components/site-glass-controls";
+import Link from "next/link";
 
 export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; revealIndex?: number }) {
   return (
@@ -36,17 +37,17 @@ export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; reve
           </span>
         </div>
         <div className="card-actions">
-          <Link className="button button--ghost" href={`/events/${event.slug}`}>
+          <SiteGlassLink variant="ghost" href={`/events/${event.slug}`}>
             Event details
-          </Link>
+          </SiteGlassLink>
           {event.ticketUrl ? (
-            <a className="button button--solid" href={event.ticketUrl} rel="noreferrer" target="_blank">
+            <SiteGlassAnchor variant="solid" href={event.ticketUrl} rel="noreferrer" target="_blank">
               Tickets
-            </a>
+            </SiteGlassAnchor>
           ) : (
-            <span className="button button--disabled" aria-label="Tickets are not yet available">
+            <SiteGlassButton className="button--disabled" disabled aria-label="Tickets are not yet available">
               Details soon
-            </span>
+            </SiteGlassButton>
           )}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GlassSurface } from "@/components/true-glass/true-glass";
 import type { ArchiveRecord } from "@/content/types";
 
 type ArchiveCardProps = {
@@ -64,25 +65,38 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
               />
             </picture>
           ) : null}
+        </div>
+        <GlassSurface
+          className="archive-card__glass"
+          contentClassName="archive-card__glass-content"
+          tone="smoked"
+          depth="deep"
+          radius="1.25rem"
+          displacementScale={18}
+          aberrationIntensity={0.72}
+          elasticity={0.16}
+          blurAmount={2}
+          saturation={142}
+        >
           <span className="archive-card__index">{entry.archiveLabel}</span>
           <span className="archive-card__pending">
             {entry.featured ? "Pinned archive" : cover ? "Photo archive" : "Image pending"}
           </span>
           {cover ? null : <span className="archive-card__mark">F/S</span>}
-        </div>
-        <div className="archive-card__overlay">
-          <div className="archive-card__meta">
-            <time dateTime={entry.dateIso}>{entry.dateLabel}</time>
-            <span>
-              {entry.gallery.length
-                ? `${entry.gallery.length} photographs`
-                : `${entry.gallerySlotCount} image slots`}
-            </span>
+          <div className="archive-card__overlay">
+            <div className="archive-card__meta">
+              <time dateTime={entry.dateIso}>{entry.dateLabel}</time>
+              <span>
+                {entry.gallery.length
+                  ? `${entry.gallery.length} photographs`
+                  : `${entry.gallerySlotCount} image slots`}
+              </span>
+            </div>
+            <h2>{entry.title}</h2>
+            <p className="archive-card__summary">{entry.summary}</p>
+            <span className="archive-card__action">View archive</span>
           </div>
-          <h2>{entry.title}</h2>
-          <p className="archive-card__summary">{entry.summary}</p>
-          <span className="archive-card__action">View archive</span>
-        </div>
+        </GlassSurface>
       </Link>
     </article>
   );

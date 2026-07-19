@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { SiteGlassAnchor, SiteGlassButton, SiteGlassLink } from "@/components/site-glass-controls";
 import { events, getEvent } from "@/content/events";
 import { eventStatusLabels } from "@/content/types";
 
@@ -53,15 +53,15 @@ export default async function EventPage({ params }: EventPageProps) {
           </dl>
           <div className="card-actions" style={{ marginTop: "2rem" }}>
             {event.ticketUrl ? (
-              <a className="button button--solid" href={event.ticketUrl} rel="noreferrer" target="_blank">
+              <SiteGlassAnchor variant="solid" href={event.ticketUrl} rel="noreferrer" target="_blank">
                 Buy tickets
-              </a>
+              </SiteGlassAnchor>
             ) : (
-              <button className="button button--disabled" type="button" disabled>Not yet available</button>
+              <SiteGlassButton className="button--disabled" disabled>Not yet available</SiteGlassButton>
             )}
-            <Link className="button button--ghost" href="/events">
+            <SiteGlassLink variant="ghost" href="/events">
               All events
-            </Link>
+            </SiteGlassLink>
           </div>
         </aside>
       </div>
