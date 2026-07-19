@@ -219,7 +219,7 @@ test("keeps media-query listeners compatible with legacy Safari", async () => {
   assert.match(source, /query\.removeListener\(listener\)/);
 });
 
-test("keeps the glass lab local while exposing only production glass components", async () => {
+test("keeps the glass lab behind serve-only middleware and out of public modules", async () => {
   const viteConfig = await readFile(`${workspaceRoot}vite.config.ts`, "utf8");
   assert.match(viteConfig, /function\s+localGlassLab\s*\(/);
   assert.match(viteConfig, /apply:\s*["']serve["']/);
@@ -239,18 +239,10 @@ test("keeps the glass lab local while exposing only production glass components"
       )
     ).join("\n");
 
-    assert.doesNotMatch(source, /glass-lab-root|from\s*["'][^"']*glass-lab/);
+    assert.doesNotMatch(
+      source,
+      /(?:from\s*["'][^"']*true-glass|import\s*\([^)]*true-glass|glass-lab-root)/,
+      `${root} must not import the local-only glass implementation`,
+    );
   }
-
-  const controls = await readFile(
-    `${workspaceRoot}components/site-glass-controls.tsx`,
-    "utf8",
-  );
-  const archiveCard = await readFile(
-    `${workspaceRoot}components/archive-card.tsx`,
-    "utf8",
-  );
-  assert.match(controls, /true-glass\/true-glass/);
-  assert.match(archiveCard, /true-glass\/true-glass/);
-  assert.doesNotMatch(controls, /realtime-glass-stage|glass-lab/);
 });

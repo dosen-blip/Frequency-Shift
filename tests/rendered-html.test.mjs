@@ -157,7 +157,7 @@ test("keeps the glass material lab local-only", async () => {
   const clientFiles = await readdir(builtClientRoot, { recursive: true });
   assert.doesNotMatch(
     clientFiles.join("\n"),
-    /(?:glass-demo|glass-lab|realtime-glass-stage|realtime-glass-engine)/i,
+    /(?:glass-demo|glass-lab|realtime-glass|true-glass)/i,
   );
 
   const clientText = (

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
-import { SiteGlassAnchor } from "@/components/site-glass-controls";
 import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -26,14 +25,14 @@ export default function ContactPage() {
             can pick up the conversation.
           </p>
           <p>
-            <SiteGlassAnchor
-              variant="solid"
+            <a
+              className="button button--solid"
               href={siteConfig.instagram.href}
               target="_blank"
               rel="noreferrer"
             >
               Message {siteConfig.instagram.handle}
-            </SiteGlassAnchor>
+            </a>
           </p>
           <p className="notice">Instagram is currently the active route for bookings and collaborations.</p>
         </div>

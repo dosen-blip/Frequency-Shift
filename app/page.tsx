@@ -1,7 +1,6 @@
+import Link from "next/link";
 import { EventCard } from "@/components/event-card";
 import { RouteHero } from "@/components/route-hero";
-import { SiteGlassLink } from "@/components/site-glass-controls";
-import Link from "next/link";
 import { archives } from "@/content/archives";
 import { events } from "@/content/events";
 import { momentGallery } from "@/content/media";
@@ -21,9 +20,9 @@ export default function HomePage() {
         imageSrc="/media/figma/hero-crowd-960.webp"
         imageSrcSet="/media/figma/hero-crowd-960.webp 960w, /media/figma/hero-crowd-1440.webp 1440w, /media/figma/hero-crowd.webp 2400w"
         actions={
-          <SiteGlassLink variant="light" href="/archive">
+          <Link className="button button--light" href="/archive">
             Enter the archive
-          </SiteGlassLink>
+          </Link>
         }
       />
 
@@ -35,9 +34,9 @@ export default function HomePage() {
               Next <span className="gradient-text">up</span>
             </h2>
           </div>
-          <SiteGlassLink variant="ghost" href="/events" data-reveal="up">
+          <Link className="button button--ghost" href="/events" data-reveal="up">
             View all events
-          </SiteGlassLink>
+          </Link>
         </div>
         <div className="event-grid">
           {featuredEvent ? (
@@ -57,9 +56,9 @@ export default function HomePage() {
             </h2>
           </div>
           {featuredArchive ? (
-            <SiteGlassLink variant="ghost" href={`/archive/${featuredArchive.slug}`} data-reveal="up">
+            <Link className="button button--ghost" href={`/archive/${featuredArchive.slug}`} data-reveal="up">
               Open the archive
-            </SiteGlassLink>
+            </Link>
           ) : null}
         </div>
         <div className="memory-strip" aria-label="Selected event moments">
