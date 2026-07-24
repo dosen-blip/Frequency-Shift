@@ -37,7 +37,7 @@ test("server-renders the Frequency Shift homepage", async () => {
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
   assert.match(html, /Raw energy\. Pure frequency\./);
-  assert.match(html, /next date is being tuned/i);
+  assert.match(html, /The Experiment/);
   assert.match(html, /hero-crowd-960\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
@@ -52,6 +52,7 @@ test("renders the primary route scaffold", async () => {
     ["/archive/frequency-shift-001", /frequency-shift-001-01\.webp/],
     ["/about", /Not just another night out/],
     ["/contact", /Contact Frequency Shift/],
+    ["/events/the-experiment", /Yaan, Valium, Seb B, Balla/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
     ["/terms", /<title>Terms — Frequency Shift<\/title>/i],
   ];
@@ -113,6 +114,9 @@ test("renders caption-grounded editorial and event facts", async () => {
   const homepageHtml = await homepage.text();
   assert.match(homepageHtml, /Ottawa’s underground, on its own frequency/);
   assert.match(homepageHtml, /freedom, self-expression, and a community/i);
+  assert.match(homepageHtml, /The Experiment/);
+  assert.match(homepageHtml, /August 7, 2026/);
+  assert.match(homepageHtml, /the-experiment\.webp/);
 
   const about = await render("/about");
   const aboutHtml = await about.text();
@@ -137,6 +141,18 @@ test("renders caption-grounded editorial and event facts", async () => {
     assert.equal(response.status, 200, path);
     assert.match(await response.text(), expected, path);
   }
+
+  const ogs018 = await render("/archive/frequency-shift-003");
+  const ogs018Html = await ogs018.text();
+  assert.match(ogs018Html, /sets were later released in full/i);
+  assert.match(ogs018Html, /DPAOdRxDzCV/);
+  assert.match(ogs018Html, /DPNJv_KEW9M/);
+  assert.match(ogs018Html, /DPXgfzYEZX9/);
+
+  const ogs041 = await render("/archive/frequency-shift-004");
+  const ogs041Html = await ogs041.text();
+  assert.match(ogs041Html, /run-it-back/i);
+  assert.match(ogs041Html, /DSfs0EuDE7I/);
 });
 
 test("keeps the internal draft event out of the public sitemap", async () => {
@@ -144,6 +160,7 @@ test("keeps the internal draft event out of the public sitemap", async () => {
   assert.equal(response.status, 200);
   const sitemap = await response.text();
   assert.doesNotMatch(sitemap, /next-frequency-shift/);
+  assert.match(sitemap, /events\/the-experiment/);
   assert.match(sitemap, /archive\/frequency-fest/);
 });
 
