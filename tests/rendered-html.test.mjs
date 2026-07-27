@@ -36,9 +36,11 @@ test("server-renders the Frequency Shift homepage", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
-  assert.match(html, /Raw energy\. Pure frequency\./);
+  assert.match(html, /For the love of house\./);
   assert.match(html, /The Experiment/);
-  assert.match(html, /hero-crowd-960\.webp/);
+  assert.match(html, /frequency-shift-wordmark-neon\.svg/);
+  assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
+  assert.match(html, /event-tech\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
@@ -66,11 +68,11 @@ test("renders the primary route scaffold", async () => {
 
 test("renders every requested archive slot", async () => {
   const archiveRoutes = [
-    ["/archive/frequency-fest", /15(?:<!-- -->)? photographs/i],
+    ["/archive/frequency-fest", /27(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-001", /20(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-002", /11(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-003", /16(?:<!-- -->)? photographs/i],
-    ["/archive/frequency-shift-004", /12(?:<!-- -->)? image slots/i],
+    ["/archive/frequency-shift-004", /2(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-005", /12(?:<!-- -->)? image slots/i],
     ["/archive/world-cup", /10(?:<!-- -->)? photographs/i],
     ["/archive/solstice", /12(?:<!-- -->)? image slots/i],
@@ -102,6 +104,12 @@ test("uses event photography for completed archive cards and galleries", async (
   assert.match(photoHtml, /frequency-shift-003-16\.webp/);
   assert.doesNotMatch(photoHtml, /Photography placeholders \/ final edit pending/);
 
+  const reelArchive = await render("/archive/frequency-shift-004");
+  const reelHtml = await reelArchive.text();
+  assert.match(reelHtml, /frequency-shift-004-02\.webp/);
+  assert.match(reelHtml, /selected still frames from the official January 8 recap Reel/i);
+  assert.doesNotMatch(reelHtml, /Photography placeholders \/ final edit pending/);
+
   const pendingArchive = await render("/archive/solstice");
   assert.match(
     await pendingArchive.text(),
@@ -112,7 +120,8 @@ test("uses event photography for completed archive cards and galleries", async (
 test("renders caption-grounded editorial and event facts", async () => {
   const homepage = await render("/");
   const homepageHtml = await homepage.text();
-  assert.match(homepageHtml, /Ottawa’s underground, on its own frequency/);
+  assert.match(homepageHtml, /Ottawa’s underground,/);
+  assert.match(homepageHtml, /on its own frequency/);
   assert.match(homepageHtml, /freedom, self-expression, and a community/i);
   assert.match(homepageHtml, /The Experiment/);
   assert.match(homepageHtml, /August 7, 2026/);
@@ -189,10 +198,11 @@ test("keeps the glass material lab local-only", async () => {
 
 test("ships every declared archive photograph as responsive WebP assets", async () => {
   const expectedCounts = {
-    "frequency-fest": 15,
+    "frequency-fest": 27,
     "frequency-shift-001": 20,
     "frequency-shift-002": 11,
     "frequency-shift-003": 16,
+    "frequency-shift-004": 2,
     "world-cup": 10,
     dopamine: 20,
   };

@@ -6,6 +6,7 @@ import { siteConfig } from "@/content/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.canonicalBase),
   title: {
     default: `${siteConfig.name} — ${siteConfig.location}`,
     template: `%s — ${siteConfig.name}`,
@@ -19,6 +20,20 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     type: "website",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "Frequency Shift — Ottawa, for the love of house.",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.name,
+    description: siteConfig.description,
+    images: ["/og.png"],
   },
 };
 

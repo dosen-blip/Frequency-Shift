@@ -72,7 +72,7 @@ export function SiteHeader() {
     };
   }, [closeMenu, isMenuOpen]);
 
-  const latestActive = pathname === "/archive/frequency-fest";
+  const latestActive = pathname === "/events/the-experiment";
 
   return (
     <header
@@ -94,10 +94,10 @@ export function SiteHeader() {
         />
         <img
           className="wordmark__type"
-          src="/media/brand/frequency-shift-wordmark.webp"
+          src="/media/brand/frequency-shift-wordmark-vector.svg"
           alt=""
-          width="1111"
-          height="81"
+          width="1456"
+          height="103"
           decoding="async"
         />
       </Link>
@@ -115,10 +115,10 @@ export function SiteHeader() {
       </nav>
       <Link
         className={`header-cta${latestActive ? " is-active" : ""}`}
-        href="/archive/frequency-fest"
+        href="/events/the-experiment"
         aria-current={latestActive ? "page" : undefined}
       >
-        Latest recap
+        Next event
       </Link>
       <div className={`mobile-nav${isMenuOpen ? " is-open" : ""}`}>
         <button
@@ -179,7 +179,7 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          <Link href="/archive/frequency-fest">Latest recap</Link>
+          <Link href="/events/the-experiment">Next event</Link>
         </nav>
       </details>
     </header>

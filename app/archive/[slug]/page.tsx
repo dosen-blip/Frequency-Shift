@@ -111,7 +111,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
         <aside data-reveal="up" style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
           <p className="notice">
             {entry.gallery.length
-              ? "Photography published in the event recaps is in place. Final captions and editorial sequencing remain open for review."
+              ? "Selected event media from the published recaps is in place. Final captions and editorial sequencing remain open for review."
               : "Archive record established. Original event photography remains to be supplied and approved."}
           </p>
           <dl className="archive-provenance">

@@ -7,6 +7,7 @@ export type PopulatedArchiveSlug =
   | "frequency-shift-001"
   | "frequency-shift-002"
   | "frequency-shift-003"
+  | "frequency-shift-004"
   | "world-cup"
   | "dopamine";
 
@@ -14,6 +15,7 @@ function buildGallery(
   slug: string,
   title: string,
   dimensions: Array<readonly [number, number]>,
+  mediaLabel = "event photograph",
 ): ArchiveGallery {
   return dimensions.map(([width, height], index) => {
     const stem = `/media/archive/${slug}/${slug}-${String(index + 1).padStart(2, "0")}`;
@@ -31,7 +33,7 @@ function buildGallery(
       src: `${stem}.webp`,
       srcSet: responsiveSources.join(", "),
       mobileSrcSet: mobileSources.join(", "),
-      alt: `${title} event photograph ${index + 1} of ${dimensions.length}`,
+      alt: `${title} ${mediaLabel} ${index + 1} of ${dimensions.length}`,
       width,
       height,
     };
@@ -42,7 +44,38 @@ export const archiveGalleries = {
   "frequency-fest": buildGallery(
     "frequency-fest",
     "Frequency Fest Vol. 1",
-    [[1052,1402],[1179,1571],[1179,1571],[1440,1920],[1179,1571],[1179,1571],[1179,1571],[1179,1571],[1440,1920],[1179,1571],[1179,1571],[1179,1571],[1440,1918],[1069,1425],[1179,1571]],
+    [
+      [1052, 1402],
+      [1179, 1571],
+      [1179, 1571],
+      [1440, 1920],
+      [1179, 1571],
+      [1179, 1571],
+      [1179, 1571],
+      [1179, 1571],
+      [1440, 1920],
+      [1179, 1571],
+      [1179, 1571],
+      [1179, 1571],
+      [1440, 1918],
+      [1069, 1425],
+      [1179, 1571],
+      // Supplied Club SAW originals, in source order:
+      // C_A09109, C_A09325, C_A09676, C_A09717, C_A09855, C_A09928,
+      // C_A00064, C_A00229, C_A00268, C_A00403, C_A00464, C_A00509.
+      [1920, 1281],
+      [1920, 1281],
+      [1280, 1920],
+      [1920, 1281],
+      [1920, 1281],
+      [1920, 1281],
+      [1920, 1281],
+      [1920, 1281],
+      [1920, 1281],
+      [1920, 1281],
+      [1920, 1281],
+      [1920, 1281],
+    ],
   ),
   "frequency-shift-001": buildGallery(
     "frequency-shift-001",
@@ -58,6 +91,15 @@ export const archiveGalleries = {
     "frequency-shift-003",
     "Frequency Shift 003",
     [[1364,908],[1324,886],[1365,913],[1364,908],[1365,913],[1364,908],[1365,913],[1365,913],[1338,895],[1365,913],[1089,612],[1089,612],[1089,612],[1104,621],[1089,612],[726,408]],
+  ),
+  "frequency-shift-004": buildGallery(
+    "frequency-shift-004",
+    "Frequency Shift 004",
+    [
+      [1179, 2096],
+      [720, 1280],
+    ],
+    "event recap still frame",
   ),
   "world-cup": buildGallery(
     "world-cup",
