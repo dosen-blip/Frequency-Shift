@@ -86,11 +86,10 @@ export function SiteHeader() {
       >
         <img
           className="wordmark__mark"
-          src="/media/brand/fs-icon.webp"
+          src="/media/brand/fs-icon-vector.svg"
           alt=""
-          width="404"
-          height="410"
-          decoding="async"
+          width="400"
+          height="400"
         />
         <img
           className="wordmark__type"
@@ -98,7 +97,6 @@ export function SiteHeader() {
           alt=""
           width="1456"
           height="103"
-          decoding="async"
         />
       </Link>
       <nav className="site-nav" aria-label="Primary navigation">

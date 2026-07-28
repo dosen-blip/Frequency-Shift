@@ -14,8 +14,8 @@ export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; reve
           className="event-card__image"
           src={event.coverImage}
           alt={event.coverAlt}
-          width="1600"
-          height="1066"
+          width="1200"
+          height="1598"
           loading="lazy"
           decoding="async"
         />

@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/media/brand/fs-icon-128.png",
-    shortcut: "/media/brand/fs-icon-128.png",
+    icon: "/media/brand/fs-icon-vector.svg",
+    shortcut: "/media/brand/fs-icon-vector.svg",
   },
   openGraph: {
     title: siteConfig.name,
@@ -40,13 +40,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `if(!Object.hasOwn){Object.hasOwn=function(object,key){return Object.prototype.hasOwnProperty.call(Object(object),key)}}if(!Array.prototype.at){Array.prototype.at=function(index){index=Math.trunc(index)||0;if(index<0)index+=this.length;return this[index]}}if(!String.prototype.replaceAll){String.prototype.replaceAll=function(search,replacement){if(search instanceof RegExp){if(!search.global)throw new TypeError("replaceAll requires a global RegExp");return this.replace(search,replacement)}return this.split(search).join(replacement)}}`,
-          }}
-        />
-      </head>
       <body>
         <SiteMotion />
         <a className="skip-link" href="#main-content">

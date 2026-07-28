@@ -3,18 +3,22 @@
   <defs>
     <style>
       .cls-1 {
+        --ignite-delay: 0ms;
         fill: #eb73c1;
         opacity: 0.04;
-        animation: fs-neon-ignite 1.28s linear forwards;
+        paint-order: stroke fill;
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: fs-neon-ignite 1.92s linear var(--ignite-delay) forwards;
       }
-      path:nth-of-type(2) { animation-delay: 70ms; }
-      path:nth-of-type(3) { animation-delay: 25ms; }
-      path:nth-of-type(4) { animation-delay: 150ms; }
-      path:nth-of-type(5) { animation-delay: 90ms; }
-      path:nth-of-type(6) { animation-delay: 210ms; }
-      path:nth-of-type(7) { animation-delay: 45ms; }
-      path:nth-of-type(8) { animation-delay: 175ms; }
-      path:nth-of-type(9) { animation-delay: 115ms; }
+      path:nth-of-type(2) { --ignite-delay: 105ms; }
+      path:nth-of-type(3) { --ignite-delay: 38ms; }
+      path:nth-of-type(4) { --ignite-delay: 225ms; }
+      path:nth-of-type(5) { --ignite-delay: 135ms; }
+      path:nth-of-type(6) { --ignite-delay: 315ms; }
+      path:nth-of-type(7) { --ignite-delay: 68ms; }
+      path:nth-of-type(8) { --ignite-delay: 263ms; }
+      path:nth-of-type(9) { --ignite-delay: 173ms; }
       @keyframes fs-neon-ignite {
         0%, 7% { opacity: 0.03; }
         8% { opacity: 0.88; }
@@ -25,8 +29,115 @@
         34% { opacity: 0.62; }
         42%, 100% { opacity: 1; }
       }
+      path {
+        pointer-events: visiblePainted;
+      }
+      path:hover,
+      path.is-proximity-flicker {
+        animation:
+          fs-neon-ignite 1.92s linear var(--ignite-delay) forwards,
+          fs-neon-hover 820ms linear 0s 1 both;
+      }
+      @keyframes fs-neon-hover {
+        0% {
+          opacity: 1;
+          fill: #eb73c1;
+          stroke: transparent;
+          stroke-width: 0;
+          transform: translateX(0);
+          filter: none;
+        }
+        5% {
+          opacity: 1;
+          fill: #fff8fd;
+          stroke: #fff;
+          stroke-width: 0.55px;
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 5px #eb73c1);
+        }
+        9% {
+          opacity: 0.05;
+          fill: #eb73c1;
+          stroke: transparent;
+          stroke-width: 0;
+          transform: translateX(-0.35px);
+          filter: none;
+        }
+        15% {
+          opacity: 0.98;
+          fill: #ffb7e4;
+          stroke: #fff;
+          stroke-width: 0.38px;
+          transform: translateX(0.25px);
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 4px #f06ac5);
+        }
+        21% {
+          opacity: 0.14;
+          stroke-width: 0;
+          transform: translateX(-0.2px);
+          filter: none;
+        }
+        28% {
+          opacity: 1;
+          fill: #9af6ff;
+          stroke: #efffff;
+          stroke-width: 0.3px;
+          transform: translateX(0.35px);
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 4px #66e9ff);
+        }
+        34% {
+          opacity: 0.22;
+          fill: #eb73c1;
+          stroke: transparent;
+          stroke-width: 0;
+          transform: translateX(-0.25px);
+          filter: none;
+        }
+        43% {
+          opacity: 1;
+          fill: #fff8fd;
+          stroke: #fff;
+          stroke-width: 0.45px;
+          transform: translateX(0);
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 6px #eb73c1);
+        }
+        56% {
+          opacity: 0.64;
+          fill: #eb73c1;
+          stroke: transparent;
+          stroke-width: 0;
+          filter: none;
+        }
+        63% {
+          opacity: 0.16;
+          transform: translateX(0.15px);
+        }
+        71% {
+          opacity: 1;
+          fill: #ffd7ef;
+          stroke: #fff;
+          stroke-width: 0.2px;
+          transform: translateX(0);
+          filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 3px #eb73c1);
+        }
+        82%, 100% {
+          opacity: 1;
+          fill: #eb73c1;
+          stroke: transparent;
+          stroke-width: 0;
+          transform: translateX(0);
+          filter: none;
+        }
+      }
       @media (prefers-reduced-motion: reduce) {
         .cls-1 {
+          opacity: 1;
+          animation: none;
+        }
+        path:hover,
+        path.is-proximity-flicker {
+          fill: #ffd7ef;
+          stroke: #fff;
+          stroke-width: 0.2px;
           opacity: 1;
           animation: none;
         }

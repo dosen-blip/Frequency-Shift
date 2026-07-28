@@ -1,9 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useLayoutEffect } from "react";
-
-const HERO_SESSION_KEY = "frequency-shift:hero-played";
+import { useLayoutEffect, useRef } from "react";
 
 function mediaMatches(query: string) {
   return typeof window.matchMedia === "function" && window.matchMedia(query).matches;
@@ -11,6 +9,7 @@ function mediaMatches(query: string) {
 
 export function SiteMotion() {
   const pathname = usePathname();
+  const hasPlayedHero = useRef(false);
 
   useLayoutEffect(() => {
     const root = document.documentElement;
@@ -33,22 +32,13 @@ export function SiteMotion() {
     const revealAll = () => revealElements.forEach(reveal);
 
     if (hero) {
-      let heroMotion: "full" | "quick" = "quick";
-
-      if (!reducedMotion) {
-        try {
-          if (!window.sessionStorage.getItem(HERO_SESSION_KEY)) {
-            heroMotion = "full";
-            window.sessionStorage.setItem(HERO_SESSION_KEY, "true");
-          }
-        } catch {
-          // Storage is optional; the quick, visible state is the safest fallback.
-        }
-      }
+      const heroMotion: "full" | "quick" =
+        !reducedMotion && !hasPlayedHero.current ? "full" : "quick";
 
       hero.setAttribute("data-hero-motion", heroMotion);
       void hero.offsetWidth;
       hero.classList.add("is-motion-ready");
+      hasPlayedHero.current = true;
     }
 
     // Touch devices get the same visual hierarchy without scroll-bound motion.

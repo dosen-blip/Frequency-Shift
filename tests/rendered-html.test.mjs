@@ -7,6 +7,9 @@ const builtArchiveRoot = fileURLToPath(
   new URL("../dist/client/media/archive/", import.meta.url),
 );
 const builtClientRoot = fileURLToPath(new URL("../dist/client/", import.meta.url));
+const globalStylesPath = fileURLToPath(
+  new URL("../app/globals.css", import.meta.url),
+);
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -171,6 +174,33 @@ test("keeps the internal draft event out of the public sitemap", async () => {
   assert.doesNotMatch(sitemap, /next-frequency-shift/);
   assert.match(sitemap, /events\/the-experiment/);
   assert.match(sitemap, /archive\/frequency-fest/);
+});
+
+test("keeps reveal motion from clipping interactive glow effects", async () => {
+  const styles = await readFile(globalStylesPath, "utf8");
+  const generalRevealRule = styles.match(
+    /\.motion-enabled \[data-reveal\]\.is-revealed\s*\{([^}]*)\}/,
+  );
+
+  assert.ok(generalRevealRule, "general revealed-state rule is present");
+  assert.doesNotMatch(generalRevealRule[1], /clip-path/);
+  assert.match(
+    styles,
+    /\.motion-enabled \[data-reveal="clip"\]\.is-revealed\s*\{[^}]*clip-path:\s*inset\(0\)/,
+  );
+});
+
+test("renders page titles without waiting for client-side reveal motion", async () => {
+  const response = await render("/about");
+  const html = await response.text();
+
+  assert.match(html, /<h1 class="page-title">About<\/h1>/);
+  assert.match(html, /<h2>Not just another night out\.<\/h2>/);
+  assert.match(html, /<h2>Built with the room\.<\/h2>/);
+  assert.doesNotMatch(
+    html,
+    /<h1[^>]*class="page-title"[^>]*data-reveal/,
+  );
 });
 
 test("keeps the glass material lab local-only", async () => {

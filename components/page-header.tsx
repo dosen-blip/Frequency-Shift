@@ -2,16 +2,30 @@ type PageHeaderProps = {
   eyebrow: string;
   title: string;
   intro: string;
+  motion?: boolean;
 };
 
-export function PageHeader({ eyebrow, title, intro }: PageHeaderProps) {
+export function PageHeader({
+  eyebrow,
+  title,
+  intro,
+  motion = true,
+}: PageHeaderProps) {
   return (
     <header className="page-header">
       <div>
-        <p className="eyebrow" data-reveal="up">{eyebrow}</p>
-        <h1 className="page-title" data-reveal="clip" style={{ "--reveal-delay": "45ms" } as React.CSSProperties}>{title}</h1>
+        <p className="eyebrow" data-reveal={motion ? "up" : undefined}>
+          {eyebrow}
+        </p>
+        <h1 className="page-title">{title}</h1>
       </div>
-      <p className="page-intro" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>{intro}</p>
+      <p
+        className="page-intro"
+        data-reveal={motion ? "up" : undefined}
+        style={motion ? { "--reveal-delay": "90ms" } as React.CSSProperties : undefined}
+      >
+        {intro}
+      </p>
     </header>
   );
 }

@@ -29,14 +29,16 @@ export default function HomePage() {
               data-reveal="media"
               aria-label={`Open ${featuredEvent.title} event details`}
             >
-              <img
-                src={featuredEvent.coverImage ?? ""}
-                alt={featuredEvent.coverAlt}
-                width="1200"
-                height="1598"
-                loading="lazy"
-                decoding="async"
-              />
+              <span className="home-event__media">
+                <img
+                  src={featuredEvent.coverImage ?? ""}
+                  alt={featuredEvent.coverAlt}
+                  width="1200"
+                  height="1598"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
               <span className="home-event__visual-index" aria-hidden="true">
                 FS / LIVE
               </span>
