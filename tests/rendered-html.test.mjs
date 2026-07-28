@@ -49,15 +49,16 @@ test("server-renders the Frequency Shift homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
-test("renders the primary route scaffold", async () => {
+test("renders the primary public routes", async () => {
   const routes = [
     ["/events", /Upcoming Frequency Shift events/],
-    ["/events/next-frequency-shift", /Draft content record/],
     ["/archive", /Frequency Shift 001/],
     ["/archive/frequency-shift-001", /frequency-shift-001-01\.webp/],
-    ["/about", /Not just another night out/],
+    ["/about", /Built for the dancefloor/],
     ["/contact", /Contact Frequency Shift/],
     ["/events/the-experiment", /Yaan, Valium, Seb B, Balla/],
+    ["/events/september-4", /returns to GRIDWRKS on September 4/],
+    ["/events/boat-party", /heads onto the water for Boat Party/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
     ["/terms", /<title>Terms — Frequency Shift<\/title>/i],
   ];
@@ -76,9 +77,9 @@ test("renders every requested archive slot", async () => {
     ["/archive/frequency-shift-002", /11(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-003", /16(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-004", /2(?:<!-- -->)? photographs/i],
-    ["/archive/frequency-shift-005", /12(?:<!-- -->)? image slots/i],
+    ["/archive/frequency-shift-005", /Event record/i],
     ["/archive/world-cup", /10(?:<!-- -->)? photographs/i],
-    ["/archive/solstice", /12(?:<!-- -->)? image slots/i],
+    ["/archive/solstice", /Event record/i],
     ["/archive/dopamine", /20(?:<!-- -->)? photographs/i],
   ];
 
@@ -105,19 +106,21 @@ test("uses event photography for completed archive cards and galleries", async (
   const photoArchive = await render("/archive/frequency-shift-003");
   const photoHtml = await photoArchive.text();
   assert.match(photoHtml, /frequency-shift-003-16\.webp/);
-  assert.doesNotMatch(photoHtml, /Photography placeholders \/ final edit pending/);
+  assert.doesNotMatch(photoHtml, /placeholder|final edit pending/i);
 
   const reelArchive = await render("/archive/frequency-shift-004");
   const reelHtml = await reelArchive.text();
   assert.match(reelHtml, /frequency-shift-004-02\.webp/);
-  assert.match(reelHtml, /selected still frames from the official January 8 recap Reel/i);
-  assert.doesNotMatch(reelHtml, /Photography placeholders \/ final edit pending/);
+  assert.match(reelHtml, /event-night frames selected from that official recap/i);
+  assert.doesNotMatch(reelHtml, /placeholder|final edit pending/i);
 
-  const pendingArchive = await render("/archive/solstice");
-  assert.match(
-    await pendingArchive.text(),
-    /Photography placeholders \/ final edit pending/,
-  );
+  const recordArchive = await render("/archive/solstice");
+  const recordHtml = await recordArchive.text();
+  assert.match(recordHtml, /Event announcement/);
+  assert.doesNotMatch(recordHtml, /Event context|Record notes/);
+  assert.doesNotMatch(recordHtml, /Context, lineup, venue, and original source posts are preserved here/);
+  assert.doesNotMatch(recordHtml, /A documentary edit drawn from the original event record/);
+  assert.doesNotMatch(recordHtml, /placeholder|image pending|image slots|final edit pending/i);
 });
 
 test("renders caption-grounded editorial and event facts", async () => {
@@ -130,14 +133,25 @@ test("renders caption-grounded editorial and event facts", async () => {
   assert.match(homepageHtml, /August 7, 2026/);
   assert.match(homepageHtml, /the-experiment\.webp/);
 
+  const eventsPage = await render("/events");
+  const eventsHtml = await eventsPage.text();
+  assert.match(eventsHtml, /September 4, 2026/);
+  assert.match(eventsHtml, /Boat Party/);
+  assert.match(eventsHtml, /September 17, 2026/);
+  assert.match(eventsHtml, /GRIDWRKS, Ottawa, Canada/);
+  assert.doesNotMatch(eventsHtml, /Location to be announced|Details soon/i);
+
   const about = await render("/about");
   const aboutHtml = await about.text();
-  assert.match(aboutHtml, /expecting\s*70 people/i);
-  assert.match(aboutHtml, /nearly\s*200/i);
+  assert.match(aboutHtml, /intimacy of a local room/i);
+  assert.match(aboutHtml, /Made together/i);
+  assert.doesNotMatch(aboutHtml, /70 people|nearly 200/i);
   assert.match(aboutHtml, /DMdwuDnvnKH/);
 
   const contact = await render("/contact");
-  assert.match(await contact.text(), /@frequency___shift/);
+  const contactHtml = await contact.text();
+  assert.match(contactHtml, /@frequency___shift/);
+  assert.doesNotMatch(contactHtml, /Instagram is currently the active route/);
 
   const factChecks = [
     ["/archive/frequency-shift-003", /GRIDWRKS/],
@@ -167,13 +181,36 @@ test("renders caption-grounded editorial and event facts", async () => {
   assert.match(ogs041Html, /DSfs0EuDE7I/);
 });
 
-test("keeps the internal draft event out of the public sitemap", async () => {
+test("publishes only finished event records in the sitemap", async () => {
   const response = await render("/sitemap.xml");
   assert.equal(response.status, 200);
   const sitemap = await response.text();
   assert.doesNotMatch(sitemap, /next-frequency-shift/);
   assert.match(sitemap, /events\/the-experiment/);
+  assert.match(sitemap, /events\/september-4/);
+  assert.match(sitemap, /events\/boat-party/);
   assert.match(sitemap, /archive\/frequency-fest/);
+});
+
+test("keeps scaffold language out of public pages", async () => {
+  const routes = [
+    "/events",
+    "/events/september-4",
+    "/events/boat-party",
+    "/archive",
+    "/archive/frequency-shift-005",
+    "/archive/solstice",
+    "/privacy",
+    "/terms",
+  ];
+  const scaffoldLanguage =
+    /placeholder|image pending|image slots|final edit pending|draft only|policy scaffold|content-ready shell|details soon|not yet available/i;
+
+  for (const path of routes) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    assert.doesNotMatch(await response.text(), scaffoldLanguage, path);
+  }
 });
 
 test("keeps reveal motion from clipping interactive glow effects", async () => {
@@ -195,8 +232,8 @@ test("renders page titles without waiting for client-side reveal motion", async 
   const html = await response.text();
 
   assert.match(html, /<h1 class="page-title">About<\/h1>/);
-  assert.match(html, /<h2>Not just another night out\.<\/h2>/);
-  assert.match(html, /<h2>Built with the room\.<\/h2>/);
+  assert.match(html, /<h2>Built for the dancefloor\.<\/h2>/);
+  assert.match(html, /<h2>Made together\.<\/h2>/);
   assert.doesNotMatch(
     html,
     /<h1[^>]*class="page-title"[^>]*data-reveal/,

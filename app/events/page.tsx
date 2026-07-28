@@ -10,25 +10,23 @@ export const metadata: Metadata = {
 };
 
 export default function EventsPage() {
-  const publicEvents = events.filter((event) => !event.draft);
-
   return (
     <div className="page-shell">
       <PageHeader
         eyebrow="Live signal"
         title="Events"
-        intro="When the next Frequency Shift lands, its date, lineup, venue, and ticket link will live here."
+        intro="Upcoming Frequency Shift nights, collaborations, and ticket links."
       />
       <section className="event-grid" aria-label="Upcoming events">
-        {publicEvents.length ? (
-          publicEvents.map((event, index) => <EventCard event={event} key={event.slug} revealIndex={index} />)
+        {events.length ? (
+          events.map((event, index) => <EventCard event={event} key={event.slug} revealIndex={index} />)
         ) : (
           <p className="empty-state" data-reveal="up">
-            No new date is announced yet. Follow{" "}
+            Follow{" "}
             <a href={siteConfig.instagram.href} target="_blank" rel="noreferrer">
               {siteConfig.instagram.handle}
             </a>{" "}
-            or step into the archive while the next room takes shape.
+            for the next transmission, or step into the archive.
           </p>
         )}
       </section>

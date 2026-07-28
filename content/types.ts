@@ -27,13 +27,12 @@ export type EventRecord = {
   startsAt: string | null;
   endsAt: string | null;
   venue: string | null;
-  city: string;
+  city: string | null;
   status: EventStatus;
   ticketUrl: string | null;
   genre: string | null;
   artistSlugs: string[];
   featured: boolean;
-  draft: boolean;
   coverImage: string | null;
   coverAlt: string;
 };
@@ -65,12 +64,10 @@ export type ArchiveRecord = {
     width: number;
     height: number;
   }>;
-  gallerySlotCount: number;
   coverImageIndex: number;
   featured?: boolean;
   featureImageIndices?: number[];
   photoCredit: string | null;
   sourceNote: string;
   sourceLinks: Array<{ label: string; href: string }>;
-  draft: boolean;
 };

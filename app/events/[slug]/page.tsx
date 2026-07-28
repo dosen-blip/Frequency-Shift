@@ -20,21 +20,19 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
 export default async function EventPage({ params }: EventPageProps) {
   const event = getEvent((await params).slug);
   if (!event) notFound();
+  const location = [event.venue, event.city].filter(Boolean).join(", ");
 
   return (
     <article className="page-shell">
       <p className="eyebrow" data-reveal="up">{eventStatusLabels[event.status]}</p>
       <div className="detail-grid">
         <div className="detail-content">
-          <h1 className="detail-title" data-reveal="clip">{event.title}</h1>
+          <h1 className="detail-title">{event.title}</h1>
           <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "70ms" } as React.CSSProperties}>
             {event.description.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          {event.draft ? (
-            <p className="notice" data-reveal="up">Draft content record — not a public event announcement.</p>
-          ) : null}
         </div>
         <aside data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <dl className="detail-meta">
@@ -42,10 +40,12 @@ export default async function EventPage({ params }: EventPageProps) {
               <dt>Date</dt>
               <dd>{event.dateLabel}</dd>
             </div>
-            <div>
-              <dt>Location</dt>
-              <dd>{event.venue ? `${event.venue}, ${event.city}` : event.city}</dd>
-            </div>
+            {location ? (
+              <div>
+                <dt>Location</dt>
+                <dd>{location}</dd>
+              </div>
+            ) : null}
             <div>
               <dt>Ticket status</dt>
               <dd>{eventStatusLabels[event.status]}</dd>
@@ -56,9 +56,7 @@ export default async function EventPage({ params }: EventPageProps) {
               <a className="button button--solid" href={event.ticketUrl} rel="noreferrer" target="_blank">
                 Buy tickets
               </a>
-            ) : (
-              <button className="button button--disabled" type="button" disabled>Not yet available</button>
-            )}
+            ) : null}
             <Link className="button button--ghost" href="/events">
               All events
             </Link>

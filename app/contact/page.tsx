@@ -9,14 +9,14 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="page-shell">
+    <div className="page-shell contact-page">
       <PageHeader
         eyebrow="Open channel"
         title="Contact"
         intro="Bookings, collaborations, media, and ideas for the next room all start through the active Frequency Shift channel."
       />
-      <section className="split-section section--rule">
-        <h2 data-reveal="clip">Meet us on the frequency.</h2>
+      <section className="split-section section--rule contact-section">
+        <h2>Meet us on the frequency.</h2>
         <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <p>
             Frequency Shift works with artists, promoters, photographers,
@@ -24,7 +24,7 @@ export default function ContactPage() {
             the account a direct message with the essentials and a real person
             can pick up the conversation.
           </p>
-          <p>
+          <div className="contact-actions">
             <a
               className="button button--solid"
               href={siteConfig.instagram.href}
@@ -33,8 +33,7 @@ export default function ContactPage() {
             >
               Message {siteConfig.instagram.handle}
             </a>
-          </p>
-          <p className="notice">Instagram is currently the active route for bookings and collaborations.</p>
+          </div>
         </div>
       </section>
     </div>

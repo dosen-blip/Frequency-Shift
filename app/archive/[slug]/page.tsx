@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArchiveImagePlaceholder } from "@/components/archive-image-placeholder";
 import { archives, getArchive } from "@/content/archives";
 
 type ArchivePageProps = { params: Promise<{ slug: string }> };
@@ -26,7 +25,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
       <header className="archive-detail-hero">
         <div>
           <p className="eyebrow" data-reveal="up">Archive / {entry.dateLabel}</p>
-          <h1 className="detail-title" data-reveal="clip" style={{ "--reveal-delay": "45ms" } as React.CSSProperties}>{entry.title}</h1>
+          <h1 className="detail-title">{entry.title}</h1>
         </div>
         <dl className="detail-meta" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <div>
@@ -46,7 +45,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
             <dd>
               {entry.gallery.length
                 ? `${entry.gallery.length} photographs`
-                : `${entry.gallerySlotCount} image slots`}
+                : "Event record"}
             </dd>
           </div>
         </dl>
@@ -91,29 +90,9 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
                 </figure>
               ))}
             </section>
-          ) : (
-            <section className="archive-placeholder-section" aria-labelledby="gallery-heading">
-              <div className="archive-placeholder-heading" data-reveal="up">
-                <div>
-                  <p className="eyebrow">Contact sheet</p>
-                  <h2 id="gallery-heading">Event images</h2>
-                </div>
-                <p>Photography placeholders / final edit pending</p>
-              </div>
-              <div className="archive-placeholder-grid">
-                {Array.from({ length: entry.gallerySlotCount }, (_, index) => (
-                  <ArchiveImagePlaceholder key={index} eventTitle={entry.title} index={index} />
-                ))}
-              </div>
-            </section>
-          )}
+          ) : null}
         </div>
         <aside data-reveal="up" style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
-          <p className="notice">
-            {entry.gallery.length
-              ? "Selected event media from the published recaps is in place. Final captions and editorial sequencing remain open for review."
-              : "Archive record established. Original event photography remains to be supplied and approved."}
-          </p>
           <dl className="archive-provenance">
             {entry.photoCredit ? (
               <div>
@@ -121,10 +100,6 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
                 <dd>{entry.photoCredit}</dd>
               </div>
             ) : null}
-            <div>
-              <dt>Classification</dt>
-              <dd>{entry.sourceNote}</dd>
-            </div>
             <div>
               <dt>Sources</dt>
               <dd>

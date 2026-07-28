@@ -20,7 +20,7 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
     >
       <Link href={`/archive/${entry.slug}`} aria-label={`View ${entry.title} archive`}>
         <div
-          className={`archive-card__visual${cover ? " archive-card__visual--photo" : ""}`}
+          className={`archive-card__visual${cover ? " archive-card__visual--photo" : " archive-card__visual--record"}`}
           aria-hidden="true"
         >
           {featureImages.length ? (
@@ -65,8 +65,8 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
             </picture>
           ) : null}
           <span className="archive-card__index">{entry.archiveLabel}</span>
-          <span className="archive-card__pending">
-            {entry.featured ? "Pinned archive" : cover ? "Photo archive" : "Image pending"}
+          <span className="archive-card__type">
+            {entry.featured ? "Pinned archive" : cover ? "Photo archive" : "Event record"}
           </span>
           {cover ? null : <span className="archive-card__mark">F/S</span>}
         </div>
@@ -76,13 +76,13 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
             <span>
               {entry.gallery.length
                 ? `${entry.gallery.length} photographs`
-                : `${entry.gallerySlotCount} image slots`}
+                : "Event record"}
             </span>
           </div>
           <h2>{entry.title}</h2>
           <p className="archive-card__summary">{entry.summary}</p>
           <span className="archive-card__action button button--ghost">
-            View archive
+            {entry.gallery.length ? "View archive" : "Read record"}
           </span>
         </div>
       </Link>

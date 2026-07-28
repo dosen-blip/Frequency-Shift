@@ -8,27 +8,27 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="page-shell">
+    <div className="page-shell about-page">
       <PageHeader
         eyebrow="Why we gather"
         title="About"
         intro="Frequency Shift channels raw underground energy into Ottawa rooms built for freedom, self-expression, and connection through music."
         motion={false}
       />
-      <section className="split-section section--rule">
-        <h2>Not just another night out.</h2>
+      <section className="split-section section--rule about-section">
+        <h2>Built for the dancefloor.</h2>
         <div className="prose prose--large">
           <p>
-            The idea began with house music and a clear ambition: bring the raw,
-            communal spirit people chase in larger scenes into Ottawa on its own
-            terms. A Frequency Shift room should feel free, expressive, and fully
-            connected to the dancefloor—not like a routine night at the club.
+            Frequency Shift began with a simple idea: Ottawa deserved house
+            nights with the intimacy of a local room and the charge of a larger
+            underground scene. Every edition is shaped around the dancefloor—
+            close, expressive, and driven by the people in it.
           </p>
           <p>
-            Before the OGS018 collaboration, the collective remembered expecting
-            70 people at the previous event and seeing nearly 200 arrive. That
-            response turned an idea into a growing series of solo nights, partner
-            takeovers, and the first two-stage Frequency Fest at Club SAW.
+            What started as a single night has grown through solo editions,
+            partner takeovers, and Frequency Fest at Club SAW. The format
+            changes; the intent stays constant: strong sound, room to move, and
+            a crowd that becomes part of the event.
           </p>
           <a
             className="text-link"
@@ -40,14 +40,13 @@ export default function AboutPage() {
           </a>
         </div>
       </section>
-      <section className="split-section section--rule">
-        <h2>Built with the room.</h2>
+      <section className="split-section section--rule about-section">
+        <h2>Made together.</h2>
         <div className="prose prose--large">
           <p>
-            Artists shape the sound. Production crews build stages and systems.
-            Venues host, photographers keep the memory, collaborators widen the
-            circle, and dancers complete the night. Frequency Shift is the signal
-            that passes between all of them.
+            Each night is shared work. Artists set the direction; venues,
+            production crews, photographers, and collaborators give it form;
+            dancers give it life.
           </p>
           <p>
             The archive keeps those relationships visible alongside the images:

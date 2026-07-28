@@ -58,13 +58,14 @@ export function NeonWordmark() {
     let lastPointerY = 0;
     let lagX = 0;
     let lagY = 0;
+    const timers = activeTimers.current;
 
     const schedule = (callback: () => void, delay: number) => {
       const timer = window.setTimeout(() => {
-        activeTimers.current.delete(timer);
+        timers.delete(timer);
         callback();
       }, delay);
-      activeTimers.current.add(timer);
+      timers.add(timer);
     };
 
     const strike = (path: SVGPathElement, delay = 0) => {
@@ -207,8 +208,8 @@ export function NeonWordmark() {
       );
       embeddedCleanups.forEach((cleanup) => cleanup());
       if (frame) window.cancelAnimationFrame(frame);
-      activeTimers.current.forEach(window.clearTimeout);
-      activeTimers.current.clear();
+      timers.forEach(window.clearTimeout);
+      timers.clear();
     };
   }, []);
 

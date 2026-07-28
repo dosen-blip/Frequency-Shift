@@ -22,10 +22,7 @@ export function HomeHero() {
         </h1>
         <NeonWordmark />
         <div className="home-hero__statement">
-          <p
-            className="home-hero__mantra route-hero__body"
-            data-text="For the love of house."
-          >
+          <p className="home-hero__mantra route-hero__body">
             For the love of house.
           </p>
         </div>

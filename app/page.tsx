@@ -5,7 +5,7 @@ import { events } from "@/content/events";
 import { momentGallery } from "@/content/media";
 
 export default function HomePage() {
-  const featuredEvent = events.find((event) => event.featured && !event.draft);
+  const featuredEvent = events.find((event) => event.featured);
   const featuredArchive = archives[0];
 
   return (
@@ -54,7 +54,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <dt>Room</dt>
-                  <dd>{featuredEvent.venue ? `${featuredEvent.venue}, ${featuredEvent.city}` : featuredEvent.city}</dd>
+                  <dd>{[featuredEvent.venue, featuredEvent.city].filter(Boolean).join(", ")}</dd>
                 </div>
                 {featuredEvent.genre ? (
                   <div>
@@ -82,7 +82,7 @@ export default function HomePage() {
           </div>
         ) : (
           <p className="empty-state" data-reveal="up">
-            The next date is being tuned. Check back soon.
+            Follow Frequency Shift on Instagram for the next date.
           </p>
         )}
       </section>
