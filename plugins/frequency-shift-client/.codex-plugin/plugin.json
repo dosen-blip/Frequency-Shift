@@ -1,0 +1,35 @@
+{
+  "name": "frequency-shift-client",
+  "version": "0.1.0",
+  "description": "Plain-English website editing, Git collaboration, and verified Sites publishing for Frequency Shift clients.",
+  "author": {
+    "name": "Frequency Shift"
+  },
+  "homepage": "https://frequency-shift-ottawa.hydrogenyoga.chatgpt.site/",
+  "repository": "https://github.com/dosen-blip/Frequency-Shift",
+  "keywords": [
+    "frequency-shift",
+    "website",
+    "client",
+    "publishing",
+    "github"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Frequency Shift Client",
+    "shortDescription": "Manage the site in everyday language.",
+    "longDescription": "Describe the website result you want in ordinary language. Codex translates it into a careful site change, protects concurrent GitHub work, tests it, publishes the exact version through Sites, and verifies the public result.",
+    "developerName": "Frequency Shift",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "brandColor": "#EB73C1",
+    "defaultPrompt": [
+      "Update the website with our next event and make it live.",
+      "Help me explain a visual change I want.",
+      "Replace this photo and show me before publishing."
+    ]
+  }
+}

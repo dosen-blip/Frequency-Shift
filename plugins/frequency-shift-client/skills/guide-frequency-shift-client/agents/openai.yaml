@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frequency Shift Client Guide"
+  short_description: "Turn everyday requests into clear site changes"
+  default_prompt: "Use $guide-frequency-shift-client to help me describe the website change I want."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Coordinate Frequency Shift Git"
+  short_description: "Protect collaborators while saving changes"
+  default_prompt: "Use $coordinate-frequency-shift-git to safely save and synchronize this website change."

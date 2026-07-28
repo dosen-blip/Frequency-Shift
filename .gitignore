@@ -40,3 +40,6 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# Per-computer Frequency Shift Codex onboarding choice
+/.frequency-shift/client-profile.local.json

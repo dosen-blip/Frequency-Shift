@@ -1,0 +1,4 @@
+interface:
+  display_name: "Publish Frequency Shift Site"
+  short_description: "Test, publish, and verify the live site"
+  default_prompt: "Use $publish-frequency-shift-site to publish my verified website change."

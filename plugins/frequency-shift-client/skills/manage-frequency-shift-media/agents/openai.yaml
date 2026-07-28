@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Frequency Shift Media"
+  short_description: "Prepare and place site photos and artwork"
+  default_prompt: "Use $manage-frequency-shift-media to add or replace media on the Frequency Shift website."

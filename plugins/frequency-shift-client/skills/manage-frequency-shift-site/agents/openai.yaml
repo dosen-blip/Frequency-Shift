@@ -1,0 +1,4 @@
+interface:
+  display_name: "Manage Frequency Shift Site"
+  short_description: "Make accurate content and design changes"
+  default_prompt: "Use $manage-frequency-shift-site to update the Frequency Shift website from my description."
