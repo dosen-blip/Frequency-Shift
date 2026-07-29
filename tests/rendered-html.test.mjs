@@ -48,39 +48,54 @@ test("server-renders the Frequency Shift homepage", async () => {
   assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
   assert.match(
     html,
-    /<img class="neon-wordmark__glow neon-wordmark__glow--logo" src="\/media\/brand\/fs-icon-neon-glow\.png"/,
+    /<img class="neon-wordmark__asset" src="\/media\/brand\/fs-icon-neon\.svg" alt="" loading="lazy"\/>/,
   );
   assert.match(
     html,
     /<object class="neon-wordmark__asset" data="\/media\/brand\/fs-icon-neon\.svg"/,
   );
-  assert.match(
-    html,
-    /frequency-shift-wordmark-neon-glow\.png/,
-  );
-  assert.match(
-    html,
-    /frequency-shift-wordmark-neon-mobile-glow\.png/,
-  );
-  assert.doesNotMatch(html, /neon-wordmark__layer--(?:ambient|bloom)/);
+  assert.match(html, /neon-wordmark__layer--ambient/);
+  assert.match(html, /neon-wordmark__layer--bloom/);
+  assert.doesNotMatch(html, /neon-glow\.png/);
   assert.match(html, /event-tech\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
-test("renders the hero glow without rectangular runtime filters", async () => {
+test("preserves the full hero glow inside an expanded paint surface", async () => {
   const styles = await readFile(globalStylesPath, "utf8");
-  const glowRule = styles.match(/\.neon-wordmark__glow\s*\{([^}]*)\}/);
-  const coreRule = styles.match(
-    /\.neon-wordmark__layer--core\s*\{([^}]*)\}/,
+  const paintSurfaceRule = styles.match(
+    /\.neon-wordmark__layer--ambient,\s*\.neon-wordmark__layer--bloom,\s*\.neon-wordmark__layer--core\s*\{([^}]*)\}/,
   );
+  const ambientRule = styles.match(
+    /\.neon-wordmark__layer--ambient\s*\{([^}]*)\}/,
+  );
+  const bloomRule = styles.match(
+    /\.neon-wordmark__layer--bloom\s*\{([^}]*)\}/,
+  );
+  const coreRule = [
+    ...styles.matchAll(/\.neon-wordmark__layer--core\s*\{([^}]*)\}/g),
+  ].find((match) => /brightness\(1\.36\)/.test(match[1]));
 
-  assert.ok(glowRule, "Expected a static hero glow rule");
+  assert.ok(paintSurfaceRule, "Expected an expanded hero paint surface");
+  assert.ok(ambientRule, "Expected the ambient glow layer");
+  assert.ok(bloomRule, "Expected the bloom glow layer");
   assert.ok(coreRule, "Expected an animated hero core rule");
-  assert.doesNotMatch(glowRule[1], /\bfilter\s*:/);
-  assert.doesNotMatch(coreRule[1], /\bfilter\s*:/);
-  assert.doesNotMatch(styles, /\.neon-wordmark__layer--(?:ambient|bloom)/);
+  assert.match(
+    paintSurfaceRule[1],
+    /inset:\s*calc\(var\(--neon-paint-gutter\) \* -1\)/,
+  );
+  assert.match(
+    paintSurfaceRule[1],
+    /padding:\s*var\(--neon-paint-gutter\)/,
+  );
+  assert.match(ambientRule[1], /opacity:\s*0\.3/);
+  assert.match(ambientRule[1], /blur\(2\.2rem\) saturate\(1\.5\)/);
+  assert.match(bloomRule[1], /opacity:\s*0\.58/);
+  assert.match(bloomRule[1], /drop-shadow\(0 0 1\.8rem/);
+  assert.match(coreRule[1], /brightness\(1\.36\)/);
+  assert.match(coreRule[1], /drop-shadow\(0 0 1\.45rem/);
 });
 
 test("renders the primary public routes", async () => {

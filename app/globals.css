@@ -2509,9 +2509,18 @@ select {
 }
 
 .neon-wordmark__layer {
+  --neon-paint-gutter: clamp(4rem, 6vw, 5.5rem);
   position: absolute;
   inset: 0;
   display: block;
+}
+
+.neon-wordmark__layer--ambient,
+.neon-wordmark__layer--bloom,
+.neon-wordmark__layer--core {
+  inset: calc(var(--neon-paint-gutter) * -1);
+  padding: var(--neon-paint-gutter);
+  pointer-events: none;
 }
 
 .neon-wordmark__asset {
@@ -2526,27 +2535,19 @@ select {
   display: none;
 }
 
-.neon-wordmark__glow {
-  position: absolute;
-  z-index: 0;
-  display: block;
-  max-width: none;
+.neon-wordmark__layer--ambient {
+  opacity: 0.3;
+  filter: blur(2.2rem) saturate(1.5);
   pointer-events: none;
-  object-fit: fill;
+  transform: scale(1.018);
 }
 
-.neon-wordmark__glow--logo {
-  top: -25%;
-  left: -25%;
-  width: 150%;
-  height: 150%;
-}
-
-.neon-wordmark__glow--wordmark {
-  top: -79.65%;
-  left: -8%;
-  width: 116%;
-  height: 259.3%;
+.neon-wordmark__layer--bloom {
+  opacity: 0.58;
+  filter:
+    blur(0.36rem)
+    drop-shadow(0 0 0.5rem rgba(235, 115, 193, 0.94))
+    drop-shadow(0 0 1.8rem rgba(197, 72, 240, 0.78));
 }
 
 .neon-wordmark__cursor-trail {
@@ -2584,9 +2585,13 @@ select {
 
 .neon-wordmark__layer--core {
   z-index: 2;
+  filter:
+    brightness(1.36)
+    drop-shadow(0 0 0.12rem #fff5fb)
+    drop-shadow(0 0 0.5rem rgba(235, 115, 193, 0.96))
+    drop-shadow(0 0 1.45rem rgba(197, 72, 240, 0.58));
 }
 
-.neon-wordmark__layer--core,
 .neon-wordmark__layer--core .neon-wordmark__asset {
   pointer-events: auto;
 }
@@ -3603,6 +3608,10 @@ select {
     gap: clamp(1.25rem, 5vw, 2rem);
   }
 
+  .neon-wordmark__layer--ambient {
+    padding: calc(var(--neon-paint-gutter) + 0.5rem);
+  }
+
   .neon-logo {
     width: 80%;
   }
@@ -3618,13 +3627,6 @@ select {
 
   .neon-wordmark__asset--mobile {
     display: block;
-  }
-
-  .neon-wordmark__glow--wordmark {
-    top: -50%;
-    left: -8%;
-    width: 116%;
-    height: 200%;
   }
 
   .home-hero__statement {
