@@ -122,6 +122,133 @@
 
   }
 
+  function prepareNeonProximity() {
+    var lockup = document.querySelector(".neon-lockup");
+    if (!lockup || matches("(prefers-reduced-motion: reduce)") || matches("(hover: none), (pointer: coarse)")) return;
+
+    var overlays = lockup.querySelectorAll(".neon-wordmark__flicker-overlay");
+    var frame = 0;
+    var pointerX = 0;
+    var pointerY = 0;
+    var lagX = 0;
+    var lagY = 0;
+    var trailFadeTimer = 0;
+
+    each(overlays, function (overlay) {
+      var base = overlay.parentNode.querySelector(".neon-wordmark__interactive-base");
+      if (!base || typeof window.fetch !== "function") return;
+
+      window.fetch(base.currentSrc || base.src, { credentials: "same-origin" })
+        .then(function (response) {
+          if (!response.ok) throw new Error("Neon asset unavailable");
+          return response.text();
+        })
+        .then(function (markup) {
+          var parsed = new DOMParser().parseFromString(markup, "image/svg+xml");
+          var svg = parsed.documentElement;
+          if (!svg || svg.tagName.toLowerCase() !== "svg") return;
+          svg.classList.add("neon-wordmark__inline-svg");
+          svg.setAttribute("aria-hidden", "true");
+          overlay.replaceChildren(svg);
+          overlay.setAttribute("data-interactive-ready", "true");
+        })
+        .catch(function () {
+          overlay.setAttribute("data-interactive-ready", "false");
+        });
+    });
+
+    function keepTrailVisible() {
+      if (trailFadeTimer) {
+        window.clearTimeout(trailFadeTimer);
+        trailFadeTimer = 0;
+      }
+      lockup.classList.add("is-cursor-near");
+    }
+
+    function fadeTrail(delay) {
+      if (trailFadeTimer) return;
+      trailFadeTimer = window.setTimeout(function () {
+        trailFadeTimer = 0;
+        lockup.classList.remove("is-cursor-near");
+      }, delay || 520);
+    }
+
+    function strike(path, delay) {
+      var now = window.performance.now();
+      var previous = path._frequencyShiftLastStrike || 0;
+      if (now - previous < 520) return;
+      path._frequencyShiftLastStrike = now + delay;
+
+      window.setTimeout(function () {
+        path.classList.remove("is-proximity-flicker");
+        path.getBoundingClientRect();
+        path.classList.add("is-proximity-flicker");
+        window.setTimeout(function () {
+          path.classList.remove("is-proximity-flicker");
+        }, 1220);
+      }, delay);
+    }
+
+    function updateInteraction() {
+      frame = 0;
+      var rect = lockup.getBoundingClientRect();
+      var influence = window.innerWidth <= 760
+        ? 104
+        : Math.min(180, Math.max(138, rect.width * 0.12));
+      var horizontalReach = influence * 1.5;
+      var verticalReach = influence * 1.35;
+      var near =
+        pointerX >= rect.left - horizontalReach &&
+        pointerX <= rect.right + horizontalReach &&
+        pointerY >= rect.top - verticalReach &&
+        pointerY <= rect.bottom + verticalReach;
+
+      if (!near) {
+        fadeTrail(520);
+        return;
+      }
+
+      lagX += (pointerX - rect.left - lagX) * 0.38;
+      lagY += (pointerY - rect.top - lagY) * 0.38;
+      lockup.style.setProperty("--neon-cursor-x", lagX + "px");
+      lockup.style.setProperty("--neon-cursor-y", lagY + "px");
+      keepTrailVisible();
+
+      var nearby = [];
+      each(overlays, function (overlay) {
+        if (!overlay.getClientRects().length) return;
+        each(overlay.querySelectorAll("path"), function (path) {
+          var pathRect = path.getBoundingClientRect();
+          var dx = Math.max(pathRect.left - pointerX, 0, pointerX - pathRect.right);
+          var dy = Math.max(pathRect.top - pointerY, 0, pointerY - pathRect.bottom);
+          var distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance <= influence) nearby.push({ path: path, distance: distance });
+        });
+      });
+
+      nearby.sort(function (first, second) {
+        return first.distance - second.distance;
+      });
+      nearby = nearby.slice(0, 5);
+      each(nearby, function (item, index) {
+        strike(
+          item.path,
+          Math.round(index * 72 + (item.distance / influence) * 44),
+        );
+      });
+    }
+
+    window.addEventListener("pointermove", function (event) {
+      if (event.pointerType && event.pointerType !== "mouse") return;
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (!frame) frame = window.requestAnimationFrame(updateInteraction);
+    }, { passive: true });
+    root.addEventListener("pointerleave", function () {
+      fadeTrail(380);
+    });
+  }
+
   function updateHeader() {
     scrollFrame = 0;
     if (!header) return;
@@ -179,6 +306,7 @@
 
   prepareMobileNeon();
   prepareMotion();
+  prepareNeonProximity();
   updateHeader();
   window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
 

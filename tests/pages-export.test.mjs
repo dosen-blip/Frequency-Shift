@@ -82,10 +82,12 @@ test("keeps the public boot path lightweight", async () => {
   const runtime = await readFile(output("static-pages.js"), "utf8");
 
   assert.ok(Buffer.byteLength(homepage) < 13_500, "homepage HTML budget");
-  assert.ok(Buffer.byteLength(runtime) < 7_000, "static runtime budget");
+  assert.ok(Buffer.byteLength(runtime) < 12_000, "static runtime budget");
   assert.doesNotMatch(homepage, /assets\/(?:framework|index)-[^"']+\.js/);
   assert.match(runtime, /mobile-neon-enabled/);
   assert.match(runtime, /is-mobile-neon-active/);
+  assert.match(runtime, /prepareNeonProximity/);
+  assert.match(runtime, /is-proximity-flicker/);
 });
 
 test("excludes the local glass lab from Pages artifacts", async () => {
