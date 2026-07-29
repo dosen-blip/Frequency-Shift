@@ -84,6 +84,8 @@ test("keeps the public boot path lightweight", async () => {
   assert.ok(Buffer.byteLength(homepage) < 12_000, "homepage HTML budget");
   assert.ok(Buffer.byteLength(runtime) < 7_000, "static runtime budget");
   assert.doesNotMatch(homepage, /assets\/(?:framework|index)-[^"']+\.js/);
+  assert.match(runtime, /mobile-neon-enabled/);
+  assert.match(runtime, /is-mobile-neon-active/);
 });
 
 test("excludes the local glass lab from Pages artifacts", async () => {

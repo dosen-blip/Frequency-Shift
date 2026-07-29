@@ -34,6 +34,43 @@
     each(revealElements, reveal);
   }
 
+  function prepareMobileNeon() {
+    var coarse = matches("(hover: none), (pointer: coarse)");
+    var compact = matches("(max-width: 760px)");
+    if ((!coarse && !compact) || !("IntersectionObserver" in window)) return;
+
+    var elements = document.querySelectorAll([
+      ".event-card",
+      ".archive-card > a",
+      ".home-event__visual",
+      ".home-memory__grid figure",
+      ".button",
+      ".mobile-nav__toggle",
+      ".mobile-nav__panel a",
+    ].join(","));
+
+    root.classList.add("mobile-neon-enabled");
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        each(entries, function (entry) {
+          entry.target.classList.toggle(
+            "is-mobile-neon-active",
+            entry.isIntersecting && entry.intersectionRatio >= 0.15,
+          );
+        });
+      },
+      {
+        threshold: [0.15, 0.45, 0.75],
+        rootMargin: "-18% 0px -18% 0px",
+      },
+    );
+
+    each(elements, function (element) {
+      observer.observe(element);
+    });
+  }
+
   function prepareMotion() {
     var reduced = matches("(prefers-reduced-motion: reduce)");
     var coarse = matches("(hover: none), (pointer: coarse)");
@@ -140,6 +177,7 @@
     });
   }
 
+  prepareMobileNeon();
   prepareMotion();
   updateHeader();
   window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
