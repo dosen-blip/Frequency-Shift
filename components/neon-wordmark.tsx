@@ -6,6 +6,11 @@ type NeonWordmarkAssetProps = {
   className: string;
 };
 
+type InteractiveNeonAssetProps = {
+  className?: string;
+  src: string;
+};
+
 function NeonWordmarkAsset({ className }: NeonWordmarkAssetProps) {
   return (
     <span className={className}>
@@ -25,6 +30,76 @@ function NeonWordmarkAsset({ className }: NeonWordmarkAssetProps) {
   );
 }
 
+function InteractiveNeonAsset({
+  className,
+  src,
+}: InteractiveNeonAssetProps) {
+  const overlayRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    const coarsePointer = window.matchMedia(
+      "(hover: none), (pointer: coarse)",
+    ).matches;
+
+    if (reducedMotion || coarsePointer) return;
+
+    const controller = new AbortController();
+
+    void fetch(src, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Unable to load interactive neon asset: ${src}`);
+        }
+        return response.text();
+      })
+      .then((markup) => {
+        const document = new DOMParser().parseFromString(
+          markup,
+          "image/svg+xml",
+        );
+        const svg = document.documentElement;
+        if (svg.tagName.toLowerCase() !== "svg") return;
+
+        svg.classList.add("neon-wordmark__inline-svg");
+        svg.setAttribute("aria-hidden", "true");
+        overlay.replaceChildren(svg);
+        overlay.dataset.interactiveReady = "true";
+      })
+      .catch((error: unknown) => {
+        if (
+          !(error instanceof DOMException && error.name === "AbortError")
+        ) {
+          overlay.dataset.interactiveReady = "false";
+        }
+      });
+
+    return () => controller.abort();
+  }, [src]);
+
+  return (
+    <span
+      className={`neon-wordmark__asset neon-wordmark__interactive-asset${className ? ` ${className}` : ""}`}
+    >
+      <img
+        className="neon-wordmark__interactive-base"
+        src={src}
+        alt=""
+      />
+      <span
+        ref={overlayRef}
+        className="neon-wordmark__flicker-overlay"
+        aria-hidden="true"
+      />
+    </span>
+  );
+}
+
 function NeonLogoAsset({
   className,
   interactive = false,
@@ -32,11 +107,7 @@ function NeonLogoAsset({
   return (
     <span className={className}>
       {interactive ? (
-        <object
-          className="neon-wordmark__asset"
-          data="/media/brand/fs-icon-neon.svg"
-          tabIndex={-1}
-        />
+        <InteractiveNeonAsset src="/media/brand/fs-icon-neon.svg" />
       ) : (
         <img
           className="neon-wordmark__asset"
@@ -72,6 +143,7 @@ export function NeonWordmark() {
     let lastPointerY = 0;
     let lagX = 0;
     let lagY = 0;
+    let trailFadeTimer = 0;
     const timers = activeTimers.current;
 
     const schedule = (callback: () => void, delay: number) => {
@@ -92,17 +164,39 @@ export function NeonWordmark() {
         path.classList.remove("is-proximity-flicker");
         void path.getBoundingClientRect();
         path.classList.add("is-proximity-flicker");
-        schedule(() => path.classList.remove("is-proximity-flicker"), 840);
+        schedule(() => path.classList.remove("is-proximity-flicker"), 1220);
       }, delay);
+    };
+
+    const keepTrailVisible = () => {
+      if (trailFadeTimer) {
+        window.clearTimeout(trailFadeTimer);
+        timers.delete(trailFadeTimer);
+        trailFadeTimer = 0;
+      }
+      lockup.classList.add("is-cursor-near");
+    };
+
+    const fadeTrail = (delay = 520) => {
+      if (trailFadeTimer) return;
+      trailFadeTimer = window.setTimeout(() => {
+        timers.delete(trailFadeTimer);
+        trailFadeTimer = 0;
+        lockup.classList.remove("is-cursor-near");
+      }, delay);
+      timers.add(trailFadeTimer);
     };
 
     const updateInteraction = () => {
       frame = 0;
       const lockupRect = lockup.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
-      const influence = viewportWidth <= 760 ? 74 : 112;
-      const horizontalReach = influence * 1.25;
-      const verticalReach = influence * 1.15;
+      const influence =
+        viewportWidth <= 760
+          ? 104
+          : Math.min(180, Math.max(138, lockupRect.width * 0.12));
+      const horizontalReach = influence * 1.5;
+      const verticalReach = influence * 1.35;
       const nearLockup =
         lastPointerX >= lockupRect.left - horizontalReach &&
         lastPointerX <= lockupRect.right + horizontalReach &&
@@ -110,7 +204,7 @@ export function NeonWordmark() {
         lastPointerY <= lockupRect.bottom + verticalReach;
 
       if (!nearLockup) {
-        lockup.classList.remove("is-cursor-near");
+        fadeTrail();
         return;
       }
 
@@ -118,39 +212,40 @@ export function NeonWordmark() {
       lagY += (lastPointerY - lockupRect.top - lagY) * 0.38;
       lockup.style.setProperty("--neon-cursor-x", `${lagX}px`);
       lockup.style.setProperty("--neon-cursor-y", `${lagY}px`);
-      lockup.classList.add("is-cursor-near");
+      keepTrailVisible();
 
-      const activeObjects = Array.from(
-        lockup.querySelectorAll<HTMLObjectElement>(
-          ".neon-wordmark__layer--core .neon-wordmark__asset",
+      const activeOverlays = Array.from(
+        lockup.querySelectorAll<HTMLSpanElement>(
+          ".neon-wordmark__layer--core .neon-wordmark__flicker-overlay",
         ),
-      ).filter((asset) => getComputedStyle(asset).display !== "none");
+      ).filter((overlay) => overlay.getClientRects().length > 0);
 
-      const nearbyPaths = activeObjects
-        .flatMap((asset) => {
-          const svgDocument = asset.contentDocument;
-          if (!svgDocument) return [];
-          const objectRect = asset.getBoundingClientRect();
+      const nearbyPaths = activeOverlays
+        .flatMap((overlay) => {
           return Array.from(
-            svgDocument.querySelectorAll<SVGPathElement>("path"),
+            overlay.querySelectorAll<SVGPathElement>("path"),
           ).map((path) => {
             const pathRect = path.getBoundingClientRect();
-            const left = objectRect.left + pathRect.left;
-            const right = objectRect.left + pathRect.right;
-            const top = objectRect.top + pathRect.top;
-            const bottom = objectRect.top + pathRect.bottom;
-            const dx = Math.max(left - lastPointerX, 0, lastPointerX - right);
-            const dy = Math.max(top - lastPointerY, 0, lastPointerY - bottom);
+            const dx = Math.max(
+              pathRect.left - lastPointerX,
+              0,
+              lastPointerX - pathRect.right,
+            );
+            const dy = Math.max(
+              pathRect.top - lastPointerY,
+              0,
+              lastPointerY - pathRect.bottom,
+            );
             return { path, distance: Math.hypot(dx, dy) };
           });
         })
         .filter(({ distance }) => distance <= influence)
         .sort((a, b) => a.distance - b.distance)
-        .slice(0, 3);
+        .slice(0, 5);
 
       nearbyPaths.forEach(({ path, distance }, index) => {
         const proximityDelay = Math.round(
-          index * 58 + (distance / influence) * 36,
+          index * 72 + (distance / influence) * 44,
         );
         strike(path, proximityDelay);
       });
@@ -163,47 +258,8 @@ export function NeonWordmark() {
       if (!frame) frame = window.requestAnimationFrame(updateInteraction);
     };
 
-    const coreObjects = Array.from(
-      lockup.querySelectorAll<HTMLObjectElement>(
-        ".neon-wordmark__layer--core .neon-wordmark__asset",
-      ),
-    );
-    const embeddedCleanups = coreObjects.map((asset) => {
-      let embeddedDocument: Document | null = null;
-      const handleEmbeddedPointerMove = (event: PointerEvent) => {
-        if (event.pointerType && event.pointerType !== "mouse") return;
-        const assetRect = asset.getBoundingClientRect();
-        lastPointerX = assetRect.left + event.clientX;
-        lastPointerY = assetRect.top + event.clientY;
-        if (!frame) frame = window.requestAnimationFrame(updateInteraction);
-      };
-      const connect = () => {
-        embeddedDocument?.removeEventListener(
-          "pointermove",
-          handleEmbeddedPointerMove as EventListener,
-        );
-        embeddedDocument = asset.contentDocument;
-        embeddedDocument?.addEventListener(
-          "pointermove",
-          handleEmbeddedPointerMove as EventListener,
-          { passive: true },
-        );
-      };
-
-      asset.addEventListener("load", connect);
-      connect();
-
-      return () => {
-        asset.removeEventListener("load", connect);
-        embeddedDocument?.removeEventListener(
-          "pointermove",
-          handleEmbeddedPointerMove as EventListener,
-        );
-      };
-    });
-
     const handlePointerLeave = () => {
-      lockup.classList.remove("is-cursor-near");
+      fadeTrail(380);
     };
 
     window.addEventListener("pointermove", handlePointerMove, {
@@ -220,7 +276,6 @@ export function NeonWordmark() {
         "pointerleave",
         handlePointerLeave,
       );
-      embeddedCleanups.forEach((cleanup) => cleanup());
       if (frame) window.cancelAnimationFrame(frame);
       timers.forEach(window.clearTimeout);
       timers.clear();
@@ -246,15 +301,13 @@ export function NeonWordmark() {
         <span
           className="neon-wordmark__layer neon-wordmark__layer--core"
         >
-          <object
-            className="neon-wordmark__asset neon-wordmark__asset--desktop"
-            data="/media/brand/frequency-shift-wordmark-neon.svg"
-            tabIndex={-1}
+          <InteractiveNeonAsset
+            className="neon-wordmark__asset--desktop"
+            src="/media/brand/frequency-shift-wordmark-neon.svg"
           />
-          <object
-            className="neon-wordmark__asset neon-wordmark__asset--mobile"
-            data="/media/brand/frequency-shift-wordmark-neon-mobile.svg"
-            tabIndex={-1}
+          <InteractiveNeonAsset
+            className="neon-wordmark__asset--mobile"
+            src="/media/brand/frequency-shift-wordmark-neon-mobile.svg"
           />
         </span>
       </div>

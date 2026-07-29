@@ -6,10 +6,12 @@ export function HomeHero() {
     <section className="route-hero home-hero" aria-labelledby="home-hero-title">
       <div className="home-hero__media" aria-hidden="true">
         <img
-          src="/media/figma/event-tech.webp"
+          src="/media/figma/hero-crowd-960.webp"
+          srcSet="/media/figma/hero-crowd-960.webp 960w, /media/figma/hero-crowd-1440.webp 1440w, /media/figma/hero-crowd.webp 2400w"
+          sizes="100vw"
           alt=""
-          width="1600"
-          height="1066"
+          width="2400"
+          height="1600"
           loading="eager"
           fetchPriority="high"
           decoding="async"

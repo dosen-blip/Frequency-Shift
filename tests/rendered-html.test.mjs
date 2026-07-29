@@ -13,6 +13,9 @@ const globalStylesPath = fileURLToPath(
 const siteMotionPath = fileURLToPath(
   new URL("../components/site-motion.tsx", import.meta.url),
 );
+const neonWordmarkPath = fileURLToPath(
+  new URL("../components/neon-wordmark.tsx", import.meta.url),
+);
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -52,15 +55,32 @@ test("server-renders the Frequency Shift homepage", async () => {
   );
   assert.match(
     html,
-    /<object class="neon-wordmark__asset" data="\/media\/brand\/fs-icon-neon\.svg"/,
+    /neon-wordmark__interactive-asset[^>]*><img class="neon-wordmark__interactive-base" src="\/media\/brand\/fs-icon-neon\.svg"/,
   );
   assert.match(html, /neon-wordmark__layer--ambient/);
   assert.match(html, /neon-wordmark__layer--bloom/);
   assert.doesNotMatch(html, /neon-glow\.png/);
-  assert.match(html, /event-tech\.webp/);
+  assert.match(html, /hero-crowd-960\.webp/);
+  assert.match(html, /hero-crowd-1440\.webp/);
+  assert.match(html, /hero-crowd\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+});
+
+test("keeps the neon hover field broad and its flicker trail persistent", async () => {
+  const component = await readFile(neonWordmarkPath, "utf8");
+  const styles = await readFile(globalStylesPath, "utf8");
+
+  assert.match(component, /querySelectorAll<SVGPathElement>\("path"\)/);
+  assert.match(component, /lockupRect\.width \* 0\.12/);
+  assert.match(component, /\.slice\(0, 5\)/);
+  assert.match(component, /path\.classList\.remove\("is-proximity-flicker"\), 1220/);
+  assert.match(component, /fadeTrail\(\)/);
+  assert.match(
+    styles,
+    /\.neon-wordmark__flicker-overlay path\.is-proximity-flicker\s*\{[^}]*1180ms/s,
+  );
 });
 
 test("preserves the full hero glow inside an expanded paint surface", async () => {
