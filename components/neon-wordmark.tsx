@@ -2,49 +2,18 @@
 
 import { useEffect, useRef } from "react";
 
-type NeonWordmarkAssetProps = {
+type NeonAssetProps = {
   className: string;
 };
 
-function NeonWordmarkAsset({ className }: NeonWordmarkAssetProps) {
+function NeonLogoAsset({ className }: NeonAssetProps) {
   return (
     <span className={className}>
-      <img
-        className="neon-wordmark__asset neon-wordmark__asset--desktop"
-        src="/media/brand/frequency-shift-wordmark-neon.svg"
-        alt=""
-        loading="lazy"
+      <object
+        className="neon-wordmark__asset"
+        data="/media/brand/fs-icon-neon.svg"
+        tabIndex={-1}
       />
-      <img
-        className="neon-wordmark__asset neon-wordmark__asset--mobile"
-        src="/media/brand/frequency-shift-wordmark-neon-mobile.svg"
-        alt=""
-        loading="lazy"
-      />
-    </span>
-  );
-}
-
-function NeonLogoAsset({
-  className,
-  interactive = false,
-}: NeonWordmarkAssetProps & { interactive?: boolean }) {
-  return (
-    <span className={className}>
-      {interactive ? (
-        <object
-          className="neon-wordmark__asset"
-          data="/media/brand/fs-icon-neon.svg"
-          tabIndex={-1}
-        />
-      ) : (
-        <img
-          className="neon-wordmark__asset"
-          src="/media/brand/fs-icon-neon.svg"
-          alt=""
-          loading="lazy"
-        />
-      )}
     </span>
   );
 }
@@ -233,16 +202,29 @@ export function NeonWordmark() {
         className="neon-wordmark__cursor-trail"
       />
       <div className="neon-logo">
-        <NeonLogoAsset className="neon-wordmark__layer neon-wordmark__layer--ambient" />
-        <NeonLogoAsset className="neon-wordmark__layer neon-wordmark__layer--bloom" />
-        <NeonLogoAsset
-          className="neon-wordmark__layer neon-wordmark__layer--core"
-          interactive
+        <img
+          className="neon-wordmark__glow neon-wordmark__glow--logo"
+          src="/media/brand/fs-icon-neon-glow.png"
+          alt=""
+          loading="eager"
+          fetchPriority="high"
         />
+        <NeonLogoAsset className="neon-wordmark__layer neon-wordmark__layer--core" />
       </div>
       <div className="neon-wordmark">
-        <NeonWordmarkAsset className="neon-wordmark__layer neon-wordmark__layer--ambient" />
-        <NeonWordmarkAsset className="neon-wordmark__layer neon-wordmark__layer--bloom" />
+        <picture>
+          <source
+            media="(max-width: 760px)"
+            srcSet="/media/brand/frequency-shift-wordmark-neon-mobile-glow.png"
+          />
+          <img
+            className="neon-wordmark__glow neon-wordmark__glow--wordmark"
+            src="/media/brand/frequency-shift-wordmark-neon-glow.png"
+            alt=""
+            loading="eager"
+            fetchPriority="high"
+          />
+        </picture>
         <span
           className="neon-wordmark__layer neon-wordmark__layer--core"
         >

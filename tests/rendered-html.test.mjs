@@ -48,16 +48,39 @@ test("server-renders the Frequency Shift homepage", async () => {
   assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
   assert.match(
     html,
-    /<img class="neon-wordmark__asset" src="\/media\/brand\/fs-icon-neon\.svg" alt="" loading="lazy"\/>/,
+    /<img class="neon-wordmark__glow neon-wordmark__glow--logo" src="\/media\/brand\/fs-icon-neon-glow\.png"/,
   );
   assert.match(
     html,
     /<object class="neon-wordmark__asset" data="\/media\/brand\/fs-icon-neon\.svg"/,
   );
+  assert.match(
+    html,
+    /frequency-shift-wordmark-neon-glow\.png/,
+  );
+  assert.match(
+    html,
+    /frequency-shift-wordmark-neon-mobile-glow\.png/,
+  );
+  assert.doesNotMatch(html, /neon-wordmark__layer--(?:ambient|bloom)/);
   assert.match(html, /event-tech\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+});
+
+test("renders the hero glow without rectangular runtime filters", async () => {
+  const styles = await readFile(globalStylesPath, "utf8");
+  const glowRule = styles.match(/\.neon-wordmark__glow\s*\{([^}]*)\}/);
+  const coreRule = styles.match(
+    /\.neon-wordmark__layer--core\s*\{([^}]*)\}/,
+  );
+
+  assert.ok(glowRule, "Expected a static hero glow rule");
+  assert.ok(coreRule, "Expected an animated hero core rule");
+  assert.doesNotMatch(glowRule[1], /\bfilter\s*:/);
+  assert.doesNotMatch(coreRule[1], /\bfilter\s*:/);
+  assert.doesNotMatch(styles, /\.neon-wordmark__layer--(?:ambient|bloom)/);
 });
 
 test("renders the primary public routes", async () => {
