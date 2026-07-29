@@ -19,6 +19,10 @@ const pagesOrigin = (process.env.PAGES_ORIGIN ?? "https://dosen-blip.github.io")
   /\/$/,
   "",
 );
+const pagesRelease = process.env.PAGES_RELEASE?.trim();
+const runtimeVersion = pagesRelease
+  ? `?v=${encodeURIComponent(pagesRelease.slice(0, 12))}`
+  : "";
 
 function prefixSrcset(value) {
   return value
@@ -112,7 +116,7 @@ function rewriteHtml(html) {
   rewritten = addTrailingSlashesToRouteHrefs(rewritten);
   return rewritten.replace(
     "</body>",
-    `<script src="${basePath}/static-pages.js" defer data-static-pages-runtime></script></body>`,
+    `<script src="${basePath}/static-pages.js${runtimeVersion}" defer data-static-pages-runtime></script></body>`,
   );
 }
 
