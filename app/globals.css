@@ -3599,12 +3599,12 @@ select {
     gap: clamp(1.25rem, 5vw, 2rem);
   }
 
-  .neon-logo,
-  .neon-wordmark {
-    width: 100%;
+  .neon-logo {
+    width: 80%;
   }
 
   .neon-wordmark {
+    width: 100%;
     aspect-ratio: 929.93 / 212.36;
   }
 
