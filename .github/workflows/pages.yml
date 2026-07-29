@@ -37,6 +37,7 @@ jobs:
 
       - name: Build static site
         env:
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PAGES_ORIGIN: ${{ steps.pages.outputs.origin }}
         run: |
