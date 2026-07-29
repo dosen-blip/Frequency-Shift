@@ -46,6 +46,14 @@ test("server-renders the Frequency Shift homepage", async () => {
   assert.match(html, /The Experiment/);
   assert.match(html, /frequency-shift-wordmark-neon\.svg/);
   assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
+  assert.match(
+    html,
+    /<img class="neon-wordmark__asset" src="\/media\/brand\/fs-icon-neon\.svg" alt="" loading="lazy"\/>/,
+  );
+  assert.match(
+    html,
+    /<object class="neon-wordmark__asset" data="\/media\/brand\/fs-icon-neon\.svg"/,
+  );
   assert.match(html, /event-tech\.webp/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);

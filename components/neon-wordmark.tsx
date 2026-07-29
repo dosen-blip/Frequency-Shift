@@ -9,28 +9,42 @@ type NeonWordmarkAssetProps = {
 function NeonWordmarkAsset({ className }: NeonWordmarkAssetProps) {
   return (
     <span className={className}>
-      <object
+      <img
         className="neon-wordmark__asset neon-wordmark__asset--desktop"
-        data="/media/brand/frequency-shift-wordmark-neon.svg"
-        tabIndex={-1}
+        src="/media/brand/frequency-shift-wordmark-neon.svg"
+        alt=""
+        loading="lazy"
       />
-      <object
+      <img
         className="neon-wordmark__asset neon-wordmark__asset--mobile"
-        data="/media/brand/frequency-shift-wordmark-neon-mobile.svg"
-        tabIndex={-1}
+        src="/media/brand/frequency-shift-wordmark-neon-mobile.svg"
+        alt=""
+        loading="lazy"
       />
     </span>
   );
 }
 
-function NeonLogoAsset({ className }: NeonWordmarkAssetProps) {
+function NeonLogoAsset({
+  className,
+  interactive = false,
+}: NeonWordmarkAssetProps & { interactive?: boolean }) {
   return (
     <span className={className}>
-      <object
-        className="neon-wordmark__asset"
-        data="/media/brand/fs-icon-neon.svg"
-        tabIndex={-1}
-      />
+      {interactive ? (
+        <object
+          className="neon-wordmark__asset"
+          data="/media/brand/fs-icon-neon.svg"
+          tabIndex={-1}
+        />
+      ) : (
+        <img
+          className="neon-wordmark__asset"
+          src="/media/brand/fs-icon-neon.svg"
+          alt=""
+          loading="lazy"
+        />
+      )}
     </span>
   );
 }
@@ -221,7 +235,10 @@ export function NeonWordmark() {
       <div className="neon-logo">
         <NeonLogoAsset className="neon-wordmark__layer neon-wordmark__layer--ambient" />
         <NeonLogoAsset className="neon-wordmark__layer neon-wordmark__layer--bloom" />
-        <NeonLogoAsset className="neon-wordmark__layer neon-wordmark__layer--core" />
+        <NeonLogoAsset
+          className="neon-wordmark__layer neon-wordmark__layer--core"
+          interactive
+        />
       </div>
       <div className="neon-wordmark">
         <NeonWordmarkAsset className="neon-wordmark__layer neon-wordmark__layer--ambient" />
