@@ -3018,8 +3018,8 @@ select {
 
 .home-event__layout {
   display: grid;
-  grid-template-columns: minmax(17rem, 0.72fr) minmax(24rem, 1.28fr);
-  gap: clamp(2.5rem, 7vw, 7rem);
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
   align-items: stretch;
 }
 
@@ -3027,12 +3027,13 @@ select {
   --neon-surface-radius: 1.25rem;
   position: relative;
   display: block;
-  width: 100%;
-  max-width: 34rem;
-  height: auto;
+  width: auto;
+  max-width: none;
+  height: 100%;
   min-height: 0;
-  aspect-ratio: auto;
+  aspect-ratio: 1200 / 1598;
   align-self: stretch;
+  justify-self: start;
   overflow: visible;
   border: 1px solid rgba(235, 115, 193, 0.4);
   border-radius: var(--neon-surface-radius);
