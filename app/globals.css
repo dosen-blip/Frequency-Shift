@@ -1923,13 +1923,13 @@ select {
 
   .archive-grid {
     grid-template-columns: 1fr;
-    gap: 3rem;
-    padding-inline: 1.25rem;
+    gap: 1.75rem;
+    padding-inline: 0;
   }
 
   .archive-card a {
     --archive-card-radius: 1rem;
-    min-height: 30rem;
+    min-height: clamp(24rem, 108vw, 27rem);
     border-radius: var(--archive-card-radius);
   }
 
@@ -1939,7 +1939,7 @@ select {
   }
 
   .archive-card--featured a {
-    min-height: 35rem;
+    min-height: clamp(27rem, 120vw, 30rem);
   }
 
   .archive-card__feature-mosaic {
@@ -1992,13 +1992,13 @@ select {
 
   .archive-card h2 {
     max-width: 100%;
-    font-size: clamp(2.55rem, 12vw, 3.5rem);
-    letter-spacing: -0.055em;
+    font-size: clamp(2.05rem, 9vw, 2.65rem);
+    letter-spacing: -0.035em;
   }
 
   .archive-card--featured h2 {
     max-width: 100%;
-    font-size: clamp(2.9rem, 13.5vw, 4rem);
+    font-size: clamp(2.2rem, 10vw, 3rem);
   }
 
   .archive-card__summary,
@@ -3595,8 +3595,12 @@ select {
   }
 
   .neon-lockup {
-    width: min(86vw, 36rem);
+    width: min(82vw, 36rem);
     gap: clamp(1.25rem, 5vw, 2rem);
+  }
+
+  .neon-wordmark__layer--ambient {
+    inset: 0.5rem;
   }
 
   .neon-logo {
