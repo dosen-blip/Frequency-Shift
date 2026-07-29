@@ -16,10 +16,26 @@ export function SiteMotion() {
     const revealElements = Array.from(
       document.querySelectorAll<HTMLElement>("[data-reveal]"),
     );
+    const mobileNeonElements = Array.from(
+      document.querySelectorAll<HTMLElement>(
+        [
+          ".event-card",
+          ".archive-card > a",
+          ".home-event__visual",
+          ".home-memory__grid figure",
+          ".button",
+          ".mobile-nav__toggle",
+          ".mobile-nav__panel a",
+        ].join(","),
+      ),
+    );
     const hero = document.querySelector<HTMLElement>(".route-hero");
     const reducedMotion = mediaMatches("(prefers-reduced-motion: reduce)");
     const coarsePointer = mediaMatches("(hover: none), (pointer: coarse)");
+    const compactViewport = mediaMatches("(max-width: 760px)");
+    const mobileNeon = coarsePointer || compactViewport;
     let revealObserver: IntersectionObserver | null = null;
+    let mobileNeonObserver: IntersectionObserver | null = null;
     let revealFallback = 0;
 
     root.classList.add("motion-enabled");
@@ -30,6 +46,31 @@ export function SiteMotion() {
     };
 
     const revealAll = () => revealElements.forEach(reveal);
+    const clearMobileNeon = () => {
+      mobileNeonElements.forEach((element) => {
+        element.classList.remove("is-mobile-neon-active");
+      });
+      root.classList.remove("mobile-neon-enabled");
+    };
+
+    if (mobileNeon && "IntersectionObserver" in window) {
+      root.classList.add("mobile-neon-enabled");
+      mobileNeonObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            entry.target.classList.toggle(
+              "is-mobile-neon-active",
+              entry.isIntersecting && entry.intersectionRatio >= 0.15,
+            );
+          });
+        },
+        {
+          threshold: [0.15, 0.45, 0.75],
+          rootMargin: "-18% 0px -18% 0px",
+        },
+      );
+      mobileNeonElements.forEach((element) => mobileNeonObserver?.observe(element));
+    }
 
     if (hero) {
       const heroMotion: "full" | "quick" =
@@ -49,7 +90,11 @@ export function SiteMotion() {
       !("IntersectionObserver" in window)
     ) {
       revealAll();
-      return;
+      return () => {
+        mobileNeonObserver?.disconnect();
+        clearMobileNeon();
+        revealAll();
+      };
     }
 
     // Arm the fail-open path before constructing optional browser APIs.
@@ -77,7 +122,9 @@ export function SiteMotion() {
     // leave content hidden.
     return () => {
       revealObserver?.disconnect();
+      mobileNeonObserver?.disconnect();
       window.clearTimeout(revealFallback);
+      clearMobileNeon();
       revealAll();
     };
   }, [pathname]);

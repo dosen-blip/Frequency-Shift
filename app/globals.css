@@ -46,6 +46,8 @@
 }
 
 html {
+  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--paper);
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
@@ -2732,6 +2734,7 @@ select {
 
 .button:hover,
 .button:focus-visible,
+.mobile-neon-enabled .button.is-mobile-neon-active,
 .header-cta:hover,
 .header-cta:focus-visible,
 .header-cta.is-active {
@@ -2752,6 +2755,7 @@ select {
 
 .button:hover::before,
 .button:focus-visible::before,
+.mobile-neon-enabled .button.is-mobile-neon-active::before,
 .header-cta:hover::before,
 .header-cta:focus-visible::before,
 .header-cta.is-active::before {
@@ -2760,6 +2764,7 @@ select {
 
 .button:hover::after,
 .button:focus-visible::after,
+.mobile-neon-enabled .button.is-mobile-neon-active::after,
 .header-cta:hover::after,
 .header-cta:focus-visible::after,
 .header-cta.is-active::after {
@@ -2894,8 +2899,10 @@ select {
 
 .mobile-nav__toggle:hover,
 .mobile-nav__toggle:focus-visible,
+.mobile-neon-enabled .mobile-nav__toggle.is-mobile-neon-active,
 .mobile-nav__panel a:hover,
 .mobile-nav__panel a:focus-visible,
+.mobile-neon-enabled .mobile-nav__panel a.is-mobile-neon-active,
 .home-hero__scroll:hover,
 .home-hero__scroll:focus-visible {
   color: #ffbfe5;
@@ -2923,11 +2930,15 @@ select {
 
 .event-card:hover,
 .event-card:focus-within,
+.mobile-neon-enabled .event-card.is-mobile-neon-active,
 .archive-card > a:hover,
 .archive-card > a:focus-visible,
+.mobile-neon-enabled .archive-card > a.is-mobile-neon-active,
 .home-event__visual:hover,
 .home-event__visual:focus-visible,
-.home-memory__grid figure:hover {
+.mobile-neon-enabled .home-event__visual.is-mobile-neon-active,
+.home-memory__grid figure:hover,
+.mobile-neon-enabled .home-memory__grid figure.is-mobile-neon-active {
   border-color: rgba(235, 115, 193, 0.62);
   box-shadow:
     0 0 0.08rem rgba(255, 255, 255, 0.34),
@@ -2936,7 +2947,8 @@ select {
 }
 
 .archive-card > a:hover,
-.archive-card > a:focus-visible {
+.archive-card > a:focus-visible,
+.mobile-neon-enabled .archive-card > a.is-mobile-neon-active {
   border-color: rgba(235, 115, 193, 0.34);
   box-shadow:
     0 0 0.12rem rgba(255, 255, 255, 0.74),
@@ -2947,12 +2959,14 @@ select {
 }
 
 .archive-card > a:hover::before,
-.archive-card > a:focus-visible::before {
+.archive-card > a:focus-visible::before,
+.mobile-neon-enabled .archive-card > a.is-mobile-neon-active::before {
   animation: neon-cta-bloom-ignite 960ms linear both;
 }
 
 .archive-card > a:hover::after,
-.archive-card > a:focus-visible::after {
+.archive-card > a:focus-visible::after,
+.mobile-neon-enabled .archive-card > a.is-mobile-neon-active::after {
   animation: neon-cta-tube-ignite 960ms linear both;
 }
 
@@ -3112,8 +3126,10 @@ select {
 
 .event-card:hover,
 .event-card:focus-within,
+.mobile-neon-enabled .event-card.is-mobile-neon-active,
 .home-event__visual:hover,
-.home-event__visual:focus-visible {
+.home-event__visual:focus-visible,
+.mobile-neon-enabled .home-event__visual.is-mobile-neon-active {
   border-color: rgba(235, 115, 193, 0.34);
   box-shadow:
     0 0 0.12rem rgba(255, 255, 255, 0.74),
@@ -3124,21 +3140,26 @@ select {
 }
 
 .home-event__visual:hover,
-.home-event__visual:focus-visible {
+.home-event__visual:focus-visible,
+.mobile-neon-enabled .home-event__visual.is-mobile-neon-active {
   transform: translateY(-3px) scale(1.012);
 }
 
 .event-card:hover::before,
 .event-card:focus-within::before,
+.mobile-neon-enabled .event-card.is-mobile-neon-active::before,
 .home-event__visual:hover::before,
-.home-event__visual:focus-visible::before {
+.home-event__visual:focus-visible::before,
+.mobile-neon-enabled .home-event__visual.is-mobile-neon-active::before {
   animation: neon-cta-bloom-ignite 960ms linear both;
 }
 
 .event-card:hover::after,
 .event-card:focus-within::after,
+.mobile-neon-enabled .event-card.is-mobile-neon-active::after,
 .home-event__visual:hover::after,
-.home-event__visual:focus-visible::after {
+.home-event__visual:focus-visible::after,
+.mobile-neon-enabled .home-event__visual.is-mobile-neon-active::after {
   animation: neon-cta-tube-ignite 960ms linear both;
 }
 
@@ -3631,7 +3652,7 @@ select {
 
   .home-event__content h2 {
     max-width: 100%;
-    font-size: clamp(3.2rem, 14.5vw, 4.9rem);
+    font-size: clamp(3rem, 13.5vw, 4.9rem);
   }
 
   .home-event__facts div {

@@ -10,6 +10,9 @@ const builtClientRoot = fileURLToPath(new URL("../dist/client/", import.meta.url
 const globalStylesPath = fileURLToPath(
   new URL("../app/globals.css", import.meta.url),
 );
+const siteMotionPath = fileURLToPath(
+  new URL("../components/site-motion.tsx", import.meta.url),
+);
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -225,6 +228,20 @@ test("keeps reveal motion from clipping interactive glow effects", async () => {
     styles,
     /\.motion-enabled \[data-reveal="clip"\]\.is-revealed\s*\{[^}]*clip-path:\s*inset\(0\)/,
   );
+});
+
+test("gives touch devices scroll-driven neon states without horizontal spill", async () => {
+  const [styles, motion] = await Promise.all([
+    readFile(globalStylesPath, "utf8"),
+    readFile(siteMotionPath, "utf8"),
+  ]);
+
+  assert.match(styles, /html\s*\{[^}]*overflow-x:\s*clip/);
+  assert.match(styles, /\.mobile-neon-enabled \.button\.is-mobile-neon-active/);
+  assert.match(styles, /\.mobile-neon-enabled \.event-card\.is-mobile-neon-active/);
+  assert.match(motion, /mobileNeonObserver\s*=\s*new IntersectionObserver/);
+  assert.match(motion, /rootMargin:\s*"-18% 0px -18% 0px"/);
+  assert.match(motion, /is-mobile-neon-active/);
 });
 
 test("renders page titles without waiting for client-side reveal motion", async () => {
