@@ -3612,6 +3612,13 @@ select {
     padding: calc(var(--neon-paint-gutter) + 0.5rem);
   }
 
+  .neon-wordmark__layer--ambient,
+  .neon-wordmark__layer--bloom,
+  .neon-wordmark__layer--core {
+    /* Keep the mobile compositor's filter surface stable while the SVG paths ignite. */
+    box-shadow: inset 0 0 0 1px rgba(5, 5, 6, 0.004);
+  }
+
   .neon-logo {
     width: 80%;
   }

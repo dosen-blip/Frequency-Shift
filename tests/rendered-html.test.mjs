@@ -65,7 +65,12 @@ test("server-renders the Frequency Shift homepage", async () => {
 
 test("preserves the full hero glow inside an expanded paint surface", async () => {
   const styles = await readFile(globalStylesPath, "utf8");
+  const mobileRulesStart = styles.lastIndexOf("@media (max-width: 760px)");
+  const mobileRules = styles.slice(mobileRulesStart);
   const paintSurfaceRule = styles.match(
+    /\.neon-wordmark__layer--ambient,\s*\.neon-wordmark__layer--bloom,\s*\.neon-wordmark__layer--core\s*\{([^}]*)\}/,
+  );
+  const mobilePaintSurfaceRule = mobileRules.match(
     /\.neon-wordmark__layer--ambient,\s*\.neon-wordmark__layer--bloom,\s*\.neon-wordmark__layer--core\s*\{([^}]*)\}/,
   );
   const ambientRule = styles.match(
@@ -79,6 +84,10 @@ test("preserves the full hero glow inside an expanded paint surface", async () =
   ].find((match) => /brightness\(1\.36\)/.test(match[1]));
 
   assert.ok(paintSurfaceRule, "Expected an expanded hero paint surface");
+  assert.ok(
+    mobilePaintSurfaceRule,
+    "Expected a stable mobile hero paint surface",
+  );
   assert.ok(ambientRule, "Expected the ambient glow layer");
   assert.ok(bloomRule, "Expected the bloom glow layer");
   assert.ok(coreRule, "Expected an animated hero core rule");
@@ -89,6 +98,10 @@ test("preserves the full hero glow inside an expanded paint surface", async () =
   assert.match(
     paintSurfaceRule[1],
     /padding:\s*var\(--neon-paint-gutter\)/,
+  );
+  assert.match(
+    mobilePaintSurfaceRule[1],
+    /box-shadow:\s*inset 0 0 0 1px rgba\(5, 5, 6, 0\.004\)/,
   );
   assert.match(ambientRule[1], /opacity:\s*0\.3/);
   assert.match(ambientRule[1], /blur\(2\.2rem\) saturate\(1\.5\)/);
