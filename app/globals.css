@@ -2554,12 +2554,12 @@ select {
 }
 
 .neon-wordmark__flicker-overlay path {
-  opacity: 0 !important;
+  opacity: 0;
   animation: none !important;
 }
 
 .neon-wordmark__flicker-overlay path.is-proximity-flicker {
-  animation: fs-neon-hover 1180ms linear 0s 1 both !important;
+  animation: fs-neon-hover 1320ms linear 0s 1 both !important;
 }
 
 .neon-wordmark__asset--mobile {

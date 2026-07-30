@@ -164,7 +164,7 @@ export function NeonWordmark() {
         path.classList.remove("is-proximity-flicker");
         void path.getBoundingClientRect();
         path.classList.add("is-proximity-flicker");
-        schedule(() => path.classList.remove("is-proximity-flicker"), 1220);
+        schedule(() => path.classList.remove("is-proximity-flicker"), 1380);
       }, delay);
     };
 
@@ -193,10 +193,10 @@ export function NeonWordmark() {
       const viewportWidth = window.innerWidth;
       const influence =
         viewportWidth <= 760
-          ? 104
-          : Math.min(180, Math.max(138, lockupRect.width * 0.12));
-      const horizontalReach = influence * 1.5;
-      const verticalReach = influence * 1.35;
+          ? 112
+          : Math.min(210, Math.max(154, lockupRect.width * 0.135));
+      const horizontalReach = influence * 1.55;
+      const verticalReach = influence * 1.4;
       const nearLockup =
         lastPointerX >= lockupRect.left - horizontalReach &&
         lastPointerX <= lockupRect.right + horizontalReach &&
@@ -241,11 +241,11 @@ export function NeonWordmark() {
         })
         .filter(({ distance }) => distance <= influence)
         .sort((a, b) => a.distance - b.distance)
-        .slice(0, 5);
+        .slice(0, 6);
 
       nearbyPaths.forEach(({ path, distance }, index) => {
         const proximityDelay = Math.round(
-          index * 72 + (distance / influence) * 44,
+          index * 78 + (distance / influence) * 46,
         );
         strike(path, proximityDelay);
       });

@@ -73,13 +73,17 @@ test("keeps the neon hover field broad and its flicker trail persistent", async 
   const styles = await readFile(globalStylesPath, "utf8");
 
   assert.match(component, /querySelectorAll<SVGPathElement>\("path"\)/);
-  assert.match(component, /lockupRect\.width \* 0\.12/);
-  assert.match(component, /\.slice\(0, 5\)/);
-  assert.match(component, /path\.classList\.remove\("is-proximity-flicker"\), 1220/);
+  assert.match(component, /lockupRect\.width \* 0\.135/);
+  assert.match(component, /\.slice\(0, 6\)/);
+  assert.match(component, /path\.classList\.remove\("is-proximity-flicker"\), 1380/);
   assert.match(component, /fadeTrail\(\)/);
   assert.match(
     styles,
-    /\.neon-wordmark__flicker-overlay path\.is-proximity-flicker\s*\{[^}]*1180ms/s,
+    /\.neon-wordmark__flicker-overlay path\.is-proximity-flicker\s*\{[^}]*1320ms/s,
+  );
+  assert.doesNotMatch(
+    styles,
+    /\.neon-wordmark__flicker-overlay path\s*\{[^}]*opacity:\s*0\s*!important/s,
   );
 });
 

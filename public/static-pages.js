@@ -185,7 +185,7 @@
         path.classList.add("is-proximity-flicker");
         window.setTimeout(function () {
           path.classList.remove("is-proximity-flicker");
-        }, 1220);
+        }, 1380);
       }, delay);
     }
 
@@ -193,10 +193,10 @@
       frame = 0;
       var rect = lockup.getBoundingClientRect();
       var influence = window.innerWidth <= 760
-        ? 104
-        : Math.min(180, Math.max(138, rect.width * 0.12));
-      var horizontalReach = influence * 1.5;
-      var verticalReach = influence * 1.35;
+        ? 112
+        : Math.min(210, Math.max(154, rect.width * 0.135));
+      var horizontalReach = influence * 1.55;
+      var verticalReach = influence * 1.4;
       var near =
         pointerX >= rect.left - horizontalReach &&
         pointerX <= rect.right + horizontalReach &&
@@ -229,11 +229,11 @@
       nearby.sort(function (first, second) {
         return first.distance - second.distance;
       });
-      nearby = nearby.slice(0, 5);
+      nearby = nearby.slice(0, 6);
       each(nearby, function (item, index) {
         strike(
           item.path,
-          Math.round(index * 72 + (item.distance / influence) * 44),
+          Math.round(index * 78 + (item.distance / influence) * 46),
         );
       });
     }
