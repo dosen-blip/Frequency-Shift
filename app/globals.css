@@ -2639,6 +2639,23 @@ select {
   }
 }
 
+@media (hover: none), (pointer: coarse) {
+  /* Mobile WebKit rasterizes the lockup subtree into one shared surface
+     sized to the lockup's box while the hero entrance transitions run,
+     cropping every glow layer at that rectangle. A 3D transform opts each
+     glow layer out of the shared surface so it composites alone, where its
+     paint gutter (sized to the full filter reach) absorbs any bounds clip.
+     The ambient scale must mirror its base rule. */
+  .neon-wordmark__layer--ambient {
+    transform: scale(1.018) translateZ(0);
+  }
+
+  .neon-wordmark__layer--bloom,
+  .neon-wordmark__layer--core {
+    transform: translateZ(0);
+  }
+}
+
 .home-hero__statement {
   display: grid;
   margin-top: clamp(0.7rem, 1.7vh, 1.35rem);
