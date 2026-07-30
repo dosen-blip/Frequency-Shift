@@ -13,8 +13,12 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/media/brand/fs-icon-vector.svg",
-    shortcut: "/media/brand/fs-icon-vector.svg",
+    icon: {
+      url: "/favicon.png",
+      type: "image/png",
+      sizes: "256x256",
+    },
+    shortcut: "/favicon.png",
   },
   openGraph: {
     title: siteConfig.name,
