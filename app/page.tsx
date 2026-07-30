@@ -104,7 +104,7 @@ export default function HomePage() {
           ) : null}
         </div>
         <div className="home-memory__grid" aria-label="Selected event moments">
-          {momentGallery.slice(0, 5).map((image, index) => (
+          {momentGallery.slice(0, 6).map((image, index) => (
             <figure
               key={image.src}
               data-reveal="media"
@@ -139,10 +139,10 @@ export default function HomePage() {
           </h2>
           <div className="home-manifesto__copy" data-reveal="up">
             <p>
-              Frequency Shift channels the raw energy of a rave into Ottawa rooms
-              built for dancers. Solo nights, partner takeovers, and two-stage
-              gatherings all serve the same idea: freedom, self-expression, and a
-              community that connects through sound.
+              We bring the raw energy of a rave into Ottawa rooms built for
+              dancers. Whether it’s one of our own nights, a partner takeover, or
+              a two-stage gathering, the point stays the same: freedom,
+              self-expression, and a community that connects through sound.
             </p>
             <Link className="text-link" href="/about">
               Read our story

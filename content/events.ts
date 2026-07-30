@@ -5,10 +5,10 @@ export const events: EventRecord[] = [
     slug: "the-experiment",
     title: "The Experiment",
     summary:
-      "Frequency Shift and Dopamine return to GRIDWRKS with Yaan, Valium, Seb B, Balla, and Adekam & Friends.",
+      "We’re back at GRIDWRKS with Dopamine, Yaan, Valium, Seb B, Balla, and Adekam & Friends.",
     description: [
-      "The Experiment brings Frequency Shift and Dopamine back together at GRIDWRKS for a bigger-stage follow-up built around house-party energy in the club.",
-      "Yaan, Valium, Seb B, Balla with a birthday set, and Adekam & Friends carry the night. The event runs from 9 PM to 2 AM and is 19+ with ID required. Advance tickets are $10, with $4.50 Jagerbombs available all night.",
+      "For The Experiment, we’re linking back up with Dopamine at GRIDWRKS for a bigger-stage follow-up with house-party energy in the club.",
+      "Yaan, Valium, Seb B, Balla with a birthday set, and Adekam & Friends carry the night. We’re running from 9 PM to 2 AM, and the event is 19+ with ID required. Advance tickets are $10, with $4.50 Jagerbombs available all night.",
     ],
     dateLabel: "August 7, 2026 · 9 PM–2 AM",
     startsAt: "2026-08-07T21:00:00-04:00",
@@ -28,9 +28,9 @@ export const events: EventRecord[] = [
   {
     slug: "september-4",
     title: "Frequency Shift",
-    summary: "Frequency Shift returns to GRIDWRKS on September 4.",
+    summary: "We’re back at GRIDWRKS on September 4.",
     description: [
-      "Frequency Shift returns to GRIDWRKS on September 4, 2026. Follow the signal as the night takes shape.",
+      "We’re back at GRIDWRKS on September 4, 2026. Follow along as the night takes shape.",
     ],
     dateLabel: "September 4, 2026",
     startsAt: "2026-09-04",
@@ -50,7 +50,7 @@ export const events: EventRecord[] = [
     title: "Boat Party",
     summary: "Boat Party lands September 17.",
     description: [
-      "Frequency Shift heads onto the water for Boat Party on September 17, 2026.",
+      "We’re heading onto the water for Boat Party on September 17, 2026.",
     ],
     dateLabel: "September 17, 2026",
     startsAt: "2026-09-17",

@@ -137,14 +137,14 @@ test("preserves the full hero glow inside an expanded paint surface", async () =
 
 test("renders the primary public routes", async () => {
   const routes = [
-    ["/events", /Upcoming Frequency Shift events/],
+    ["/events", /Our upcoming nights/],
     ["/archive", /Frequency Shift 001/],
     ["/archive/frequency-shift-001", /frequency-shift-001-01\.webp/],
     ["/about", /Built for the dancefloor/],
-    ["/contact", /Contact Frequency Shift/],
+    ["/contact", /send us a message/i],
     ["/events/the-experiment", /Yaan, Valium, Seb B, Balla/],
-    ["/events/september-4", /returns to GRIDWRKS on September 4/],
-    ["/events/boat-party", /heads onto the water for Boat Party/],
+    ["/events/september-4", /We’re back at GRIDWRKS on September 4/],
+    ["/events/boat-party", /We’re heading onto the water for Boat Party/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
     ["/terms", /<title>Terms — Frequency Shift<\/title>/i],
   ];
@@ -197,7 +197,7 @@ test("uses event photography for completed archive cards and galleries", async (
   const reelArchive = await render("/archive/frequency-shift-004");
   const reelHtml = await reelArchive.text();
   assert.match(reelHtml, /frequency-shift-004-02\.webp/);
-  assert.match(reelHtml, /event-night frames selected from that official recap/i);
+  assert.match(reelHtml, /Two event-night frames hold onto the red lasers/i);
   assert.doesNotMatch(reelHtml, /placeholder|final edit pending/i);
 
   const recordArchive = await render("/archive/solstice");
@@ -209,7 +209,7 @@ test("uses event photography for completed archive cards and galleries", async (
   assert.doesNotMatch(recordHtml, /placeholder|image pending|image slots|final edit pending/i);
 });
 
-test("renders caption-grounded editorial and event facts", async () => {
+test("renders collective-voice editorial and event facts", async () => {
   const homepage = await render("/");
   const homepageHtml = await homepage.text();
   assert.match(homepageHtml, /Ottawa’s underground,/);
@@ -256,14 +256,14 @@ test("renders caption-grounded editorial and event facts", async () => {
 
   const ogs018 = await render("/archive/frequency-shift-003");
   const ogs018Html = await ogs018.text();
-  assert.match(ogs018Html, /sets were later released in full/i);
+  assert.match(ogs018Html, /later released the full sets/i);
   assert.match(ogs018Html, /DPAOdRxDzCV/);
   assert.match(ogs018Html, /DPNJv_KEW9M/);
   assert.match(ogs018Html, /DPXgfzYEZX9/);
 
   const ogs041 = await render("/archive/frequency-shift-004");
   const ogs041Html = await ogs041.text();
-  assert.match(ogs041Html, /run-it-back/i);
+  assert.match(ogs041Html, /ran it back/i);
   assert.match(ogs041Html, /DSfs0EuDE7I/);
 });
 

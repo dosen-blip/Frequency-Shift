@@ -4,7 +4,7 @@ import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Privacy",
-  description: "How the Frequency Shift website handles visitor information.",
+  description: "How we handle visitor information on this website.",
 };
 
 export default function PrivacyPage() {
@@ -19,9 +19,9 @@ export default function PrivacyPage() {
         <h2>On this site.</h2>
         <div className="prose prose--large" data-reveal="up">
           <p>
-            Frequency Shift does not offer visitor accounts or collect personal
-            information through forms on this website. We do not use the site to
-            build marketing profiles.
+            We do not offer visitor accounts or collect personal information
+            through forms on this website. We do not use the site to build
+            marketing profiles.
           </p>
           <p>
             Our hosting provider may process standard request information needed
@@ -36,7 +36,7 @@ export default function PrivacyPage() {
           <p>
             Links to Instagram, ticket providers, artists, venues, and partners
             lead to services with their own privacy practices. Messages sent to
-            Frequency Shift on Instagram are handled there, not by this website.
+            us on Instagram are handled there, not by this website.
           </p>
           <p>
             For a privacy question, message{" "}

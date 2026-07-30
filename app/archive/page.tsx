@@ -5,7 +5,7 @@ import { archives } from "@/content/archives";
 
 export const metadata: Metadata = {
   title: "Archive",
-  description: "Frequency Shift event recaps, images, credits, and history.",
+  description: "Our event recaps, images, credits, and history.",
 };
 
 export default function ArchiveIndexPage() {
@@ -14,7 +14,7 @@ export default function ArchiveIndexPage() {
       <PageHeader
         eyebrow="Afterimage"
         title="Archive"
-        intro="Nine gatherings, collaborations, and afterimages—from the first Ottawa night to Frequency Fest—kept with the artists, partners, photographers, and dancers who made them."
+        intro="This is where we keep the nights that built us—from our first Ottawa gathering to Frequency Fest—with the artists, partners, photographers, and dancers who made them."
       />
       <div className="archive-grid">
         {archives.map((entry, index) => (

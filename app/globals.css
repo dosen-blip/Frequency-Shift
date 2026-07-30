@@ -3434,8 +3434,9 @@ select {
 }
 
 .home-memory__grid figure:nth-child(4),
-.home-memory__grid figure:nth-child(5) {
-  grid-column: span 6;
+.home-memory__grid figure:nth-child(5),
+.home-memory__grid figure:nth-child(6) {
+  grid-column: span 4;
 }
 
 .home-memory__grid img {
@@ -3781,7 +3782,7 @@ select {
 
   .home-manifesto h2 {
     max-width: 100%;
-    font-size: clamp(3.2rem, 14.5vw, 5rem);
+    font-size: clamp(2.8rem, 12.25vw, 5rem);
   }
 
   .footer-brand__mark {

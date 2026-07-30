@@ -6,7 +6,7 @@ import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Events",
-  description: "Upcoming Frequency Shift events and ticket status.",
+  description: "Our upcoming events and ticket status.",
 };
 
 export default function EventsPage() {
@@ -15,14 +15,14 @@ export default function EventsPage() {
       <PageHeader
         eyebrow="Live signal"
         title="Events"
-        intro="Upcoming Frequency Shift nights, collaborations, and ticket links."
+        intro="Our upcoming nights, collaborations, and ticket links."
       />
       <section className="event-grid" aria-label="Upcoming events">
         {events.length ? (
           events.map((event, index) => <EventCard event={event} key={event.slug} revealIndex={index} />)
         ) : (
           <p className="empty-state" data-reveal="up">
-            Follow{" "}
+            Follow us at{" "}
             <a href={siteConfig.instagram.href} target="_blank" rel="noreferrer">
               {siteConfig.instagram.handle}
             </a>{" "}

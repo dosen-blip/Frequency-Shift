@@ -18,10 +18,10 @@ export default function TermsPage() {
         <h2>Event information.</h2>
         <div className="prose prose--large" data-reveal="up">
           <p>
-            This site is an informational record of Frequency Shift events.
-            Dates, lineups, set times, venues, and entry requirements can change.
-            When details differ, the current organizer or ticket-provider listing
-            takes precedence.
+            We use this site to share and keep a record of Frequency Shift
+            events. Dates, lineups, set times, venues, and entry requirements
+            can change. When details differ, the current organizer or
+            ticket-provider listing takes precedence.
           </p>
           <p>
             Ticket purchases, refunds, transfers, and admission are governed by
@@ -39,9 +39,8 @@ export default function TermsPage() {
             does not grant permission to reproduce or redistribute them.
           </p>
           <p>
-            External links are provided for context and convenience. Frequency
-            Shift does not control the content or availability of third-party
-            services.
+            External links are provided for context and convenience. We do not
+            control the content or availability of third-party services.
           </p>
           <p className="policy-date">Last updated July 28, 2026.</p>
         </div>

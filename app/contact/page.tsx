@@ -4,7 +4,7 @@ import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Contact Frequency Shift for bookings, partnerships, and general questions.",
+  description: "Reach us for bookings, partnerships, media, and general questions.",
 };
 
 export default function ContactPage() {
@@ -13,16 +13,15 @@ export default function ContactPage() {
       <PageHeader
         eyebrow="Open channel"
         title="Contact"
-        intro="Bookings, collaborations, media, and ideas for the next room all start through the active Frequency Shift channel."
+        intro="For bookings, collaborations, media, or an idea for the next room, send us a message."
       />
       <section className="split-section section--rule contact-section">
         <h2>Meet us on the frequency.</h2>
         <div className="prose prose--large" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>
           <p>
-            Frequency Shift works with artists, promoters, photographers,
-            production teams, venues, and community partners across Ottawa. Send
-            the account a direct message with the essentials and a real person
-            can pick up the conversation.
+            We work with artists, promoters, photographers, production teams,
+            venues, and community partners across Ottawa. Send us the essentials
+            in a direct message and we’ll pick up the conversation.
           </p>
           <div className="contact-actions">
             <a
