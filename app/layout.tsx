@@ -5,6 +5,11 @@ import { SiteMotion } from "@/components/site-motion";
 import { siteConfig } from "@/content/site";
 import "./globals.css";
 
+const faviconUrl = new URL(
+  "favicon.png",
+  `${siteConfig.canonicalBase.replace(/\/+$/, "")}/`,
+).toString();
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.canonicalBase),
   title: {
@@ -14,11 +19,11 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   icons: {
     icon: {
-      url: "/favicon.png",
+      url: faviconUrl,
       type: "image/png",
       sizes: "256x256",
     },
-    shortcut: "/favicon.png",
+    shortcut: faviconUrl,
   },
   openGraph: {
     title: siteConfig.name,
