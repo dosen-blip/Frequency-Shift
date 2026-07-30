@@ -2228,7 +2228,7 @@ select {
 
 .site-nav a:hover::after,
 .site-nav a:focus-visible::after {
-  animation: site-nav-line-ignite 520ms linear both;
+  animation: site-nav-line-ignite 340ms linear both;
   box-shadow:
     0 0 0.1rem #fff,
     0 0 0.5rem rgba(235, 115, 193, 1),
@@ -2241,23 +2241,15 @@ select {
     opacity: 0.08;
     transform: scaleX(0);
   }
-  32% {
+  52% {
     opacity: 1;
-    transform: scaleX(0.7);
+    transform: scaleX(0.82);
   }
-  43% {
-    opacity: 0.28;
-    transform: scaleX(0.79);
+  66% {
+    opacity: 0.62;
+    transform: scaleX(0.9);
   }
-  58% {
-    opacity: 1;
-    transform: scaleX(0.92);
-  }
-  68% {
-    opacity: 0.56;
-    transform: scaleX(0.96);
-  }
-  78%, 100% {
+  82%, 100% {
     opacity: 1;
     transform: scaleX(1);
   }
@@ -2822,7 +2814,7 @@ select {
 .header-cta:hover::before,
 .header-cta:focus-visible::before,
 .header-cta.is-active::before {
-  animation: neon-cta-bloom-ignite 960ms linear both;
+  animation: neon-interactive-bloom-ignite 520ms linear both;
 }
 
 .button:hover::after,
@@ -2831,7 +2823,70 @@ select {
 .header-cta:hover::after,
 .header-cta:focus-visible::after,
 .header-cta.is-active::after {
+  animation: neon-interactive-tube-ignite 520ms linear both;
+}
+
+.home-hero .button:hover::before,
+.home-hero .button:focus-visible::before,
+.mobile-neon-enabled .home-hero .button.is-mobile-neon-active::before {
+  animation: neon-cta-bloom-ignite 960ms linear both;
+}
+
+.home-hero .button:hover::after,
+.home-hero .button:focus-visible::after,
+.mobile-neon-enabled .home-hero .button.is-mobile-neon-active::after {
   animation: neon-cta-tube-ignite 960ms linear both;
+}
+
+@keyframes neon-interactive-tube-ignite {
+  0%, 12% {
+    border-color: rgba(235, 115, 193, 0.12);
+    box-shadow: none;
+    opacity: 0.1;
+  }
+  38% {
+    border-color: #fff7fc;
+    box-shadow:
+      0 0 0.12rem #fff,
+      0 0 0.86rem rgba(235, 115, 193, 1),
+      0 0 1.75rem rgba(197, 72, 240, 0.58),
+      inset 0 0 0.64rem rgba(235, 115, 193, 0.48);
+    opacity: 1;
+  }
+  52% {
+    border-color: #ff9ed8;
+    box-shadow:
+      0 0 0.1rem rgba(255, 255, 255, 0.86),
+      0 0 0.68rem rgba(235, 115, 193, 0.9),
+      inset 0 0 0.5rem rgba(235, 115, 193, 0.42);
+    opacity: 0.62;
+  }
+  72%, 100% {
+    border-color: #fff;
+    box-shadow:
+      0 0 0.13rem #fff,
+      0 0 0.92rem rgba(235, 115, 193, 1),
+      0 0 1.9rem rgba(197, 72, 240, 0.62),
+      inset 0 0 0.7rem rgba(235, 115, 193, 0.52);
+    opacity: 1;
+  }
+}
+
+@keyframes neon-interactive-bloom-ignite {
+  0%, 24% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  38% {
+    opacity: 0.68;
+  }
+  52% {
+    opacity: 0.34;
+  }
+  72%, 100% {
+    opacity: 0.92;
+    transform: scale(1.035);
+  }
 }
 
 @keyframes neon-cta-tube-ignite {
@@ -3024,13 +3079,13 @@ select {
 .archive-card > a:hover::before,
 .archive-card > a:focus-visible::before,
 .mobile-neon-enabled .archive-card > a.is-mobile-neon-active::before {
-  animation: neon-cta-bloom-ignite 960ms linear both;
+  animation: neon-interactive-bloom-ignite 520ms linear both;
 }
 
 .archive-card > a:hover::after,
 .archive-card > a:focus-visible::after,
 .mobile-neon-enabled .archive-card > a.is-mobile-neon-active::after {
-  animation: neon-cta-tube-ignite 960ms linear both;
+  animation: neon-interactive-tube-ignite 520ms linear both;
 }
 
 .route-hero.home-hero[data-hero-motion="full"] .home-hero__media img {
@@ -3214,7 +3269,7 @@ select {
 .home-event__visual:hover::before,
 .home-event__visual:focus-visible::before,
 .mobile-neon-enabled .home-event__visual.is-mobile-neon-active::before {
-  animation: neon-cta-bloom-ignite 960ms linear both;
+  animation: neon-interactive-bloom-ignite 520ms linear both;
 }
 
 .event-card:hover::after,
@@ -3223,7 +3278,7 @@ select {
 .home-event__visual:hover::after,
 .home-event__visual:focus-visible::after,
 .mobile-neon-enabled .home-event__visual.is-mobile-neon-active::after {
-  animation: neon-cta-tube-ignite 960ms linear both;
+  animation: neon-interactive-tube-ignite 520ms linear both;
 }
 
 .home-event__visual-index {
