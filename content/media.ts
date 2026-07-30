@@ -30,15 +30,15 @@ export const momentGallery = [
     height: 1500,
   },
   {
-    src: "/media/figma/moment-07.webp",
-    alt: "A guest dances in green light near the edge of the floor.",
-    width: 1000,
-    height: 1500,
-  },
-  {
     src: "/media/figma/moment-08.webp",
     alt: "A packed dance floor beneath blue and green beams.",
     width: 1600,
     height: 1067,
+  },
+  {
+    src: "/media/figma/moment-07.webp",
+    alt: "A guest dances in green light near the edge of the floor.",
+    width: 1000,
+    height: 1500,
   },
 ] as const;
