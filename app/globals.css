@@ -2567,6 +2567,11 @@ select {
 }
 
 .neon-wordmark__layer--ambient {
+  /* Each glow layer's box must exceed its filter's full reach (3x blur
+     radius, 1.5x each drop-shadow blur). Mobile compositors clip filter
+     output at the layer box while the hero entrance transitions run, so an
+     undersized gutter shows as a hard rectangle during startup. */
+  --neon-paint-gutter: 7rem;
   opacity: 0.3;
   filter: blur(2.2rem) saturate(1.5);
   pointer-events: none;
@@ -2574,6 +2579,7 @@ select {
 }
 
 .neon-wordmark__layer--bloom {
+  --neon-paint-gutter: 5rem;
   opacity: 0.58;
   filter:
     blur(0.36rem)
