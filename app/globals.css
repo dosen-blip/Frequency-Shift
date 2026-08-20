@@ -3159,7 +3159,7 @@ select {
 
 .home-event__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.8fr);
   gap: clamp(2rem, 3.5vw, 4rem);
   align-items: stretch;
 }
@@ -3173,7 +3173,7 @@ select {
   height: auto;
   min-height: 0;
   aspect-ratio: 4 / 5;
-  align-self: stretch;
+  align-self: start;
   justify-self: start;
   overflow: visible;
   border: 1px solid rgba(235, 115, 193, 0.4);

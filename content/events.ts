@@ -32,7 +32,7 @@ export const events: EventRecord[] = [
       "Frequency Shift returns to GRIDWRKS with Fantom K, Zak Black, ENKO b2b DJ Gabby, and DOSEN.",
     description: [
       "We’re back at GRIDWRKS on September 4 for a techno special with Fantom K, Zak Black, ENKO b2b DJ Gabby, and DOSEN.",
-      "Doors open at 10 PM. The event is 19+ with ID required, and tickets are available through GRIDWRKS.",
+      "Doors open at 10 PM. The event is 19+ with ID required, and tickets are available through Eventbrite.",
     ],
     dateLabel: "September 4, 2026 · Doors at 10 PM",
     startsAt: "2026-09-04T22:00:00-04:00",
@@ -40,7 +40,8 @@ export const events: EventRecord[] = [
     venue: "GRIDWRKS · 221 Rideau St",
     city: "Ottawa, Canada",
     status: "tickets-live",
-    ticketUrl: "https://www.gridwrks.ca/",
+    ticketUrl:
+      "https://www.eventbrite.com/e/frequency-shift-techno-special-tickets-1998427471363?aff=ebdssbdestsearch",
     genre: "Techno",
     artistSlugs: [],
     featured: true,

@@ -225,6 +225,7 @@ test("renders collective-voice editorial and event facts", async () => {
   assert.match(eventsHtml, /Boat Party/);
   assert.match(eventsHtml, /September 17, 2026/);
   assert.match(eventsHtml, /GRIDWRKS · 221 Rideau St, Ottawa, Canada/);
+  assert.match(eventsHtml, /frequency-shift-techno-special-tickets-1998427471363/);
   assert.doesNotMatch(eventsHtml, /Location to be announced|Details soon/i);
 
   const about = await render("/about");
