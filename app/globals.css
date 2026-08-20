@@ -3159,8 +3159,8 @@ select {
 
 .home-event__layout {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: clamp(2.5rem, 6vw, 6rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 3.5vw, 4rem);
   align-items: stretch;
 }
 
@@ -3168,11 +3168,11 @@ select {
   --neon-surface-radius: 1.25rem;
   position: relative;
   display: block;
-  width: auto;
+  width: 100%;
   max-width: none;
-  height: 100%;
+  height: auto;
   min-height: 0;
-  aspect-ratio: 1200 / 1598;
+  aspect-ratio: 4 / 5;
   align-self: stretch;
   justify-self: start;
   overflow: visible;
@@ -3305,7 +3305,8 @@ select {
 
 .home-event__content {
   position: relative;
-  padding-left: clamp(1.5rem, 4vw, 3.5rem);
+  min-height: 100%;
+  padding-left: clamp(2rem, 3.5vw, 4rem);
   border-left: 1px solid var(--signal);
 }
 
@@ -3403,7 +3404,7 @@ select {
 
 .home-event__content h2 {
   max-width: 10ch;
-  font-size: clamp(3.8rem, 7.5vw, 7.2rem);
+  font-size: clamp(3.7rem, 6.7vw, 6.65rem);
 }
 
 .home-event__summary {
@@ -3627,13 +3628,14 @@ select {
     width: min(100%, 34rem);
     height: auto;
     min-height: 0;
-    aspect-ratio: 1200 / 1598;
+    aspect-ratio: 4 / 5;
     align-self: auto;
     justify-self: center;
   }
 
   .home-event__content {
-    padding-left: 1.5rem;
+    min-height: 0;
+    padding-left: 1.75rem;
   }
 
   .home-manifesto__layout {
@@ -3796,7 +3798,7 @@ select {
 
   .home-event__content h2 {
     max-width: 100%;
-    font-size: clamp(3rem, 13.5vw, 4.9rem);
+    font-size: clamp(2.85rem, 12.5vw, 4.55rem);
   }
 
   .home-event__facts div {
