@@ -310,6 +310,7 @@ export function NeonWordmark() {
             src="/media/brand/frequency-shift-wordmark-neon-mobile.svg"
           />
         </span>
+        <span className="neon-wordmark__layer neon-wordmark__layer--face" />
       </div>
     </div>
   );
