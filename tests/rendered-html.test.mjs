@@ -46,7 +46,7 @@ test("server-renders the Frequency Shift homepage", async () => {
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
   assert.match(html, /For the love of house\./);
-  assert.match(html, /The Experiment/);
+  assert.match(html, /Frequency Shift: Techno Special/);
   assert.match(html, /frequency-shift-wordmark-neon\.svg/);
   assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
   assert.match(
@@ -143,7 +143,7 @@ test("renders the primary public routes", async () => {
     ["/about", /Built for the dancefloor/],
     ["/contact", /send us a message/i],
     ["/events/the-experiment", /Yaan, Valium, Seb B, Balla/],
-    ["/events/september-4", /We’re back at GRIDWRKS on September 4/],
+    ["/events/september-4", /Fantom K, Zak Black, ENKO b2b DJ Gabby, and DOSEN/],
     ["/events/boat-party", /We’re heading onto the water for Boat Party/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
     ["/terms", /<title>Terms — Frequency Shift<\/title>/i],
@@ -215,16 +215,16 @@ test("renders collective-voice editorial and event facts", async () => {
   assert.match(homepageHtml, /Ottawa’s underground,/);
   assert.match(homepageHtml, /on its own frequency/);
   assert.match(homepageHtml, /freedom, self-expression, and a community/i);
-  assert.match(homepageHtml, /The Experiment/);
-  assert.match(homepageHtml, /August 7, 2026/);
-  assert.match(homepageHtml, /the-experiment\.webp/);
+  assert.match(homepageHtml, /Frequency Shift: Techno Special/);
+  assert.match(homepageHtml, /September 4, 2026/);
+  assert.match(homepageHtml, /frequency-shift-techno-special\.webp/);
 
   const eventsPage = await render("/events");
   const eventsHtml = await eventsPage.text();
   assert.match(eventsHtml, /September 4, 2026/);
   assert.match(eventsHtml, /Boat Party/);
   assert.match(eventsHtml, /September 17, 2026/);
-  assert.match(eventsHtml, /GRIDWRKS, Ottawa, Canada/);
+  assert.match(eventsHtml, /GRIDWRKS · 221 Rideau St, Ottawa, Canada/);
   assert.doesNotMatch(eventsHtml, /Location to be announced|Details soon/i);
 
   const about = await render("/about");
