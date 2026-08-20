@@ -3754,6 +3754,18 @@ select {
     mask-image: url("/media/brand/frequency-shift-wordmark-neon-mobile.svg");
   }
 
+  .neon-lockup.is-neon-settled .neon-wordmark .neon-wordmark__layer--face {
+    opacity: 0.86;
+    filter:
+      brightness(1.24)
+      drop-shadow(0 0 0.08rem #fff5fb)
+      drop-shadow(0 0 0.44rem rgba(235, 115, 193, 0.92))
+      drop-shadow(0 0 1.2rem rgba(197, 72, 240, 0.52));
+    transition:
+      opacity 180ms ease,
+      filter 180ms ease;
+  }
+
   .neon-wordmark__asset--desktop {
     display: none;
   }

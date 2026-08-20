@@ -18,13 +18,13 @@ function NeonWordmarkAsset({ className }: NeonWordmarkAssetProps) {
         className="neon-wordmark__asset neon-wordmark__asset--desktop"
         src="/media/brand/frequency-shift-wordmark-neon.svg"
         alt=""
-        loading="lazy"
+        loading="eager"
       />
       <img
         className="neon-wordmark__asset neon-wordmark__asset--mobile"
         src="/media/brand/frequency-shift-wordmark-neon-mobile.svg"
         alt=""
-        loading="lazy"
+        loading="eager"
       />
     </span>
   );
@@ -136,7 +136,18 @@ export function NeonWordmark() {
       "(hover: none), (pointer: coarse)",
     ).matches;
 
-    if (reducedMotion || coarsePointer) return;
+    if (reducedMotion) {
+      lockup.classList.add("is-neon-settled");
+      return;
+    }
+
+    if (coarsePointer) {
+      const settleTimer = window.setTimeout(() => {
+        lockup.classList.add("is-neon-settled");
+      }, 2600);
+
+      return () => window.clearTimeout(settleTimer);
+    }
 
     let frame = 0;
     let lastPointerX = 0;

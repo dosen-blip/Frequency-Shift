@@ -74,8 +74,17 @@
   function prepareMotion() {
     var reduced = matches("(prefers-reduced-motion: reduce)");
     var coarse = matches("(hover: none), (pointer: coarse)");
+    var neonLockup = document.querySelector(".neon-lockup");
 
     root.classList.add("motion-enabled");
+
+    if (neonLockup && reduced) {
+      neonLockup.classList.add("is-neon-settled");
+    } else if (neonLockup && coarse) {
+      window.setTimeout(function () {
+        neonLockup.classList.add("is-neon-settled");
+      }, 2600);
+    }
 
     if (hero) {
       var heroMotion = "quick";

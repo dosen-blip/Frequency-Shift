@@ -88,6 +88,8 @@ test("keeps the public boot path lightweight", async () => {
   assert.match(runtime, /is-mobile-neon-active/);
   assert.match(runtime, /prepareNeonProximity/);
   assert.match(runtime, /is-proximity-flicker/);
+  assert.match(runtime, /neonLockup\.classList\.add\("is-neon-settled"\)/);
+  assert.match(runtime, /}, 2600\)/);
 });
 
 test("excludes the local glass lab from Pages artifacts", async () => {

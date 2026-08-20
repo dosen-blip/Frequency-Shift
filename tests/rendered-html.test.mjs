@@ -87,6 +87,22 @@ test("keeps the neon hover field broad and its flicker trail persistent", async 
   );
 });
 
+test("guarantees the mobile wordmark reaches its fully lit state", async () => {
+  const component = await readFile(neonWordmarkPath, "utf8");
+  const styles = await readFile(globalStylesPath, "utf8");
+
+  assert.match(component, /classList\.add\("is-neon-settled"\)/);
+  assert.match(component, /}, 2600\)/);
+  assert.match(
+    component,
+    /neon-wordmark__asset--mobile[\s\S]*?loading="eager"/,
+  );
+  assert.match(
+    styles,
+    /\.neon-lockup\.is-neon-settled \.neon-wordmark \.neon-wordmark__layer--face\s*\{[^}]*opacity:\s*0\.86[^}]*brightness\(1\.24\)/s,
+  );
+});
+
 test("preserves the full hero glow inside an expanded paint surface", async () => {
   const styles = await readFile(globalStylesPath, "utf8");
   const mobileRulesStart = styles.lastIndexOf("@media (max-width: 760px)");
