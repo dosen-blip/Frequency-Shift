@@ -99,8 +99,20 @@ test("guarantees the mobile wordmark reaches its fully lit state", async () => {
   );
   assert.match(
     styles,
-    /\.neon-lockup\.is-neon-settled \.neon-wordmark \.neon-wordmark__layer--face\s*\{[^}]*opacity:\s*0\.86[^}]*brightness\(1\.24\)/s,
+    /\.neon-lockup\.is-neon-settled \.neon-wordmark \.neon-wordmark__layer--face\s*\{[^}]*filter:\s*none[^}]*opacity:\s*1/s,
   );
+});
+
+test("keeps the hero wordmark face completely sharp above its glow layers", async () => {
+  const styles = await readFile(globalStylesPath, "utf8");
+  const faceRule = styles.match(
+    /\.neon-wordmark__layer--face\s*\{([^}]*)\}/,
+  );
+
+  assert.ok(faceRule, "Expected a dedicated sharp wordmark face");
+  assert.match(faceRule[1], /background:\s*#ffd7ef/);
+  assert.match(faceRule[1], /filter:\s*none/);
+  assert.match(faceRule[1], /opacity:\s*1/);
 });
 
 test("preserves the full hero glow inside an expanded paint surface", async () => {
