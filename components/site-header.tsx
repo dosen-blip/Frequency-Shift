@@ -72,7 +72,7 @@ export function SiteHeader() {
     };
   }, [closeMenu, isMenuOpen]);
 
-  const latestActive = pathname === "/events/september-4";
+  const latestActive = pathname === "/events/boat-party";
 
   return (
     <header
@@ -113,7 +113,7 @@ export function SiteHeader() {
       </nav>
       <Link
         className={`header-cta${latestActive ? " is-active" : ""}`}
-        href="/events/september-4"
+        href="/events/boat-party"
         aria-current={latestActive ? "page" : undefined}
       >
         Next event
@@ -177,7 +177,7 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          <Link href="/events/september-4">Next event</Link>
+          <Link href="/events/boat-party">Next event</Link>
         </nav>
       </details>
     </header>

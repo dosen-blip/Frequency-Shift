@@ -46,7 +46,7 @@ test("server-renders the Frequency Shift homepage", async () => {
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
   assert.match(html, /For the love of house\./);
-  assert.match(html, /Frequency Shift: Techno Special/);
+  assert.match(html, /Frequency Shift: Boat Special/);
   assert.match(html, /frequency-shift-wordmark-neon\.svg/);
   assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
   assert.match(
@@ -172,7 +172,7 @@ test("renders the primary public routes", async () => {
     ["/contact", /send us a message/i],
     ["/events/the-experiment", /Yaan, Valium, Seb B, Balla/],
     ["/events/september-4", /Fantom K, Zak Black, ENKO b2b DJ Gabby, and DOSEN/],
-    ["/events/boat-party", /We’re heading onto the water for Boat Party/],
+    ["/events/boat-party", /We’re closing out the summer on the Ottawa River/],
     ["/privacy", /<title>Privacy — Frequency Shift<\/title>/i],
     ["/terms", /<title>Terms — Frequency Shift<\/title>/i],
   ];
@@ -243,18 +243,28 @@ test("renders collective-voice editorial and event facts", async () => {
   assert.match(homepageHtml, /Ottawa’s underground,/);
   assert.match(homepageHtml, /on its own frequency/);
   assert.match(homepageHtml, /freedom, self-expression, and a community/i);
-  assert.match(homepageHtml, /Frequency Shift: Techno Special/);
-  assert.match(homepageHtml, /September 4, 2026/);
-  assert.match(homepageHtml, /frequency-shift-techno-special\.webp/);
+  assert.match(homepageHtml, /Frequency Shift: Boat Special/);
+  assert.match(homepageHtml, /September 17, 2026/);
+  assert.match(homepageHtml, /frequency-shift-boat-special\.webp/);
+  assert.doesNotMatch(homepageHtml, /events\/september-4/);
 
   const eventsPage = await render("/events");
   const eventsHtml = await eventsPage.text();
   assert.match(eventsHtml, /September 4, 2026/);
-  assert.match(eventsHtml, /Boat Party/);
+  assert.match(eventsHtml, /Frequency Shift: Boat Special/);
   assert.match(eventsHtml, /September 17, 2026/);
   assert.match(eventsHtml, /GRIDWRKS · 221 Rideau St, Ottawa, Canada/);
   assert.match(eventsHtml, /frequency-shift-techno-special-tickets-1998427471363/);
+  assert.match(eventsHtml, /frequency-shift-boat-special-tickets-2000050919139\?aff=erelpanelorg/);
+  assert.match(eventsHtml, /Parc Jacques-Cartier · 160 Rue Laurier, Gatineau, QC/);
   assert.doesNotMatch(eventsHtml, /Location to be announced|Details soon/i);
+
+  const boatHtml = await (await render("/events/boat-party")).text();
+  assert.match(boatHtml, /TOPAZ b2b EMBLEM, MAC:D b2b DANFORD, FASTR b2b CAMILLIE, and SEB B b2b BALLA/);
+  assert.match(boatHtml, /Boarding starts at 6:30 PM/);
+  assert.match(boatHtml, /7 PM to 11 PM/);
+  assert.match(boatHtml, /19\+ with valid ID required/);
+  assert.match(boatHtml, /frequency-shift-boat-special-tickets-2000050919139\?aff=erelpanelorg/);
 
   const about = await render("/about");
   const aboutHtml = await about.text();
