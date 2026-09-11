@@ -3,9 +3,39 @@ import { archiveGalleries } from "./archive-media";
 
 export const archives: ArchiveRecord[] = [
   {
+    slug: "techno-special",
+    title: "Techno Special",
+    archiveLabel: "Featured media",
+    dateLabel: "September 4, 2026",
+    dateIso: "2026-09-04",
+    locationLabel: "GRIDWRKS · Ottawa",
+    summary: "Red lights, laser trails, and a room in motion. Our September 4 Techno Special at GRIDWRKS.",
+    story: [
+      "From the booth to the front row: sixteen photographs and six short video clips from the night, following the room from its early moments to the final stretch.",
+    ],
+    eventSlug: "september-4",
+    gallery: archiveGalleries["techno-special"],
+    videos: [
+      { src: "/media/archive/techno-special/techno-special-clip-01.mp4", poster: "/media/archive/techno-special/techno-special-clip-01-poster.webp", title: "At the decks", width: 1280, height: 720 },
+      { src: "/media/archive/techno-special/techno-special-clip-02.mp4", poster: "/media/archive/techno-special/techno-special-clip-02-poster.webp", title: "Under the red lights", width: 1280, height: 720 },
+      { src: "/media/archive/techno-special/techno-special-clip-03.mp4", poster: "/media/archive/techno-special/techno-special-clip-03-poster.webp", title: "Sharing the booth", width: 1280, height: 720 },
+      { src: "/media/archive/techno-special/techno-special-clip-04.mp4", poster: "/media/archive/techno-special/techno-special-clip-04-poster.webp", title: "Behind the booth", width: 1280, height: 720 },
+      { src: "/media/archive/techno-special/techno-special-clip-05.mp4", poster: "/media/archive/techno-special/techno-special-clip-05-poster.webp", title: "Laser trails", width: 1280, height: 720 },
+      { src: "/media/archive/techno-special/techno-special-clip-06.mp4", poster: "/media/archive/techno-special/techno-special-clip-06-poster.webp", title: "Hands in the air", width: 1280, height: 720 },
+    ],
+    coverImageIndex: 9,
+    featured: true,
+    featureImageIndices: [9, 1, 12],
+    photoCredit: null,
+    sourceNote: "Documentary photos and videos supplied in the Google Drive folder FS @ GRIDWRKS, Sept. 04, 2026 and approved by the client for this website update. Selected in filename order to span the night. Artist-to-set labels and photographer/videographer credits are unconfirmed and intentionally omitted. Selection and original file mapping are recorded in docs/media/techno-special.md.",
+    sourceLinks: [
+      { label: "Event details", href: "/events/september-4" },
+    ],
+  },
+  {
     slug: "frequency-fest",
     title: "Frequency Fest Vol. 1",
-    archiveLabel: "Permanent feature",
+    archiveLabel: "Festival / 01",
     dateLabel: "July 10, 2026",
     dateIso: "2026-07-10",
     locationLabel: "Club SAW · 67 Nicholas St, Ottawa",
@@ -18,8 +48,6 @@ export const archives: ArchiveRecord[] = [
     eventSlug: null,
     gallery: archiveGalleries["frequency-fest"],
     coverImageIndex: 0,
-    featured: true,
-    featureImageIndices: [0, 8, 3],
     photoCredit: "@catherine.archambault · additional supplied set uncredited",
     sourceNote: "The announcement confirms the venue, date, two-stage format, and lineup. Catherine Archambault is credited on the published gallery source; the later thank-you post also credits Szeming Wu for event photography. Twelve additional originals were selected from the Club SAW photo folder supplied directly for this site update.",
     sourceLinks: [

@@ -14,7 +14,7 @@ export default function ArchiveIndexPage() {
       <PageHeader
         eyebrow="Afterimage"
         title="Archive"
-        intro="This is where we keep the nights that built us—from our first Ottawa gathering to Frequency Fest—with the artists, partners, photographers, and dancers who made them."
+        intro="This is where we keep the nights that built us—from our first Ottawa gathering to Techno Special—with the artists, partners, photographers, and dancers who made them."
       />
       <div className="archive-grid">
         {archives.map((entry, index) => (

@@ -65,6 +65,13 @@ export type ArchiveRecord = {
     height: number;
   }>;
   coverImageIndex: number;
+  videos?: Array<{
+    src: string;
+    poster: string;
+    title: string;
+    width: number;
+    height: number;
+  }>;
   featured?: boolean;
   featureImageIndices?: number[];
   photoCredit: string | null;

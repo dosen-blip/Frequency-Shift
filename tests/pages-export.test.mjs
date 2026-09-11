@@ -10,6 +10,7 @@ test("exports the public routes and GitHub Pages control files", async () => {
   const expectedFiles = [
     "index.html",
     "archive/index.html",
+    "archive/techno-special/index.html",
     "archive/frequency-fest/index.html",
     "archive/frequency-shift-005/index.html",
     "archive/world-cup/index.html",
@@ -32,6 +33,7 @@ test("prefixes internal routes and assets with the project site path", async () 
   assert.match(homepage, /(?:href|src)="\/Frequency-Shift\/media\//);
   assert.match(homepage, /href="\/Frequency-Shift\/archive\/"/);
   assert.match(archive, /href="\/Frequency-Shift\/archive\/frequency-fest\/"/);
+  assert.match(archive, /href="\/Frequency-Shift\/archive\/techno-special\/"/);
   assert.match(homepage, /src="\/Frequency-Shift\/static-pages\.js"/);
   assert.match(homepage, /data-static-pages-runtime/);
   assert.doesNotMatch(homepage, /data-static-pages-navigation/);
@@ -51,6 +53,26 @@ test("publishes a sitemap using the final GitHub Pages URLs", async () => {
   );
   assert.doesNotMatch(sitemap, /<loc>[^<]*[^\/]<\/loc>/);
   assert.doesNotMatch(sitemap, /frequency-shift\.local/);
+  assert.match(sitemap, /\/archive\/techno-special\//);
+});
+
+test("exports playable Techno Special videos with still fallbacks and no autoplay", async () => {
+  const html = await readFile(output("archive/techno-special/index.html"), "utf8");
+  const videos = html.match(/<video\b[^>]*>/g) ?? [];
+  assert.equal(videos.length, 6);
+  for (const video of videos) {
+    assert.match(video, /controls/);
+    assert.match(video, /preload="none"/);
+    assert.match(video, /playsinline/i);
+    assert.match(video, /poster="\/Frequency-Shift\/media\/archive\/techno-special\//);
+    assert.doesNotMatch(video, /autoplay/i);
+  }
+  for (let index = 1; index <= 6; index += 1) {
+    const stem = `media/archive/techno-special/techno-special-clip-${String(index).padStart(2, "0")}`;
+    assert.ok(html.includes(`src="/Frequency-Shift/${stem}.mp4"`));
+    await access(output(`${stem}.mp4`));
+    await access(output(`${stem}-poster.webp`));
+  }
 });
 
 test("keeps every exported document structurally intact", async () => {

@@ -186,6 +186,7 @@ test("renders the primary public routes", async () => {
 
 test("renders every requested archive slot", async () => {
   const archiveRoutes = [
+    ["/archive/techno-special", /16(?:<!-- -->)? photographs.*6 videos/i],
     ["/archive/frequency-fest", /27(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-001", /20(?:<!-- -->)? photographs/i],
     ["/archive/frequency-shift-002", /11(?:<!-- -->)? photographs/i],
@@ -208,6 +209,9 @@ test("uses event photography for completed archive cards and galleries", async (
   const indexResponse = await render("/archive");
   const indexHtml = await indexResponse.text();
   assert.match(indexHtml, /archive-card archive-card--featured/);
+  assert.equal((indexHtml.match(/<article class="archive-card archive-card--featured"/g) ?? []).length, 1);
+  assert.match(indexHtml, /archive-card archive-card--featured[\s\S]*?View Techno Special archive/);
+  assert.ok(indexHtml.indexOf("View Techno Special archive") < indexHtml.indexOf("View Frequency Fest Vol. 1 archive"));
   assert.match(indexHtml, /frequency-fest-01\.webp/);
   assert.ok(
     indexHtml.indexOf("Frequency Fest Vol. 1") < indexHtml.indexOf("Frequency Shift 001"),
@@ -404,6 +408,7 @@ test("keeps the glass material lab local-only", async () => {
 
 test("ships every declared archive photograph as responsive WebP assets", async () => {
   const expectedCounts = {
+    "techno-special": 16,
     "frequency-fest": 27,
     "frequency-shift-001": 20,
     "frequency-shift-002": 11,

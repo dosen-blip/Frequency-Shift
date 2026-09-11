@@ -75,7 +75,7 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
             <time dateTime={entry.dateIso}>{entry.dateLabel}</time>
             <span>
               {entry.gallery.length
-                ? `${entry.gallery.length} photographs`
+                ? `${entry.gallery.length} photographs${entry.videos?.length ? ` · ${entry.videos.length} videos` : ""}`
                 : "Event record"}
             </span>
           </div>

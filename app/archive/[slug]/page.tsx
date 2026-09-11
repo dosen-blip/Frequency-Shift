@@ -44,7 +44,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
             <dt>Archive</dt>
             <dd>
               {entry.gallery.length
-                ? `${entry.gallery.length} photographs`
+                ? `${entry.gallery.length} photographs${entry.videos?.length ? ` · ${entry.videos.length} videos` : ""}`
                 : "Event record"}
             </dd>
           </div>
@@ -59,6 +59,31 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
+          {entry.videos?.length ? (
+            <section className="archive-films" aria-labelledby="films-heading">
+              <h2 id="films-heading">In motion</h2>
+              <div className="archive-films__grid">
+                {entry.videos.map((video, index) => (
+                  <figure key={video.src}>
+                    <video
+                      controls
+                      playsInline
+                      preload="none"
+                      poster={video.poster}
+                      width={video.width}
+                      height={video.height}
+                      aria-label={`${entry.title}: ${video.title}`}
+                    >
+                      <source src={video.src} type="video/mp4" />
+                      <a href={video.src}>Watch {video.title}</a>
+                    </video>
+                    <figcaption><span>{String(index + 1).padStart(2, "0")}</span>{video.title}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </section>
+          ) : null}
+          {entry.videos?.length ? <h2 className="archive-photos-heading">Photographs</h2> : null}
           {entry.gallery.length ? (
             <section className="archive-gallery" aria-labelledby="gallery-heading">
               <h2 id="gallery-heading" className="sr-only">

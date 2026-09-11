@@ -3,6 +3,7 @@ import type { ArchiveRecord } from "./types";
 type ArchiveGallery = ArchiveRecord["gallery"];
 
 export type PopulatedArchiveSlug =
+  | "techno-special"
   | "frequency-fest"
   | "frequency-shift-001"
   | "frequency-shift-002"
@@ -16,6 +17,7 @@ function buildGallery(
   title: string,
   dimensions: Array<readonly [number, number]>,
   mediaLabel = "event photograph",
+  altTexts?: string[],
 ): ArchiveGallery {
   return dimensions.map(([width, height], index) => {
     const stem = `/media/archive/${slug}/${slug}-${String(index + 1).padStart(2, "0")}`;
@@ -33,7 +35,7 @@ function buildGallery(
       src: `${stem}.webp`,
       srcSet: responsiveSources.join(", "),
       mobileSrcSet: mobileSources.join(", "),
-      alt: `${title} ${mediaLabel} ${index + 1} of ${dimensions.length}`,
+      alt: altTexts?.[index] ?? `${title} ${mediaLabel} ${index + 1} of ${dimensions.length}`,
       width,
       height,
     };
@@ -41,6 +43,47 @@ function buildGallery(
 }
 
 export const archiveGalleries = {
+  "techno-special": buildGallery(
+    "techno-special",
+    "Techno Special",
+    [
+      [1280, 1920],
+      [1280, 1920],
+      [1280, 1920],
+      [1920, 1280],
+      [1280, 1920],
+      [1920, 1280],
+      [1280, 1920],
+      [1279, 1920],
+      [1280, 1920],
+      [1280, 1920],
+      [1280, 1920],
+      [1280, 1920],
+      [1280, 1920],
+      [1920, 1280],
+      [1920, 1280],
+      [1280, 1920],
+    ],
+    "event photograph",
+    [
+      "A DJ in a pointed party hat at the decks, framed by red light and silhouettes.",
+      "An orange beam cuts across the dancefloor beneath the glowing Frequency Shift roundel.",
+      "A DJ in a leather jacket leans into the mixer under red and violet light.",
+      "Red lasers fan over the decks and crowd in a wide view from behind the booth.",
+      "A dancer in sunglasses turns beneath a diagonal red spotlight.",
+      "Raised hands fill the dancefloor as red light sweeps across the crowd.",
+      "A smiling DJ looks across the decks in blue-green and magenta light.",
+      "Dancers crowd together under narrow white beams reaching across the room.",
+      "Hands rise beyond the mixer as turquoise light washes over the front row.",
+      "A DJ in headphones faces the red-lit dancefloor beneath geometric ceiling lights.",
+      "Two DJs share the booth, with a capped performer smiling above the mixer.",
+      "A raised arm breaks the silhouette of the crowd beneath bright crossing laser beams.",
+      "A smiling DJ reaches across the decks against a deep red and blue background.",
+      "A DJ is silhouetted against the Frequency Shift roundel and horizontal red lasers.",
+      "White lasers cut across a wide view of the DJ booth and packed front row.",
+      "A DJ raises both arms over the decks as the front row responds under red lights.",
+    ],
+  ),
   "frequency-fest": buildGallery(
     "frequency-fest",
     "Frequency Fest Vol. 1",
