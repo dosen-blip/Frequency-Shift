@@ -60,10 +60,9 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
             ))}
           </div>
           {entry.videos?.length ? (
-            <section className="archive-films" aria-labelledby="films-heading">
-              <h2 id="films-heading">In motion</h2>
+            <section className="archive-films" aria-label={`${entry.title} videos`}>
               <div className="archive-films__grid">
-                {entry.videos.map((video, index) => (
+                {entry.videos.map((video) => (
                   <figure key={video.src}>
                     <video
                       controls
@@ -77,13 +76,11 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
                       <source src={video.src} type="video/mp4" />
                       <a href={video.src}>Watch {video.title}</a>
                     </video>
-                    <figcaption><span>{String(index + 1).padStart(2, "0")}</span>{video.title}</figcaption>
                   </figure>
                 ))}
               </div>
             </section>
           ) : null}
-          {entry.videos?.length ? <h2 className="archive-photos-heading">Photographs</h2> : null}
           {entry.gallery.length ? (
             <section className="archive-gallery" aria-labelledby="gallery-heading">
               <h2 id="gallery-heading" className="sr-only">

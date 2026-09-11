@@ -1455,12 +1455,6 @@ select {
   margin-block: var(--space-5);
 }
 
-.archive-films h2,
-.archive-photos-heading {
-  margin: 0 0 1.25rem;
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-}
-
 .archive-films__grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1479,18 +1473,6 @@ select {
   aspect-ratio: 16 / 9;
   border-radius: 0.65rem;
   background: #080509;
-}
-
-.archive-films figcaption {
-  display: flex;
-  gap: 0.75rem;
-  padding-top: 0.65rem;
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-.archive-films figcaption span {
-  color: var(--signal);
 }
 
 @media (max-width: 760px) {
