@@ -68,7 +68,7 @@ test("exports playable Techno Special videos with still fallbacks and no autopla
     assert.doesNotMatch(video, /autoplay/i);
   }
   for (let index = 1; index <= 6; index += 1) {
-    const stem = `media/archive/techno-special/techno-special-clip-${String(index).padStart(2, "0")}`;
+    const stem = `media/archive/techno-special/techno-special-clip-${String(index).padStart(2, "0")}-1080p`;
     assert.ok(html.includes(`src="/Frequency-Shift/${stem}.mp4"`));
     await access(output(`${stem}.mp4`));
     await access(output(`${stem}-poster.webp`));
