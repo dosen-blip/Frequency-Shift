@@ -2,6 +2,31 @@ import type { EventRecord } from "./types";
 
 export const events: EventRecord[] = [
   {
+    slug: "frequency-shift-014",
+    title: "Frequency Shift 014",
+    summary:
+      "Dark tech house at GRIDWRKS with Barry, Balla B2B Evander, Sean Vincent, and Tev.N.",
+    description: [
+      "We’re bringing Frequency Shift 014 to GRIDWRKS on Friday, October 16 for a dark tech house rave. Heavy bass, rolling percussion, and gritty late-night grooves set the tone as the room gets deeper into the night.",
+      "On the lineup: Barry, Balla B2B Evander, Sean Vincent, and Tev.N.",
+      "Join us at 221 Rideau Street in Ottawa from 10 PM to 2:30 AM. Doors open at 10 PM; you must be 19+ and bring valid ID. Tickets go on sale through Eventbrite on September 29 at 7 PM.",
+    ],
+    dateLabel: "October 16, 2026 · 10 PM–2:30 AM",
+    startsAt: "2026-10-16T22:00:00-04:00",
+    endsAt: "2026-10-17T02:30:00-04:00",
+    venue: "GRIDWRKS · 221 Rideau St",
+    city: "Ottawa, Canada",
+    status: "announced",
+    ticketUrl:
+      "https://www.eventbrite.ca/e/frequency-shift-014-tickets-2002572255524?aff=ebdssbdestsearch",
+    genre: "Dark tech house",
+    artistSlugs: [],
+    featured: true,
+    coverImage: "/media/events/frequency-shift-014.webp",
+    coverAlt:
+      "Black and pink Frequency Shift poster for October 16 at GRIDWRKS, featuring Barry, Balla B2B Evander, Sean Vincent, and Tev.N.",
+  },
+  {
     slug: "the-experiment",
     title: "The Experiment",
     summary:
@@ -69,7 +94,7 @@ export const events: EventRecord[] = [
       "https://www.eventbrite.com/e/frequency-shift-boat-special-tickets-2000050919139?aff=erelpanelorg",
     genre: "House / Electronic",
     artistSlugs: [],
-    featured: true,
+    featured: false,
     coverImage: "/media/events/frequency-shift-boat-special.webp",
     coverAlt:
       "Pink and yellow Summer Closer poster for the September 17 sunset boat party.",

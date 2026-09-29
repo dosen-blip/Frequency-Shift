@@ -9,6 +9,7 @@ const outputRoot = fileURLToPath(new URL("../out/", import.meta.url));
 test("exports the public routes and GitHub Pages control files", async () => {
   const expectedFiles = [
     "index.html",
+    "events/frequency-shift-014/index.html",
     "archive/index.html",
     "archive/techno-special/index.html",
     "archive/frequency-fest/index.html",

@@ -4,8 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { primaryNavigation } from "@/content/site";
+import { events } from "@/content/events";
 
 const DEPLOYMENT_PREFIX = "/Frequency-Shift";
+const nextEvent = events.find((event) => event.featured);
+const nextEventHref = nextEvent ? `/events/${nextEvent.slug}` : "/events";
 
 function normalizePathname(pathname: string) {
   let normalized = pathname || "/";
@@ -72,7 +75,7 @@ export function SiteHeader() {
     };
   }, [closeMenu, isMenuOpen]);
 
-  const latestActive = pathname === "/events/boat-party";
+  const latestActive = pathname === nextEventHref;
 
   return (
     <header
@@ -113,7 +116,7 @@ export function SiteHeader() {
       </nav>
       <Link
         className={`header-cta${latestActive ? " is-active" : ""}`}
-        href="/events/boat-party"
+        href={nextEventHref}
         aria-current={latestActive ? "page" : undefined}
       >
         Next event
@@ -177,7 +180,7 @@ export function SiteHeader() {
               </Link>
             );
           })}
-          <Link href="/events/boat-party">Next event</Link>
+          <Link href={nextEventHref}>Next event</Link>
         </nav>
       </details>
     </header>
