@@ -1,37 +1,38 @@
 @import "tailwindcss";
 
-/* Nunito Sans (SIL OFL, see public/media/fonts/OFL.txt) stands in for Avenir
-   Next on devices without it. Browsers only fetch it when Avenir is missing. */
+/* Site typefaces, self-hosted under the SIL Open Font License
+   (licences in public/media/fonts). Fraunces sets headings; Instrument Sans
+   sets body copy, subheads, and controls; DM Mono sets dates and labels. */
 @font-face {
-  font-family: "Nunito Sans FS";
+  font-family: "Fraunces";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/media/fonts/fraunces-latin-full.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Instrument Sans";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("/media/fonts/instrument-sans-latin-wght.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "DM Mono";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("/media/fonts/nunito-sans-latin-400.woff2") format("woff2");
+  src: url("/media/fonts/dm-mono-latin-400.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "Nunito Sans FS";
+  font-family: "DM Mono";
   font-style: normal;
-  font-weight: 700;
+  font-weight: 500;
   font-display: swap;
-  src: url("/media/fonts/nunito-sans-latin-700.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Nunito Sans FS";
-  font-style: normal;
-  font-weight: 800;
-  font-display: swap;
-  src: url("/media/fonts/nunito-sans-latin-800.woff2") format("woff2");
-}
-
-@font-face {
-  font-family: "Nunito Sans FS";
-  font-style: normal;
-  font-weight: 900;
-  font-display: swap;
-  src: url("/media/fonts/nunito-sans-latin-900.woff2") format("woff2");
+  src: url("/media/fonts/dm-mono-latin-500.woff2") format("woff2");
 }
 
 :root {
@@ -44,10 +45,12 @@
   --cyan: #38ddeb;
   --muted: rgba(242, 239, 233, 0.58);
   --line: rgba(242, 239, 233, 0.14);
-  --font-display: "Avenir Next", Avenir, "Nunito Sans FS", "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Avenir Next", Avenir, "Nunito Sans FS", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
   /* One voice for dates, labels, and other metadata. */
-  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  /* Fraunces at its softest, with the wonky alternates, for headings. */
+  --display-axes: "SOFT" 100, "WONK" 1;
   --space-1: 0.5rem;
   --space-2: 0.75rem;
   --space-3: 1rem;
@@ -4359,6 +4362,94 @@ html.has-neon-cursor * {
   .neon-cursor__layer {
     transition: none;
     animation: none !important;
+  }
+}
+
+/* Heading voice: every headline is Fraunces, soft and slightly wonky.
+   Subheads, summaries, and controls stay in the sans body face. */
+.route-hero__lead h1,
+.page-title,
+.section-heading h2,
+.split-section h2,
+.detail-title,
+.archive-detail-hero .detail-title,
+.event-card h2,
+.archive-card h2,
+.home-event__content h2,
+.home-memory__heading h2,
+.home-manifesto h2,
+.past-events__title,
+.home-hero__mantra {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: var(--display-axes);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: none;
+}
+
+.route-hero__lead h1,
+.page-title,
+.section-heading h2,
+.split-section h2,
+.detail-title,
+.archive-detail-hero .detail-title,
+.event-card h2,
+.archive-card h2,
+.home-event__content h2,
+.home-memory__heading h2,
+.home-manifesto h2 {
+  line-height: 1;
+}
+
+.home-hero__mantra {
+  font-weight: 600;
+  letter-spacing: 0;
+}
+
+/* Balanced lines: no headline ends with a single orphaned word. */
+.route-hero__lead h1,
+.page-title,
+.section-heading h2,
+.split-section h2,
+.detail-title,
+.event-card h2,
+.archive-card h2,
+.home-event__content h2,
+.home-memory__heading h2,
+.home-manifesto h2,
+.archive-summary {
+  text-wrap: balance;
+}
+
+.prose p,
+.page-intro,
+.home-event__summary,
+.archive-card__summary {
+  text-wrap: pretty;
+}
+
+/* On the home page the hero already leads to the next event, so the bar
+   waits until the visitor scrolls into the page instead of covering the
+   hero buttons. Browsers without scroll timelines just show it. */
+@supports (animation-timeline: scroll()) {
+  body:has(.home-hero) .next-bar {
+    animation: next-bar-arrive linear both;
+    animation-range: 0 45vh;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes next-bar-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    visibility: visible;
   }
 }
 
