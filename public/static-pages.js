@@ -313,9 +313,57 @@
     });
   }
 
+  // Mirrors components/neon-cursor.tsx: a neon tube ring for mouse users.
+  function prepareNeonCursor() {
+    if (!matches("(hover: hover) and (pointer: fine)")) return;
+    var cursor = document.createElement("div");
+    var hovered = null;
+    var strikeTimer = 0;
+    cursor.className = "neon-cursor";
+    cursor.setAttribute("aria-hidden", "true");
+    cursor.innerHTML = '<div class="neon-cursor__ring">' +
+      ["ambient", "bloom", "core", "face"].map(function (layer) {
+        return '<span class="neon-cursor__layer neon-cursor__layer--' + layer + '"></span>';
+      }).join("") + '</div><div class="neon-cursor__dot"></div>';
+    body.appendChild(cursor);
+    var ring = cursor.firstChild;
+    var dot = cursor.lastChild;
+
+    function hide() {
+      root.classList.remove("has-neon-cursor");
+      cursor.classList.remove("is-visible", "is-hovering", "is-pressed");
+      hovered = null;
+    }
+
+    window.addEventListener("pointermove", function (event) {
+      if (event.pointerType !== "mouse") return hide();
+      dot.style.transform = ring.style.transform =
+        "translate3d(" + event.clientX + "px, " + event.clientY + "px, 0)";
+      root.classList.add("has-neon-cursor");
+      cursor.classList.add("is-visible", "is-igniting");
+      var target = event.target.closest ? event.target.closest('a, button, summary, label, video, [role="button"]') : null;
+      if (target === hovered) return;
+      hovered = target;
+      cursor.classList.toggle("is-hovering", !!target);
+      if (!target) return;
+      window.clearTimeout(strikeTimer);
+      cursor.classList.remove("is-striking");
+      void cursor.offsetWidth;
+      cursor.classList.add("is-striking");
+      strikeTimer = window.setTimeout(function () { cursor.classList.remove("is-striking"); }, 820);
+    }, { passive: true });
+    window.addEventListener("pointerdown", function (event) {
+      if (event.pointerType === "mouse") cursor.classList.add("is-pressed");
+    }, { passive: true });
+    window.addEventListener("pointerup", function () { cursor.classList.remove("is-pressed"); });
+    root.addEventListener("pointerleave", hide);
+    window.addEventListener("blur", hide);
+  }
+
   prepareMobileNeon();
   prepareMotion();
   prepareNeonProximity();
+  prepareNeonCursor();
   updateHeader();
   window.addEventListener("scroll", requestHeaderUpdate, { passive: true });
 

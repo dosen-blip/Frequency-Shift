@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NeonCursor } from "@/components/neon-cursor";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SiteMotion } from "@/components/site-motion";
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </main>
         <SiteFooter />
+        <NeonCursor />
       </body>
     </html>
   );
