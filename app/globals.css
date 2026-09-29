@@ -1050,7 +1050,7 @@ select {
 
 .split-section {
   display: grid;
-  grid-template-columns: minmax(18rem, 0.72fr) minmax(0, 1.28fr);
+  grid-template-columns: minmax(16rem, 0.8fr) minmax(0, 1.2fr);
   gap: clamp(2.5rem, 6vw, 7rem);
   align-items: start;
 }
@@ -1377,6 +1377,14 @@ select {
   display: grid;
   gap: var(--space-5);
   min-width: 0;
+  align-content: start;
+}
+
+/* A status label directly above a detail page sits on the title, as it does
+   on archive pages, instead of floating above a divider. */
+.page-shell > .eyebrow + .detail-grid {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .detail-title {
@@ -2352,9 +2360,15 @@ select {
 }
 
 .section-heading h2,
-.split-section h2,
 .detail-title {
   font-size: clamp(2.9rem, 5.5vw, 5.1rem);
+}
+
+/* Split-section headings share their row with body copy, so they scale with
+   their own column: the longest word ("dancefloor.") must fit inside it. */
+.split-section h2 {
+  max-width: 10ch;
+  font-size: clamp(2.6rem, 4.4vw, 4.5rem);
 }
 
 .page-header {
@@ -3361,13 +3375,7 @@ select {
   font-weight: 400;
 }
 
-.contact-section {
-  grid-template-columns: minmax(18rem, 0.8fr) minmax(0, 1.2fr);
-}
-
 .contact-section h2 {
-  max-width: 10ch;
-  font-size: clamp(2.8rem, 4.4vw, 4.5rem);
   overflow-wrap: anywhere;
 }
 
@@ -3712,6 +3720,13 @@ select {
 
   .past-events__venue {
     display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .split-section h2 {
+    max-width: 100%;
+    font-size: clamp(2.4rem, 11.5vw, 4rem);
   }
 }
 
