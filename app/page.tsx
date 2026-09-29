@@ -1,25 +1,41 @@
 import Link from "next/link";
 import { HomeHero } from "@/components/home-hero";
 import { archives } from "@/content/archives";
-import { events } from "@/content/events";
+import { eventEndTime, formatEventDate, getNextEvent, ticketLabel } from "@/content/events";
 import { momentGallery } from "@/content/media";
+import { eventStatusLabels } from "@/content/types";
+
+const firstNight = [...archives].sort((a, b) => a.dateIso.localeCompare(b.dateIso))[0];
+const since = firstNight
+  ? new Date(`${firstNight.dateIso}T12:00:00Z`).toLocaleDateString("en-GB", {
+      month: "long",
+      year: "numeric",
+      timeZone: "UTC",
+    })
+  : null;
 
 export default function HomePage() {
-  const featuredEvent = events.find((event) => event.featured);
+  const featuredEvent = getNextEvent();
   const featuredArchive = archives[0];
+  const tickets = featuredEvent ? ticketLabel(featuredEvent) : null;
 
   return (
     <>
       <HomeHero />
 
       <section
-        id="next-transmission"
+        id="next-event"
         className="home-event"
         aria-labelledby="next-event-title"
       >
         <div className="home-section-index" data-reveal="up">
-          <span>01</span>
-          <span>Next transmission</span>
+          <span>Next event</span>
+          {featuredEvent ? (
+            <span>
+              {formatEventDate(featuredEvent.startsAt, { weekday: true })}
+              {featuredEvent.venue ? ` / ${featuredEvent.venue.split(" · ")[0]}` : ""}
+            </span>
+          ) : null}
         </div>
         {featuredEvent ? (
           <div className="home-event__layout">
@@ -39,12 +55,9 @@ export default function HomePage() {
                   decoding="async"
                 />
               </span>
-              <span className="home-event__visual-index" aria-hidden="true">
-                FS / LIVE
-              </span>
             </Link>
             <div className="home-event__content" data-reveal="up">
-              <p className="kicker">{featuredEvent.status === "tickets-live" ? "Tickets live" : "Announced"}</p>
+              <p className="kicker">{eventStatusLabels[featuredEvent.status]}</p>
               <h2 id="next-event-title">{featuredEvent.title}</h2>
               <p className="home-event__summary">{featuredEvent.summary}</p>
               <dl className="home-event__facts">
@@ -53,25 +66,32 @@ export default function HomePage() {
                   <dd>{featuredEvent.dateLabel}</dd>
                 </div>
                 <div>
-                  <dt>Room</dt>
+                  <dt>Venue</dt>
                   <dd>{[featuredEvent.venue, featuredEvent.city].filter(Boolean).join(", ")}</dd>
                 </div>
+                {featuredEvent.lineup.length ? (
+                  <div>
+                    <dt>Lineup</dt>
+                    <dd>{featuredEvent.lineup.join(" / ")}</dd>
+                  </div>
+                ) : null}
                 {featuredEvent.genre ? (
                   <div>
-                    <dt>Signal</dt>
+                    <dt>Sound</dt>
                     <dd>{featuredEvent.genre}</dd>
                   </div>
                 ) : null}
               </dl>
               <div className="home-event__actions">
-                {featuredEvent.ticketUrl ? (
+                {featuredEvent.ticketUrl && tickets ? (
                   <a
                     className="button button--solid"
                     href={featuredEvent.ticketUrl}
                     rel="noreferrer"
                     target="_blank"
+                    data-event-end={eventEndTime(featuredEvent) ?? undefined}
                   >
-                    Get tickets
+                    {tickets}
                   </a>
                 ) : null}
                 <Link className="button button--ghost" href={`/events/${featuredEvent.slug}`}>
@@ -89,12 +109,11 @@ export default function HomePage() {
 
       <section className="home-memory" aria-labelledby="memory-title">
         <div className="home-section-index" data-reveal="up">
-          <span>02</span>
-          <span>From the room</span>
+          <span>From the archive</span>
+          <span>{archives.length} nights on record</span>
         </div>
         <div className="home-memory__heading">
           <div data-reveal="clip">
-            <p className="kicker">Moments from our last events</p>
             <h2 id="memory-title">In case you missed it.</h2>
           </div>
           {featuredArchive ? (
@@ -118,10 +137,6 @@ export default function HomePage() {
                 loading="lazy"
                 decoding="async"
               />
-              <figcaption>
-                <span>FS / {String(index + 1).padStart(2, "0")}</span>
-                <span>Ottawa</span>
-              </figcaption>
             </figure>
           ))}
         </div>
@@ -129,8 +144,8 @@ export default function HomePage() {
 
       <section className="home-manifesto" aria-labelledby="manifesto-title">
         <div className="home-section-index" data-reveal="up">
-          <span>03</span>
-          <span>Our frequency</span>
+          <span>About</span>
+          {since ? <span>Ottawa since {since}</span> : null}
         </div>
         <div className="home-manifesto__layout">
           <h2 id="manifesto-title" data-reveal="clip">

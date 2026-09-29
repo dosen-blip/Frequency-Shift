@@ -3,16 +3,16 @@ import { PageHeader } from "@/components/page-header";
 
 export const metadata: Metadata = {
   title: "About",
-  description: "Why we’re building Ottawa’s underground through house music, freedom, and community.",
+  description: "How Frequency Shift started, and who builds each night with us.",
 };
 
 export default function AboutPage() {
   return (
     <div className="page-shell about-page">
       <PageHeader
-        eyebrow="Why we gather"
+        eyebrow="About / Ottawa"
         title="About"
-        intro="We bring raw underground energy into Ottawa rooms built for freedom, self-expression, and connection through music."
+        intro="We’ve been putting on house and techno nights in Ottawa since May 31, 2025."
         motion={false}
       />
       <section className="split-section section--rule about-section">

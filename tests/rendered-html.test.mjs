@@ -257,33 +257,48 @@ test("renders collective-voice editorial and event facts", async () => {
 
   const eventsPage = await render("/events");
   const eventsHtml = await eventsPage.text();
-  assert.match(eventsHtml, /September 4, 2026/);
   assert.match(eventsHtml, /Frequency Shift 014/);
   assert.match(eventsHtml, /October 16, 2026/);
   assert.match(eventsHtml, /frequency-shift-014\.webp/);
   assert.match(eventsHtml, /frequency-shift-014-tickets-2002572255524\?aff=ebdssbdestsearch/);
-  assert.match(eventsHtml, /Frequency Shift: Boat Special/);
-  assert.match(eventsHtml, /September 17, 2026/);
   assert.match(eventsHtml, /GRIDWRKS · 221 Rideau St, Ottawa, Canada/);
-  assert.match(eventsHtml, /frequency-shift-techno-special-tickets-1998427471363/);
-  assert.match(eventsHtml, /frequency-shift-boat-special-tickets-2000050919139\?aff=erelpanelorg/);
-  assert.match(eventsHtml, /Parc Jacques-Cartier · 160 Rue Laurier, Gatineau, QC/);
   assert.doesNotMatch(eventsHtml, /Location to be announced|Details soon/i);
+
+  // Nights that have ended move to a dated list and stop selling tickets.
+  assert.match(eventsHtml, /Past nights/);
+  assert.match(eventsHtml, /Frequency Shift: Boat Special/);
+  assert.match(eventsHtml, /17 Sep 2026/);
+  assert.match(eventsHtml, /04 Sep 2026/);
+  assert.match(eventsHtml, /href="\/archive\/techno-special"/);
+  assert.doesNotMatch(eventsHtml, /frequency-shift-techno-special-tickets-1998427471363/);
+  assert.doesNotMatch(eventsHtml, /frequency-shift-boat-special-tickets-2000050919139/);
 
   const boatHtml = await (await render("/events/boat-party")).text();
   assert.match(boatHtml, /TOPAZ b2b EMBLEM, MAC:D b2b DANFORD, FASTR b2b CAMILLIE, and SEB B b2b BALLA/);
   assert.match(boatHtml, /Boarding starts at 6:30 PM/);
   assert.match(boatHtml, /7 PM to 11 PM/);
   assert.match(boatHtml, /19\+ with valid ID required/);
-  assert.match(boatHtml, /frequency-shift-boat-special-tickets-2000050919139\?aff=erelpanelorg/);
+  assert.match(boatHtml, /Parc Jacques-Cartier · 160 Rue Laurier, Gatineau, QC/);
+  assert.match(boatHtml, /Past event/);
+  assert.doesNotMatch(boatHtml, /frequency-shift-boat-special-tickets-2000050919139/);
+
+  const technoHtml = await (await render("/events/september-4")).text();
+  assert.match(technoHtml, /href="\/archive\/techno-special"/);
 
   const octoberHtml = await (await render("/events/frequency-shift-014")).text();
   assert.match(octoberHtml, /Barry, Balla B2B Evander, Sean Vincent, and Tev.N/);
   assert.match(octoberHtml, /10 PM to 2:30 AM/);
   assert.match(octoberHtml, /19\+ and bring valid ID/);
-  assert.match(octoberHtml, /September 29 at 7 PM/);
-  assert.match(octoberHtml, /Announced/);
+  assert.match(octoberHtml, /Tickets are on sale now/);
+  assert.match(octoberHtml, /Tickets live/);
+  assert.match(octoberHtml, /<li>Sean Vincent<\/li>/);
   assert.match(octoberHtml, /frequency-shift-014-tickets-2002572255524\?aff=ebdssbdestsearch/);
+  assert.match(octoberHtml, /data-event-end="2026-10-17T02:30:00-04:00"/);
+
+  // Labels carry facts, not filler.
+  assert.doesNotMatch(homepageHtml, /Next transmission|FS \/ LIVE|>Signal<|>Room</);
+  assert.match(homepageHtml, /Fri 16 Oct 2026/);
+  assert.match(homepageHtml, /class="next-bar"/);
 
   const about = await render("/about");
   const aboutHtml = await about.text();
@@ -455,5 +470,16 @@ test("ships every declared archive photograph as responsive WebP assets", async 
       );
       assert.equal(mobileImage.subarray(8, 12).toString("ascii"), "WEBP", filename);
     }
+  }
+});
+
+test("keeps archive films playable without JavaScript and styled with it", async () => {
+  const html = await (await render("/archive/techno-special")).text();
+  const films = html.match(/<figure class="archive-film">[\s\S]*?<\/figure>/g) ?? [];
+
+  assert.equal(films.length, 6);
+  for (const film of films) {
+    assert.match(film, /<video controls=""/);
+    assert.match(film, /<button class="archive-film__play" type="button" hidden="" aria-label="Play [^"]+"/);
   }
 });

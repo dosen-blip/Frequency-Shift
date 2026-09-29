@@ -63,7 +63,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
             <section className="archive-films" aria-label={`${entry.title} videos`}>
               <div className="archive-films__grid">
                 {entry.videos.map((video) => (
-                  <figure key={video.src}>
+                  <figure className="archive-film" key={video.src}>
                     <video
                       controls
                       playsInline
@@ -76,6 +76,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
                       <source src={video.src} type="video/mp4" />
                       <a href={video.src}>Watch {video.title}</a>
                     </video>
+                    <button className="archive-film__play" type="button" hidden aria-label={`Play ${video.title}`} />
                   </figure>
                 ))}
               </div>

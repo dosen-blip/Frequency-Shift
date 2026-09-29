@@ -31,6 +31,7 @@ export type EventRecord = {
   status: EventStatus;
   ticketUrl: string | null;
   genre: string | null;
+  lineup: string[];
   artistSlugs: string[];
   featured: boolean;
   coverImage: string | null;

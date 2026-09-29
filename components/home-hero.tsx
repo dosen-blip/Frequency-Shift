@@ -39,8 +39,8 @@ export function HomeHero() {
       </div>
       <a
         className="home-hero__scroll"
-        href="#next-transmission"
-        aria-label="Next transmission"
+        href="#next-event"
+        aria-label="Skip to the next event"
       >
         <span aria-hidden="true">↓</span>
       </a>

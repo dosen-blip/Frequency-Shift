@@ -65,9 +65,6 @@ export function ArchiveCard({ entry, revealIndex = 0 }: ArchiveCardProps) {
             </picture>
           ) : null}
           <span className="archive-card__index">{entry.archiveLabel}</span>
-          <span className="archive-card__type">
-            {entry.featured ? "Pinned archive" : cover ? "Photo archive" : "Event record"}
-          </span>
           {cover ? null : <span className="archive-card__mark">F/S</span>}
         </div>
         <div className="archive-card__overlay">

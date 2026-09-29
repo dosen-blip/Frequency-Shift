@@ -9,17 +9,18 @@ export const events: EventRecord[] = [
     description: [
       "We’re bringing Frequency Shift 014 to GRIDWRKS on Friday, October 16 for a dark tech house rave. Heavy bass, rolling percussion, and gritty late-night grooves set the tone as the room gets deeper into the night.",
       "On the lineup: Barry, Balla B2B Evander, Sean Vincent, and Tev.N.",
-      "Join us at 221 Rideau Street in Ottawa from 10 PM to 2:30 AM. Doors open at 10 PM; you must be 19+ and bring valid ID. Tickets go on sale through Eventbrite on September 29 at 7 PM.",
+      "Join us at 221 Rideau Street in Ottawa from 10 PM to 2:30 AM. Doors open at 10 PM; you must be 19+ and bring valid ID. Tickets are on sale now through Eventbrite.",
     ],
     dateLabel: "October 16, 2026 · 10 PM–2:30 AM",
     startsAt: "2026-10-16T22:00:00-04:00",
     endsAt: "2026-10-17T02:30:00-04:00",
     venue: "GRIDWRKS · 221 Rideau St",
     city: "Ottawa, Canada",
-    status: "announced",
+    status: "tickets-live",
     ticketUrl:
       "https://www.eventbrite.ca/e/frequency-shift-014-tickets-2002572255524?aff=ebdssbdestsearch",
     genre: "Dark tech house",
+    lineup: ["Barry", "Balla B2B Evander", "Sean Vincent", "Tev.N"],
     artistSlugs: [],
     featured: true,
     coverImage: "/media/events/frequency-shift-014.webp",
@@ -44,6 +45,7 @@ export const events: EventRecord[] = [
     ticketUrl:
       "https://www.eventbrite.ca/e/the-experiment-dopamine-x-frequency-shift-dopamine-029-tickets-1994983985805",
     genre: "House / Tech house",
+    lineup: ["Yaan", "Valium", "Seb B", "Balla", "Adekam & Friends"],
     artistSlugs: [],
     featured: false,
     coverImage: "/media/events/the-experiment.webp",
@@ -68,6 +70,7 @@ export const events: EventRecord[] = [
     ticketUrl:
       "https://www.eventbrite.com/e/frequency-shift-techno-special-tickets-1998427471363?aff=ebdssbdestsearch",
     genre: "Techno",
+    lineup: ["Fantom K", "Zak Black", "ENKO b2b DJ Gabby", "DOSEN"],
     artistSlugs: [],
     featured: false,
     coverImage: "/media/events/frequency-shift-techno-special.webp",
@@ -93,6 +96,7 @@ export const events: EventRecord[] = [
     ticketUrl:
       "https://www.eventbrite.com/e/frequency-shift-boat-special-tickets-2000050919139?aff=erelpanelorg",
     genre: "House / Electronic",
+    lineup: ["TOPAZ b2b EMBLEM", "MAC:D b2b DANFORD", "FASTR b2b CAMILLIE", "SEB B b2b BALLA"],
     artistSlugs: [],
     featured: false,
     coverImage: "/media/events/frequency-shift-boat-special.webp",
@@ -103,4 +107,54 @@ export const events: EventRecord[] = [
 
 export function getEvent(slug: string) {
   return events.find((event) => event.slug === slug);
+}
+
+// Events without an end time are treated as over 12 hours after they start.
+export function eventEndTime(event: EventRecord) {
+  if (event.endsAt) return event.endsAt;
+  if (!event.startsAt) return null;
+  return new Date(Date.parse(event.startsAt) + 12 * 60 * 60 * 1000).toISOString();
+}
+
+export function isEventPast(event: EventRecord, now = Date.now()) {
+  const end = eventEndTime(event);
+  return event.status === "archived" || (end !== null && Date.parse(end) < now);
+}
+
+export function getUpcomingEvents(now = Date.now()) {
+  return events
+    .filter((event) => !isEventPast(event, now))
+    .sort((a, b) => (a.startsAt ?? "").localeCompare(b.startsAt ?? ""));
+}
+
+export function getPastEvents(now = Date.now()) {
+  return events
+    .filter((event) => isEventPast(event, now))
+    .sort((a, b) => (b.startsAt ?? "").localeCompare(a.startsAt ?? ""));
+}
+
+// The featured event leads while it is upcoming; otherwise the soonest one does.
+export function getNextEvent(now = Date.now()) {
+  const upcoming = getUpcomingEvents(now);
+  return upcoming.find((event) => event.featured) ?? upcoming[0] ?? null;
+}
+
+export function ticketLabel(event: EventRecord) {
+  if (!event.ticketUrl) return null;
+  if (event.status === "announced") return "Ticket info";
+  if (event.status === "sold-out") return "Sold out";
+  if (event.status === "archived") return null;
+  return "Get tickets";
+}
+
+// "2026-10-16T22:00:00-04:00" -> "Fri 16 Oct 2026", read from the local
+// date written in the record so the build machine's time zone cannot shift it.
+export function formatEventDate(iso: string | null, { weekday = false } = {}) {
+  if (!iso) return "";
+  const date = new Date(`${iso.slice(0, 10)}T12:00:00Z`);
+  if (Number.isNaN(date.valueOf())) return "";
+  const part = (options: Intl.DateTimeFormatOptions) =>
+    date.toLocaleDateString("en-US", { ...options, timeZone: "UTC" });
+  const day = `${part({ day: "2-digit" })} ${part({ month: "short" })} ${part({ year: "numeric" })}`;
+  return weekday ? `${part({ weekday: "short" })} ${day}` : day;
 }

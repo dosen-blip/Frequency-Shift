@@ -7,6 +7,32 @@ function mediaMatches(query: string) {
   return typeof window.matchMedia === "function" && window.matchMedia(query).matches;
 }
 
+// Ticket links carry their event's end time so a stale build never keeps
+// selling a night that has already happened.
+function hideEndedTicketLinks() {
+  document.querySelectorAll<HTMLElement>("[data-event-end]").forEach((element) => {
+    if (Date.parse(element.dataset.eventEnd ?? "") < Date.now()) element.hidden = true;
+  });
+}
+
+// Archive films show a poster and play button; native controls return on play.
+// Without JavaScript the plain video element with controls remains.
+function enhanceFilms() {
+  document.querySelectorAll<HTMLElement>(".archive-film").forEach((film) => {
+    const video = film.querySelector("video");
+    const play = film.querySelector<HTMLButtonElement>(".archive-film__play");
+    if (!video || !play || !play.hidden) return;
+    video.controls = false;
+    play.hidden = false;
+    play.addEventListener("click", () => {
+      play.hidden = true;
+      video.controls = true;
+      video.focus();
+      void video.play();
+    });
+  });
+}
+
 export function SiteMotion() {
   const pathname = usePathname();
   const hasPlayedHero = useRef(false);
@@ -39,6 +65,8 @@ export function SiteMotion() {
     let revealFallback = 0;
 
     root.classList.add("motion-enabled");
+    hideEndedTicketLinks();
+    enhanceFilms();
 
     const reveal = (element: HTMLElement) => {
       element.classList.remove("is-reveal-pending");

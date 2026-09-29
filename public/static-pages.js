@@ -131,8 +131,7 @@
 
   }
 
-  // Footer lockups defer their glow sources so the ignite flicker plays on
-  // arrival; the query gives them their own SVG animation timeline.
+  // Footer lockups ignite on arrival; "?ignite" gives them their own SVG timeline.
   function prepareNeonIgnite() {
     each(document.querySelectorAll(".neon-lockup--footer"), function (lockup) {
       function ignite() {
@@ -335,7 +334,27 @@
     });
   }
 
-  // Mirrors components/neon-cursor.tsx: a glowing neon dot for mouse users.
+  // Mirrors components/site-motion.tsx.
+  function prepareEventsAndFilms() {
+    each(document.querySelectorAll("[data-event-end]"), function (element) {
+      if (Date.parse(element.getAttribute("data-event-end")) < Date.now()) element.hidden = true;
+    });
+    each(document.querySelectorAll(".archive-film"), function (film) {
+      var video = film.querySelector("video");
+      var play = film.querySelector(".archive-film__play");
+      if (!video || !play) return;
+      video.controls = false;
+      play.hidden = false;
+      play.addEventListener("click", function () {
+        play.hidden = true;
+        video.controls = true;
+        video.focus();
+        video.play();
+      });
+    });
+  }
+
+  // Mirrors components/neon-cursor.tsx.
   function prepareNeonCursor() {
     if (!matches("(hover: hover) and (pointer: fine)")) return;
     var cursor = document.createElement("div");
@@ -380,6 +399,7 @@
 
   prepareMobileNeon();
   prepareMotion();
+  prepareEventsAndFilms();
   prepareNeonIgnite();
   prepareNeonProximity();
   prepareNeonCursor();

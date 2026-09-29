@@ -1,16 +1,11 @@
 import Link from "next/link";
+import { eventEndTime, formatEventDate, ticketLabel } from "@/content/events";
 import type { EventRecord } from "@/content/types";
 import { eventStatusLabels } from "@/content/types";
 
 export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; revealIndex?: number }) {
   const location = [event.venue, event.city].filter(Boolean).join(", ");
-  const date = event.startsAt
-    ? new Date(`${event.startsAt.slice(0, 10)}T12:00:00`)
-    : null;
-  const dateMark =
-    date && !Number.isNaN(date.valueOf())
-      ? date.toLocaleDateString("en-CA", { month: "short", day: "2-digit" }).replace(" ", " / ")
-      : "";
+  const tickets = ticketLabel(event);
 
   return (
     <article
@@ -32,7 +27,7 @@ export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; reve
       {event.coverImage ? null : (
         <div className="event-card__signal" aria-hidden="true">
           <span>F/S</span>
-          <span>{dateMark}</span>
+          <span>{formatEventDate(event.startsAt)}</span>
         </div>
       )}
       <div className="event-card__scrim" aria-hidden="true" />
@@ -50,9 +45,15 @@ export function EventCard({ event, revealIndex = 0 }: { event: EventRecord; reve
           <Link className="button button--ghost" href={`/events/${event.slug}`}>
             Event details
           </Link>
-          {event.ticketUrl ? (
-            <a className="button button--solid" href={event.ticketUrl} rel="noreferrer" target="_blank">
-              Tickets
+          {event.ticketUrl && tickets ? (
+            <a
+              className="button button--solid"
+              href={event.ticketUrl}
+              rel="noreferrer"
+              target="_blank"
+              data-event-end={eventEndTime(event) ?? undefined}
+            >
+              {tickets}
             </a>
           ) : null}
         </div>

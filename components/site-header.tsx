@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { primaryNavigation } from "@/content/site";
-import { events } from "@/content/events";
+import { getNextEvent } from "@/content/events";
 
 const DEPLOYMENT_PREFIX = "/Frequency-Shift";
-const nextEvent = events.find((event) => event.featured);
+const nextEvent = getNextEvent();
 const nextEventHref = nextEvent ? `/events/${nextEvent.slug}` : "/events";
 
 function normalizePathname(pathname: string) {

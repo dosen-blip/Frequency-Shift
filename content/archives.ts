@@ -5,7 +5,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "techno-special",
     title: "Techno Special",
-    archiveLabel: "Featured media",
+    archiveLabel: "Special",
     dateLabel: "September 4, 2026",
     dateIso: "2026-09-04",
     locationLabel: "GRIDWRKS · Ottawa",
@@ -35,7 +35,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "frequency-fest",
     title: "Frequency Fest Vol. 1",
-    archiveLabel: "Festival / 01",
+    archiveLabel: "Festival",
     dateLabel: "July 10, 2026",
     dateIso: "2026-07-10",
     locationLabel: "Club SAW · 67 Nicholas St, Ottawa",
@@ -59,7 +59,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "frequency-shift-001",
     title: "Frequency Shift 001",
-    archiveLabel: "FS / 001",
+    archiveLabel: "FS 001",
     dateLabel: "May 31, 2025",
     dateIso: "2025-05-31",
     locationLabel: "Ottawa, Canada",
@@ -81,7 +81,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "frequency-shift-002",
     title: "Frequency Shift 002",
-    archiveLabel: "FS / 002",
+    archiveLabel: "FS 002",
     dateLabel: "July 2025",
     dateIso: "2025-07",
     locationLabel: "Ottawa, Canada",
@@ -102,7 +102,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "frequency-shift-003",
     title: "Frequency Shift 003",
-    archiveLabel: "FS / 003",
+    archiveLabel: "FS 003",
     dateLabel: "July 26, 2025",
     dateIso: "2025-07-26",
     locationLabel: "GRIDWRKS · Ottawa",
@@ -131,7 +131,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "frequency-shift-004",
     title: "Frequency Shift 004",
-    archiveLabel: "FS / 004",
+    archiveLabel: "FS 004",
     dateLabel: "January 3, 2026",
     dateIso: "2026-01-03",
     locationLabel: "GRIDWRKS · Ottawa",
@@ -155,7 +155,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "frequency-shift-005",
     title: "Frequency Shift 005",
-    archiveLabel: "FS / 005",
+    archiveLabel: "FS 005",
     dateLabel: "June 5, 2026",
     dateIso: "2026-06-05",
     locationLabel: "GRIDWRKS · 221 Rideau St, Ottawa",
@@ -177,7 +177,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "world-cup",
     title: "World Cup",
-    archiveLabel: "Special / 01",
+    archiveLabel: "Partner night",
     dateLabel: "June 18, 2026",
     dateIso: "2026-06-18",
     locationLabel: "GRIDWRKS · Ottawa",
@@ -200,7 +200,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "solstice",
     title: "Solstice",
-    archiveLabel: "Special / 02",
+    archiveLabel: "Partner night",
     dateLabel: "May 22, 2026",
     dateIso: "2026-05-22",
     locationLabel: "City At Night · 222 Slater St, Ottawa",
@@ -224,7 +224,7 @@ export const archives: ArchiveRecord[] = [
   {
     slug: "dopamine",
     title: "Dopamine",
-    archiveLabel: "Special / 03",
+    archiveLabel: "Partner night",
     dateLabel: "March 17, 2026",
     dateIso: "2026-03-17",
     locationLabel: "City At Night · 222 Slater St, Ottawa",
@@ -245,6 +245,10 @@ export const archives: ArchiveRecord[] = [
     ],
   },
 ];
+
+export function getArchiveForEvent(eventSlug: string) {
+  return archives.find((entry) => entry.eventSlug === eventSlug);
+}
 
 export function getArchive(slug: string) {
   return archives.find((entry) => entry.slug === slug);
