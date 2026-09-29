@@ -8,8 +8,19 @@ type NeonWordmarkAssetProps = {
 
 type InteractiveNeonAssetProps = {
   className?: string;
+  deferIgnite?: boolean;
   src: string;
 };
+
+const WORDMARK_NEON_SRC = "/media/brand/frequency-shift-wordmark-neon.svg";
+
+// A separate URL gives deferred copies their own SVG animation timeline, so
+// they replay the ignite flicker instead of inheriting the hero's finished one.
+function igniteNeon(lockup: HTMLElement) {
+  lockup.querySelectorAll<HTMLImageElement>("img[data-neon-src]").forEach((image) => {
+    image.src = `${image.dataset.neonSrc}?ignite`;
+  });
+}
 
 function NeonWordmarkAsset({ className }: NeonWordmarkAssetProps) {
   return (
@@ -32,6 +43,7 @@ function NeonWordmarkAsset({ className }: NeonWordmarkAssetProps) {
 
 function InteractiveNeonAsset({
   className,
+  deferIgnite = false,
   src,
 }: InteractiveNeonAssetProps) {
   const overlayRef = useRef<HTMLSpanElement>(null);
@@ -88,7 +100,8 @@ function InteractiveNeonAsset({
     >
       <img
         className="neon-wordmark__interactive-base"
-        src={src}
+        src={deferIgnite ? undefined : src}
+        data-neon-src={deferIgnite ? src : undefined}
         alt=""
       />
       <span
@@ -120,10 +133,37 @@ function NeonLogoAsset({
   );
 }
 
-export function NeonWordmark() {
+function DeferredNeonLayer({ className }: NeonWordmarkAssetProps) {
+  return (
+    <span className={className}>
+      <img className="neon-wordmark__asset" data-neon-src={WORDMARK_NEON_SRC} alt="" />
+    </span>
+  );
+}
+
+// The footer variant is the single-line wordmark only, and ignites when it
+// scrolls into view rather than on page load.
+export function NeonWordmark({ variant = "hero" }: { variant?: "hero" | "footer" }) {
   const lockupRef = useRef<HTMLDivElement>(null);
   const activeTimers = useRef<Set<number>>(new Set());
   const lastStrike = useRef(new WeakMap<SVGPathElement, number>());
+
+  useEffect(() => {
+    const lockup = lockupRef.current;
+    if (!lockup || variant !== "footer") return;
+    if (!("IntersectionObserver" in window)) {
+      igniteNeon(lockup);
+      return;
+    }
+
+    const igniteObserver = new IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      igniteObserver.disconnect();
+      igniteNeon(lockup);
+    }, { threshold: 0.4 });
+    igniteObserver.observe(lockup);
+    return () => igniteObserver.disconnect();
+  }, [variant]);
 
   useEffect(() => {
     const lockup = lockupRef.current;
@@ -292,6 +332,22 @@ export function NeonWordmark() {
       timers.clear();
     };
   }, []);
+
+  if (variant === "footer") {
+    return (
+      <div ref={lockupRef} className="neon-lockup neon-lockup--footer" aria-hidden="true">
+        <span className="neon-wordmark__cursor-trail" />
+        <div className="neon-wordmark">
+          <DeferredNeonLayer className="neon-wordmark__layer neon-wordmark__layer--ambient" />
+          <DeferredNeonLayer className="neon-wordmark__layer neon-wordmark__layer--bloom" />
+          <span className="neon-wordmark__layer neon-wordmark__layer--core">
+            <InteractiveNeonAsset src={WORDMARK_NEON_SRC} deferIgnite />
+          </span>
+          <span className="neon-wordmark__layer neon-wordmark__layer--face" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div ref={lockupRef} className="neon-lockup" aria-hidden="true">

@@ -3,14 +3,11 @@
 import { useEffect } from "react";
 
 const INTERACTIVE_TARGETS = 'a, button, summary, label, video, [role="button"]';
-const CURSOR_MARKUP =
-  '<div class="neon-cursor__ring">' +
-  ["ambient", "bloom", "core", "face"]
-    .map((layer) => `<span class="neon-cursor__layer neon-cursor__layer--${layer}"></span>`)
-    .join("") +
-  '</div><div class="neon-cursor__dot"></div>';
+const CURSOR_MARKUP = ["ambient", "bloom", "core", "face"]
+  .map((layer) => `<span class="neon-cursor__layer neon-cursor__layer--${layer}"></span>`)
+  .join("");
 
-// Replaces the mouse pointer with a neon tube ring built from the hero sign's
+// Replaces the mouse pointer with a neon dot built from the hero sign's
 // glow stack. Mouse-only, and the native cursor stays until the first real
 // mouse movement. Mirrored by prepareNeonCursor in public/static-pages.js.
 export function NeonCursor() {
@@ -23,8 +20,6 @@ export function NeonCursor() {
     cursor.setAttribute("aria-hidden", "true");
     cursor.innerHTML = CURSOR_MARKUP;
     document.body.appendChild(cursor);
-    const ring = cursor.firstElementChild as HTMLElement;
-    const dot = cursor.lastElementChild as HTMLElement;
     let hovered: Element | null = null;
     let strikeTimer = 0;
 
@@ -39,8 +34,7 @@ export function NeonCursor() {
         hide();
         return;
       }
-      dot.style.transform = ring.style.transform =
-        `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
+      cursor.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0)`;
       root.classList.add("has-neon-cursor");
       cursor.classList.add("is-visible", "is-igniting");
 

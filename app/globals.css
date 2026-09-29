@@ -1520,12 +1520,6 @@ select {
   align-items: center;
 }
 
-.footer-brand__type {
-  width: clamp(10rem, 18vw, 14rem);
-  height: auto;
-  object-fit: contain;
-}
-
 .footer-bottom {
   display: flex;
   gap: var(--space-5);
@@ -2106,10 +2100,6 @@ select {
     margin-bottom: 2.5rem;
   }
 
-  .footer-brand__type {
-    width: clamp(10rem, 48vw, 13rem);
-  }
-
   .footer-bottom {
     gap: 1.5rem;
     align-items: flex-start;
@@ -2192,8 +2182,7 @@ select {
   background: rgba(5, 5, 6, 0.97);
 }
 
-.wordmark__type,
-.footer-brand__type {
+.wordmark__type {
   filter: drop-shadow(0 0 0.45rem rgba(235, 115, 193, 0.24));
 }
 
@@ -3630,8 +3619,18 @@ select {
   margin-bottom: clamp(3rem, 8vw, 7rem);
 }
 
-.footer-brand__type {
+/* Footer neon wordmark: the hero's single-line lockup at footer scale. */
+.neon-lockup--footer {
   width: min(82vw, 48rem);
+}
+
+.neon-lockup--footer .neon-wordmark {
+  aspect-ratio: 1455.54 / 102.77;
+}
+
+.neon-lockup--footer .neon-wordmark__layer--face {
+  -webkit-mask-image: url("/media/brand/frequency-shift-wordmark-vector.svg");
+  mask-image: url("/media/brand/frequency-shift-wordmark-vector.svg");
 }
 
 .footer-bottom {
@@ -3882,7 +3881,7 @@ select {
     font-size: clamp(2.8rem, 12.25vw, 5rem);
   }
 
-  .footer-brand__type {
+  .neon-lockup--footer {
     width: min(100%, 34rem);
   }
 }
@@ -3921,8 +3920,8 @@ select {
   }
 }
 
-/* Neon cursor: a tube ring built from the hero sign's glow stack
-   (ambient haze, bloom, core tube, hot face). Created by NeonCursor and
+/* Neon cursor: a glowing dot built from the hero sign's glow stack
+   (ambient haze, bloom, core, hot face). Created by NeonCursor and
    prepareNeonCursor in public/static-pages.js; mouse-only, and the native
    cursor is hidden only after the first real mouse movement. */
 html.has-neon-cursor,
@@ -3931,16 +3930,18 @@ html.has-neon-cursor * {
 }
 
 .neon-cursor {
-  --neon-cursor-size: 1.6rem;
-  --neon-cursor-tube: 3px;
+  --neon-cursor-size: 0.8rem;
   --neon-cursor-scale: 1;
   position: fixed;
   z-index: 200;
   top: 0;
   left: 0;
+  width: 0;
+  height: 0;
   pointer-events: none;
   opacity: 0;
   transition: opacity 220ms ease;
+  will-change: transform;
 }
 
 .neon-cursor.is-visible {
@@ -3948,37 +3949,22 @@ html.has-neon-cursor * {
 }
 
 .neon-cursor.is-hovering {
-  --neon-cursor-scale: 1.55;
+  --neon-cursor-scale: 1.6;
 }
 
 .neon-cursor.is-pressed {
-  --neon-cursor-scale: 0.8;
+  --neon-cursor-scale: 0.75;
 }
 
 .neon-cursor.is-hovering.is-pressed {
   --neon-cursor-scale: 1.3;
 }
 
-.neon-cursor__ring,
-.neon-cursor__dot {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  will-change: transform;
-}
-
-/* The ring trails the dot with the hero cursor trail's easing. */
-.neon-cursor.is-visible .neon-cursor__ring {
-  transition: transform 120ms var(--motion-ease);
-}
-
 .neon-cursor__layer {
   position: absolute;
   inset: calc(var(--neon-cursor-size) / -2);
-  border: var(--neon-cursor-tube) solid #eb73c1;
   border-radius: 50%;
+  background: #eb73c1;
   transform: scale(var(--neon-cursor-scale));
   transition: transform 260ms var(--motion-ease);
 }
@@ -4006,32 +3992,12 @@ html.has-neon-cursor * {
 }
 
 .neon-cursor__layer--face {
-  inset: calc(var(--neon-cursor-size) / -2 + var(--neon-cursor-tube) / 4);
-  border-width: calc(var(--neon-cursor-tube) / 2);
-  border-color: #ffd7ef;
-}
-
-.neon-cursor__dot::before {
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
+  inset: calc(var(--neon-cursor-size) / -2 + 1.5px);
   background: #ffd7ef;
-  content: "";
-  filter:
-    brightness(1.36)
-    drop-shadow(0 0 0.12rem #fff5fb)
-    drop-shadow(0 0 0.5rem rgba(235, 115, 193, 0.96))
-    drop-shadow(0 0 1.45rem rgba(197, 72, 240, 0.58));
-  transition: transform 260ms var(--motion-ease);
-}
-
-.neon-cursor.is-hovering .neon-cursor__dot::before {
-  transform: scale(0.6);
 }
 
 /* First appearance mirrors the sign's ignite flicker. */
-.neon-cursor.is-igniting .neon-cursor__ring,
-.neon-cursor.is-igniting .neon-cursor__dot {
+.neon-cursor.is-igniting .neon-cursor__layer {
   animation: neon-cursor-ignite 1.2s linear both;
 }
 
@@ -4046,24 +4012,46 @@ html.has-neon-cursor * {
   42%, 100% { opacity: 1; }
 }
 
-/* Entering a link or button strikes the tube like the sign's proximity flicker. */
+.neon-cursor.is-igniting .neon-cursor__layer--ambient {
+  animation-name: neon-cursor-ignite-ambient;
+}
+
+.neon-cursor.is-igniting .neon-cursor__layer--bloom {
+  animation-name: neon-cursor-ignite-bloom;
+}
+
+@keyframes neon-cursor-ignite-ambient {
+  0%, 7%, 11% { opacity: 0.01; }
+  8%, 34% { opacity: 0.2; }
+  15%, 27%, 42%, 100% { opacity: 0.3; }
+  21% { opacity: 0.05; }
+}
+
+@keyframes neon-cursor-ignite-bloom {
+  0%, 7%, 11% { opacity: 0.02; }
+  8%, 34% { opacity: 0.4; }
+  15%, 27%, 42%, 100% { opacity: 0.58; }
+  21% { opacity: 0.1; }
+}
+
+/* Entering a link or button strikes the dot like the sign's proximity flicker. */
 .neon-cursor.is-striking .neon-cursor__layer--core,
 .neon-cursor.is-striking .neon-cursor__layer--face {
   animation: neon-cursor-strike 820ms linear both;
 }
 
 @keyframes neon-cursor-strike {
-  0% { opacity: 1; border-color: #eb73c1; }
-  5% { opacity: 1; border-color: #fff8fd; }
-  9% { opacity: 0.05; border-color: #eb73c1; }
-  15% { opacity: 0.98; border-color: #ffb7e4; }
+  0% { opacity: 1; background-color: #eb73c1; }
+  5% { opacity: 1; background-color: #fff8fd; }
+  9% { opacity: 0.05; background-color: #eb73c1; }
+  15% { opacity: 0.98; background-color: #ffb7e4; }
   21% { opacity: 0.14; }
-  28% { opacity: 1; border-color: #9af6ff; }
-  34% { opacity: 0.22; border-color: #eb73c1; }
-  43% { opacity: 1; border-color: #fff8fd; }
-  56% { opacity: 0.64; border-color: #eb73c1; }
+  28% { opacity: 1; background-color: #9af6ff; }
+  34% { opacity: 0.22; background-color: #eb73c1; }
+  43% { opacity: 1; background-color: #fff8fd; }
+  56% { opacity: 0.64; background-color: #eb73c1; }
   63% { opacity: 0.16; }
-  71% { opacity: 1; border-color: #ffd7ef; }
+  71% { opacity: 1; background-color: #ffd7ef; }
   82%, 100% { opacity: 1; }
 }
 
@@ -4072,16 +4060,14 @@ html.has-neon-cursor * {
 }
 
 @keyframes neon-cursor-strike-face {
-  0%, 82%, 100% { opacity: 1; border-color: #ffd7ef; }
-  5%, 43% { opacity: 1; border-color: #fff; }
+  0%, 82%, 100% { opacity: 1; background-color: #ffd7ef; }
+  5%, 15%, 43%, 71% { opacity: 1; background-color: #fff; }
   9% { opacity: 0.05; }
-  15% { opacity: 0.98; border-color: #fff; }
   21% { opacity: 0.14; }
-  28% { opacity: 1; border-color: #efffff; }
+  28% { opacity: 1; background-color: #efffff; }
   34% { opacity: 0.22; }
   56% { opacity: 0.64; }
   63% { opacity: 0.16; }
-  71% { opacity: 1; border-color: #fff; }
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -4091,15 +4077,8 @@ html.has-neon-cursor * {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .neon-cursor.is-visible .neon-cursor__ring,
-  .neon-cursor__layer,
-  .neon-cursor__dot::before {
+  .neon-cursor__layer {
     transition: none;
-  }
-
-  .neon-cursor .neon-cursor__ring,
-  .neon-cursor .neon-cursor__dot,
-  .neon-cursor .neon-cursor__layer {
     animation: none !important;
   }
 }

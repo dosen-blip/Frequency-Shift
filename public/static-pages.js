@@ -131,9 +131,31 @@
 
   }
 
+  // Footer lockups defer their glow sources so the ignite flicker plays on
+  // arrival; the query gives them their own SVG animation timeline.
+  function prepareNeonIgnite() {
+    each(document.querySelectorAll(".neon-lockup--footer"), function (lockup) {
+      function ignite() {
+        each(lockup.querySelectorAll("img[data-neon-src]"), function (image) {
+          image.src = image.getAttribute("data-neon-src") + "?ignite";
+        });
+      }
+      if (!("IntersectionObserver" in window)) return ignite();
+      var observer = new IntersectionObserver(function (entries) {
+        if (!entries[0].isIntersecting) return;
+        observer.disconnect();
+        ignite();
+      }, { threshold: 0.4 });
+      observer.observe(lockup);
+    });
+  }
+
   function prepareNeonProximity() {
-    var lockup = document.querySelector(".neon-lockup");
-    if (!lockup || matches("(prefers-reduced-motion: reduce)") || matches("(hover: none), (pointer: coarse)")) return;
+    if (matches("(prefers-reduced-motion: reduce)") || matches("(hover: none), (pointer: coarse)")) return;
+    each(document.querySelectorAll(".neon-lockup"), prepareLockupProximity);
+  }
+
+  function prepareLockupProximity(lockup) {
 
     var overlays = lockup.querySelectorAll(".neon-wordmark__flicker-overlay");
     var frame = 0;
@@ -147,7 +169,7 @@
       var base = overlay.parentNode.querySelector(".neon-wordmark__interactive-base");
       if (!base || typeof window.fetch !== "function") return;
 
-      window.fetch(base.currentSrc || base.src, { credentials: "same-origin" })
+      window.fetch(base.getAttribute("data-neon-src") || base.currentSrc || base.src, { credentials: "same-origin" })
         .then(function (response) {
           if (!response.ok) throw new Error("Neon asset unavailable");
           return response.text();
@@ -313,7 +335,7 @@
     });
   }
 
-  // Mirrors components/neon-cursor.tsx: a neon tube ring for mouse users.
+  // Mirrors components/neon-cursor.tsx: a glowing neon dot for mouse users.
   function prepareNeonCursor() {
     if (!matches("(hover: hover) and (pointer: fine)")) return;
     var cursor = document.createElement("div");
@@ -321,13 +343,10 @@
     var strikeTimer = 0;
     cursor.className = "neon-cursor";
     cursor.setAttribute("aria-hidden", "true");
-    cursor.innerHTML = '<div class="neon-cursor__ring">' +
-      ["ambient", "bloom", "core", "face"].map(function (layer) {
-        return '<span class="neon-cursor__layer neon-cursor__layer--' + layer + '"></span>';
-      }).join("") + '</div><div class="neon-cursor__dot"></div>';
+    cursor.innerHTML = ["ambient", "bloom", "core", "face"].map(function (layer) {
+      return '<span class="neon-cursor__layer neon-cursor__layer--' + layer + '"></span>';
+    }).join("");
     body.appendChild(cursor);
-    var ring = cursor.firstChild;
-    var dot = cursor.lastChild;
 
     function hide() {
       root.classList.remove("has-neon-cursor");
@@ -337,8 +356,7 @@
 
     window.addEventListener("pointermove", function (event) {
       if (event.pointerType !== "mouse") return hide();
-      dot.style.transform = ring.style.transform =
-        "translate3d(" + event.clientX + "px, " + event.clientY + "px, 0)";
+      cursor.style.transform = "translate3d(" + event.clientX + "px, " + event.clientY + "px, 0)";
       root.classList.add("has-neon-cursor");
       cursor.classList.add("is-visible", "is-igniting");
       var target = event.target.closest ? event.target.closest('a, button, summary, label, video, [role="button"]') : null;
@@ -362,6 +380,7 @@
 
   prepareMobileNeon();
   prepareMotion();
+  prepareNeonIgnite();
   prepareNeonProximity();
   prepareNeonCursor();
   updateHeader();

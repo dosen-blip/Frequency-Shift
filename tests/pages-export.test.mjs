@@ -104,8 +104,8 @@ test("keeps the public boot path lightweight", async () => {
   const homepage = await readFile(output("index.html"), "utf8");
   const runtime = await readFile(output("static-pages.js"), "utf8");
 
-  assert.ok(Buffer.byteLength(homepage) < 13_500, "homepage HTML budget");
-  assert.ok(Buffer.byteLength(runtime) < 14_000, "static runtime budget");
+  assert.ok(Buffer.byteLength(homepage) < 14_500, "homepage HTML budget");
+  assert.ok(Buffer.byteLength(runtime) < 15_000, "static runtime budget");
   assert.match(runtime, /prepareNeonCursor/);
   assert.doesNotMatch(homepage, /assets\/(?:framework|index)-[^"']+\.js/);
   assert.match(runtime, /mobile-neon-enabled/);

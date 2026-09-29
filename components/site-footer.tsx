@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { footerNavigation, siteConfig } from "@/content/site";
+import { NeonWordmark } from "./neon-wordmark";
 
 export function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="footer-brand" data-reveal="up">
-        <img className="footer-brand__type" src="/media/brand/frequency-shift-wordmark-vector.svg" alt="Frequency Shift" width="1456" height="103" />
+        <p className="sr-only">Frequency Shift</p>
+        <NeonWordmark variant="footer" />
       </div>
       <div className="footer-bottom" data-reveal="up" style={{ "--reveal-delay": "80ms" } as React.CSSProperties}>
         <p className="footer-meta">© 2026 Frequency Shift Ottawa</p>
