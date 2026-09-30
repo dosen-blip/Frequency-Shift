@@ -110,7 +110,7 @@ Use the smallest useful set of skills, but always include both Git coordination 
 
 - Runtime: React 19, TypeScript, Next-compatible routes, vinext, and Vite.
 - The existing Sites project is identified by `.openai/hosting.json`. Reuse its opaque `project_id`; never create a replacement project because a tool lookup was inconvenient.
-- `content/events.ts` is the authoritative event list.
+- `content/events.ts` is the authoritative event list. Its helpers decide upcoming versus past from each event's end time and label ticket buttons from its status; `lineup` holds the billed names exactly as supplied. Never hand-move past events.
 - `content/archives.ts` is the authoritative archive editorial record.
 - `content/archive-media.ts` maps archive galleries to responsive assets.
 - `content/artists.ts` is the artist record.
@@ -119,6 +119,11 @@ Use the smallest useful set of skills, but always include both Git coordination 
 - `app/` contains route composition and page-specific copy.
 - `components/` contains reusable visible sections and cards.
 - `app/globals.css` contains the shared visual system, layout, breakpoints, spacing, colour, typography, and motion.
+- Typography: Fraunces headlines (`--font-display`), Instrument Sans body and subheads (`--font-body`), DM Mono dates and labels (`--font-mono`), self-hosted in `public/media/fonts/` with their OFL licences. Do not add fonts from external services.
+- Labels carry facts (dates, venues, counts, edition codes), never atmospheric filler such as "transmission" or "signal".
+- Neon glow is reserved for the hero sign, the footer sign, the mouse cursor dot, and a restrained hover glow on cards and buttons.
+- `components/next-event-bar.tsx` renders the floating next-event bar; it hides itself once the event ends and, on the home page, waits until the visitor scrolls past the hero.
+- `public/static-pages.js` is the hand-written runtime for the static export, which ships no React. Mirror any client-component behaviour there and stay inside the size budgets in `tests/pages-export.test.mjs`.
 - `public/media/README.md` contains the media rules.
 - `tests/rendered-html.test.mjs` and `tests/pages-export.test.mjs` protect public routes and exports.
 - `tests/glass-materials.test.mjs` protects the local-only visual lab.

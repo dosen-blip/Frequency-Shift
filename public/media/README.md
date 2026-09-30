@@ -15,3 +15,13 @@ the FS mark, hero crowd image, one draft-safe event cover, event moments, and sm
 utility icons. Photography is stored as metadata-free WebP at display-appropriate
 dimensions. The Figma file remains the source for original-resolution exports and
 the unused dated poster concepts.
+
+## Fonts
+
+`fonts/` holds the site's self-hosted typefaces, each with its SIL Open Font License text:
+
+- `fraunces-latin-full.woff2` — Fraunces variable (weight, optical size, SOFT, WONK) for headlines.
+- `instrument-sans-latin-wght.woff2` — Instrument Sans variable weight for body copy and controls.
+- `dm-mono-latin-400.woff2`, `dm-mono-latin-500.woff2` — DM Mono for dates and labels.
+
+All files are the Latin subset from Fontsource. Keep the matching `OFL-*.txt` file next to any font you add, and do not load fonts from third-party services at runtime.
