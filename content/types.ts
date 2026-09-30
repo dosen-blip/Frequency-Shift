@@ -24,6 +24,8 @@ export type EventRecord = {
   summary: string;
   description: string[];
   dateLabel: string;
+  // Historical dates can be known without a confirmed opening time.
+  dateIso?: string;
   startsAt: string | null;
   endsAt: string | null;
   venue: string | null;

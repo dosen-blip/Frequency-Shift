@@ -185,6 +185,35 @@ test("renders the primary public routes", async () => {
   }
 });
 
+test("lists the full past-night history once, newest first, using archive names", async () => {
+  const response = await render("/events");
+  const html = await response.text();
+  const list = html.match(/<ol class="past-events__list">([\s\S]*?)<\/ol>/)?.[1];
+  assert.ok(list, "Expected the past-night listing");
+  const names = [...list.matchAll(/class="past-events__name">([^<]+)<\/span>/g)].map((match) => match[1]);
+  assert.deepEqual(names, [
+    "Frequency Shift: Boat Special", "Techno Special", "The Experiment",
+    "Frequency Fest Vol. 1", "World Cup", "Frequency Shift 005", "Solstice",
+    "Dopamine", "Frequency Shift 004", "Frequency Shift 003", "Frequency Shift 002",
+    "Frequency Shift 001",
+  ]);
+  assert.match(list, /2025-07-18/);
+  assert.match(list, /18 Jul 2025/);
+  assert.match(list, /31 May 2025/);
+  assert.match(list, /href="\/archive\/frequency-shift-002"/);
+  assert.match(list, /href="\/archive\/frequency-shift-005"[\s\S]*?past-events__action">Details/);
+  assert.doesNotMatch(list, /Frequency Shift 014|Invalid Date/);
+
+  for (const slug of ["frequency-fest", "world-cup", "frequency-shift-005", "solstice", "dopamine", "frequency-shift-004", "frequency-shift-003", "frequency-shift-002", "frequency-shift-001"]) {
+    const detail = await render(`/events/${slug}`);
+    assert.equal(detail.status, 200, slug);
+    const detailHtml = await detail.text();
+    assert.match(detailHtml, /Past event/);
+    assert.match(detailHtml, new RegExp(`href="/archive/${slug}"`));
+    assert.doesNotMatch(detailHtml.match(/<article class="page-shell">[\s\S]*?<\/article>/)?.[0] ?? "", />Get tickets<|>Ticket info</);
+  }
+});
+
 test("renders every requested archive slot", async () => {
   const archiveRoutes = [
     ["/archive/techno-special", /16(?:<!-- -->)? photographs.*6 videos/i],

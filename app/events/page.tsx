@@ -43,14 +43,16 @@ export default function EventsPage() {
           <ol className="past-events__list">
             {past.map((event) => {
               const archive = getArchiveForEvent(event.slug);
+              const date = event.dateIso ?? event.startsAt;
+              const hasMedia = archive && (archive.gallery.length > 0 || (archive.videos?.length ?? 0) > 0);
               const href = archive ? `/archive/${archive.slug}` : `/events/${event.slug}`;
               return (
                 <li key={event.slug} data-reveal="up">
                   <Link href={href}>
-                    <time dateTime={event.startsAt?.slice(0, 10)}>{formatEventDate(event.startsAt)}</time>
+                    <time dateTime={date?.slice(0, 10)}>{formatEventDate(date)}</time>
                     <span className="past-events__name">{event.title}</span>
                     <span className="past-events__venue">{event.venue?.split(" · ")[0]}</span>
-                    <span className="past-events__action">{archive ? "Photos & video" : "Details"}</span>
+                    <span className="past-events__action">{hasMedia ? "Photos & video" : "Details"}</span>
                   </Link>
                 </li>
               );

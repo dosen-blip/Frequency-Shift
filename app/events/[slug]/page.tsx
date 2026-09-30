@@ -88,7 +88,7 @@ export default async function EventPage({ params }: EventPageProps) {
             ) : null}
             {archive ? (
               <Link className="button button--solid" href={`/archive/${archive.slug}`}>
-                Photos & video
+                {archive.gallery.length || archive.videos?.length ? "Photos & video" : "Event record"}
               </Link>
             ) : null}
             <Link className="button button--ghost" href="/events">

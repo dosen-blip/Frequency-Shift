@@ -1,4 +1,33 @@
 import type { EventRecord } from "./types";
+import { getArchive } from "./archives";
+
+// Keep historical names and editorial copy tied to the approved archive record.
+// A date alone does not imply an opening time.
+function archivedEvent(slug: string, details: Partial<EventRecord> = {}): EventRecord {
+  const archive = getArchive(slug);
+  if (!archive) throw new Error(`Missing archive for historical event: ${slug}`);
+  return {
+    summary: archive.summary,
+    description: archive.story,
+    dateLabel: archive.dateLabel,
+    dateIso: archive.dateIso,
+    startsAt: null,
+    endsAt: null,
+    venue: archive.locationLabel?.split(" · ")[0] ?? null,
+    city: "Ottawa, Canada",
+    ticketUrl: null,
+    genre: null,
+    lineup: [],
+    artistSlugs: [],
+    featured: false,
+    coverImage: null,
+    coverAlt: "",
+    ...details,
+    slug,
+    title: archive.title,
+    status: "archived",
+  };
+}
 
 export const events: EventRecord[] = [
   {
@@ -54,7 +83,7 @@ export const events: EventRecord[] = [
   },
   {
     slug: "september-4",
-    title: "Frequency Shift: Techno Special",
+    title: "Techno Special",
     summary:
       "Frequency Shift returns to GRIDWRKS with Fantom K, Zak Black, ENKO b2b DJ Gabby, and DOSEN.",
     description: [
@@ -103,6 +132,69 @@ export const events: EventRecord[] = [
     coverAlt:
       "Pink and yellow Summer Closer poster for the September 17 sunset boat party.",
   },
+  archivedEvent("frequency-fest", {
+    dateLabel: "July 10, 2026 · 7 PM–2 AM",
+    startsAt: "2026-07-10T19:00:00-04:00",
+    endsAt: "2026-07-11T02:00:00-04:00",
+    venue: "Club SAW · 67 Nicholas St",
+    ticketUrl: "https://www.eventbrite.ca/e/frequency-shift-two-stage-event-tickets-1990324833154",
+    lineup: ["Chefnier", "LX", "Niko Couture", "Alex Jimenez", "Danford", "Return of the Jaded", "Seung", "Setou & Senyo", "Sebastian Couture", "Emblem"],
+  }),
+  archivedEvent("world-cup", {
+    dateLabel: "June 18, 2026 · 9 PM–2 AM",
+    startsAt: "2026-06-18T21:00:00-04:00",
+    endsAt: "2026-06-19T02:00:00-04:00",
+    venue: "GRIDWRKS · 221 Rideau St",
+    lineup: ["Seb Belanger b2b Gab Balladelli", "Camille Hendricks", "Fawcy", "DJ Maz", "Ttrills", "Best Rae", "Wallxce"],
+  }),
+  archivedEvent("frequency-shift-005", {
+    dateLabel: "June 5, 2026 · 10 PM–2:30 AM",
+    startsAt: "2026-06-05T22:00:00-04:00",
+    endsAt: "2026-06-06T02:30:00-04:00",
+    venue: "GRIDWRKS · 221 Rideau St",
+    ticketUrl: "https://www.eventbrite.ca/e/frequency-shift-tickets-1990289631866",
+    genre: "House / Techno",
+    lineup: ["Sophiaxfay", "Seb Belanger b2b Dylan McIntosh", "Vantedge", "Nate Adams"],
+  }),
+  archivedEvent("solstice", { venue: "City At Night · 222 Slater St" }),
+  archivedEvent("dopamine", {
+    dateLabel: "March 17, 2026 · Doors at 8 PM",
+    startsAt: "2026-03-17T20:00:00-04:00",
+    venue: "City At Night · 222 Slater St",
+  }),
+  archivedEvent("frequency-shift-004", {
+    venue: "GRIDWRKS · 221 Rideau St",
+    lineup: ["Seb Belanger", "Matia Dosen", "Arden", "Maggie Tipenko"],
+  }),
+  archivedEvent("frequency-shift-003", {
+    venue: "GRIDWRKS · 221 Rideau St",
+    lineup: ["LX", "Seb Belanger", "Jrise"],
+  }),
+  archivedEvent("frequency-shift-002", {
+    summary: "Beach-party house music at POA Tiki Bar on July 18, 2025.",
+    description: [
+      "For Frequency Shift 002, we brought beach-party energy and house music to POA Tiki Bar on July 18, 2025.",
+      "The night ran from 10 PM to 2 AM at 281a Dalhousie Street in Ottawa. The beach-party edition kept the focus on house music and tropical dancefloor energy.",
+    ],
+    dateLabel: "July 18, 2025 · 10 PM–2 AM",
+    startsAt: "2025-07-18T22:00:00-04:00",
+    endsAt: "2025-07-19T02:00:00-04:00",
+    venue: "POA Tiki Bar · 281a Dalhousie St",
+    ticketUrl: "https://www.eventbrite.ca/e/frequency-shift-beach-party-tickets-1434401666999",
+    genre: "House",
+  }),
+  archivedEvent("frequency-shift-001", {
+    description: [
+      "Our first Frequency Shift brought Ottawa’s house heads to POA Tiki Bar on May 31, 2025. Deep grooves, tropical cocktails, and a room ready to dance started the series.",
+      "The debut ran from 10 PM to 2:30 AM at 281a Dalhousie Street. Blue Chapel Lamb’s photographs capture the people and movement of the night in the archive.",
+    ],
+    dateLabel: "May 31, 2025 · 10 PM–2:30 AM",
+    startsAt: "2025-05-31T22:00:00-04:00",
+    endsAt: "2025-06-01T02:30:00-04:00",
+    venue: "POA Tiki Bar · 281a Dalhousie St",
+    ticketUrl: "https://www.eventbrite.ca/e/frequency-shift-001-tickets-1315458514829",
+    genre: "House",
+  }),
 ];
 
 export function getEvent(slug: string) {
@@ -130,7 +222,7 @@ export function getUpcomingEvents(now = Date.now()) {
 export function getPastEvents(now = Date.now()) {
   return events
     .filter((event) => isEventPast(event, now))
-    .sort((a, b) => (b.startsAt ?? "").localeCompare(a.startsAt ?? ""));
+    .sort((a, b) => (b.dateIso ?? b.startsAt ?? "").localeCompare(a.dateIso ?? a.startsAt ?? ""));
 }
 
 // The featured event leads while it is upcoming; otherwise the soonest one does.
