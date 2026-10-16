@@ -2524,10 +2524,10 @@ select {
 
 .neon-lockup {
   position: relative;
-  width: min(91vw, 92rem);
+  width: min(74vw, 72rem);
   display: grid;
   justify-items: center;
-  gap: clamp(1.8rem, 3.5vw, 3.5rem);
+  gap: clamp(1.5rem, 2.8vw, 2.75rem);
   isolation: isolate;
 }
 
@@ -2609,19 +2609,20 @@ select {
      output at the layer box while the hero entrance transitions run, so an
      undersized gutter shows as a hard rectangle during startup. */
   --neon-paint-gutter: 7rem;
-  opacity: 0.3;
-  filter: blur(2.2rem) saturate(1.5);
+  opacity: 0.17;
+  filter: blur(1.6rem) saturate(1.5);
   pointer-events: none;
   transform: scale(1.018);
 }
 
+/* The bloom halos the tubes without a blurred copy of the artwork, so the
+   letter edges stay crisp and the light falls off outside them. */
 .neon-wordmark__layer--bloom {
   --neon-paint-gutter: 5rem;
-  opacity: 0.58;
+  opacity: 0.46;
   filter:
-    blur(0.36rem)
-    drop-shadow(0 0 0.5rem rgba(235, 115, 193, 0.94))
-    drop-shadow(0 0 1.8rem rgba(197, 72, 240, 0.78));
+    drop-shadow(0 0 0.3rem rgba(235, 115, 193, 0.86))
+    drop-shadow(0 0 1.1rem rgba(197, 72, 240, 0.5));
 }
 
 .neon-wordmark__cursor-trail {
@@ -2661,9 +2662,9 @@ select {
   z-index: 2;
   filter:
     brightness(1.36)
-    drop-shadow(0 0 0.12rem #fff5fb)
-    drop-shadow(0 0 0.5rem rgba(235, 115, 193, 0.96))
-    drop-shadow(0 0 1.45rem rgba(197, 72, 240, 0.58));
+    drop-shadow(0 0 0.06rem #fff5fb)
+    drop-shadow(0 0 0.26rem rgba(235, 115, 193, 0.92))
+    drop-shadow(0 0 0.85rem rgba(197, 72, 240, 0.42));
 }
 
 .neon-wordmark__layer--face {
@@ -4027,8 +4028,8 @@ body.nav-open .next-bar {
   }
 
   .neon-lockup {
-    width: min(82vw, 36rem);
-    gap: clamp(1.25rem, 5vw, 2rem);
+    width: min(72vw, 32rem);
+    gap: clamp(1.1rem, 4.5vw, 1.75rem);
   }
 
   .neon-wordmark__layer--ambient {
@@ -4074,8 +4075,10 @@ body.nav-open .next-bar {
     margin-top: 1rem;
   }
 
+  /* Sized to the viewport rather than the hero column, which shrink-wraps
+     the neon sign, so resizing the sign leaves the buttons alone. */
   .home-hero__actions {
-    width: min(70%, 20rem);
+    width: min(57.5vw, 20rem);
     flex-direction: column;
   }
 

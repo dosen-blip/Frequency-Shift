@@ -155,12 +155,14 @@ test("preserves the full hero glow inside an expanded paint surface", async () =
     mobilePaintSurfaceRule[1],
     /box-shadow:\s*inset 0 0 0 1px rgba\(5, 5, 6, 0\.004\)/,
   );
-  assert.match(ambientRule[1], /opacity:\s*0\.3/);
-  assert.match(ambientRule[1], /blur\(2\.2rem\) saturate\(1\.5\)/);
-  assert.match(bloomRule[1], /opacity:\s*0\.58/);
-  assert.match(bloomRule[1], /drop-shadow\(0 0 1\.8rem/);
+  assert.match(ambientRule[1], /opacity:\s*0\.17/);
+  assert.match(ambientRule[1], /blur\(1\.6rem\) saturate\(1\.5\)/);
+  assert.match(bloomRule[1], /opacity:\s*0\.46/);
+  assert.match(bloomRule[1], /drop-shadow\(0 0 1\.1rem/);
+  // A blurred copy of the artwork would soften the tube edges.
+  assert.doesNotMatch(bloomRule[1], /blur\(/);
   assert.match(coreRule[1], /brightness\(1\.36\)/);
-  assert.match(coreRule[1], /drop-shadow\(0 0 1\.45rem/);
+  assert.match(coreRule[1], /drop-shadow\(0 0 0\.85rem/);
 });
 
 test("renders the primary public routes", async () => {
