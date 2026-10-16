@@ -55,6 +55,13 @@ export const events: EventRecord[] = [
     coverImage: "/media/events/frequency-shift-014.webp",
     coverAlt:
       "Black and pink Frequency Shift poster for October 16 at GRIDWRKS, featuring Barry, Balla B2B Evander, Sean Vincent, and Tev.N.",
+    promoVideo: {
+      src: "/media/events/frequency-shift-014-promo-1080p.mp4",
+      poster: "/media/events/frequency-shift-014-promo-1080p-poster.webp",
+      title: "Frequency Shift 014 promo",
+      width: 1920,
+      height: 1080,
+    },
   },
   {
     slug: "the-experiment",

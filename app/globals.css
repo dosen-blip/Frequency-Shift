@@ -3652,6 +3652,11 @@ select {
   margin-top: var(--space-7);
 }
 
+/* An event's promo film spans the page under its details. */
+.event-promo {
+  margin-block: var(--space-7) 0;
+}
+
 .past-events__title {
   margin: 0 0 var(--space-4);
   font-weight: 800;

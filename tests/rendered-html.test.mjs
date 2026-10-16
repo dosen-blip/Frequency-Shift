@@ -295,6 +295,17 @@ test("renders collective-voice editorial and event facts", async () => {
   assert.match(eventsHtml, /GRIDWRKS · 221 Rideau St, Ottawa, Canada/);
   assert.doesNotMatch(eventsHtml, /Location to be announced|Details soon/i);
 
+  // The promo lives on its event's own page, at full resolution, loading only on play.
+  assert.doesNotMatch(eventsHtml, /event-promo/);
+  const eventHtml = await (await render("/events/frequency-shift-014")).text();
+  const promo = eventHtml.match(/<section[^>]*class="archive-films event-promo"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(promo, "Expected the Frequency Shift 014 promo");
+  assert.match(promo, /src="\/media\/events\/frequency-shift-014-promo-1080p\.mp4"/);
+  assert.match(promo, /poster="\/media\/events\/frequency-shift-014-promo-1080p-poster\.webp"/);
+  assert.match(promo, /width="1920"[^>]*height="1080"/);
+  assert.match(promo, /preload="none"/);
+  assert.doesNotMatch(promo, /autoplay/i);
+
   // Nights that have ended move to a dated list and stop selling tickets.
   assert.match(eventsHtml, /Past nights/);
   assert.match(eventsHtml, /Frequency Shift: Boat Special/);

@@ -97,6 +97,28 @@ export default async function EventPage({ params }: EventPageProps) {
           </div>
         </aside>
       </div>
+      {event.promoVideo ? (
+        <section className="archive-films event-promo" aria-labelledby="event-promo-title" data-reveal="up">
+          <h2 id="event-promo-title" className="past-events__title">
+            Promo
+          </h2>
+          <figure className="archive-film">
+            <video
+              controls
+              playsInline
+              preload="none"
+              poster={event.promoVideo.poster}
+              width={event.promoVideo.width}
+              height={event.promoVideo.height}
+              aria-label={event.promoVideo.title}
+            >
+              <source src={event.promoVideo.src} type="video/mp4" />
+              <a href={event.promoVideo.src}>Watch the {event.promoVideo.title}</a>
+            </video>
+            <button className="archive-film__play" type="button" hidden aria-label={`Play the ${event.promoVideo.title}`} />
+          </figure>
+        </section>
+      ) : null}
     </article>
   );
 }

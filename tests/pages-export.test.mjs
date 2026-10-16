@@ -66,6 +66,15 @@ test("publishes a sitemap using the final GitHub Pages URLs", async () => {
   assert.match(sitemap, /\/archive\/techno-special\//);
 });
 
+test("exports the promo film with its poster on its event page", async () => {
+  const html = await readFile(output("events/frequency-shift-014/index.html"), "utf8");
+  const stem = "media/events/frequency-shift-014-promo-1080p";
+  assert.ok(html.includes(`src="/Frequency-Shift/${stem}.mp4"`));
+  assert.ok(html.includes(`poster="/Frequency-Shift/${stem}-poster.webp"`));
+  await access(output(`${stem}.mp4`));
+  await access(output(`${stem}-poster.webp`));
+});
+
 test("exports playable Techno Special videos with still fallbacks and no autoplay", async () => {
   const html = await readFile(output("archive/techno-special/index.html"), "utf8");
   const videos = html.match(/<video\b[^>]*>/g) ?? [];

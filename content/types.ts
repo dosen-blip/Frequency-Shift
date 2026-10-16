@@ -18,6 +18,14 @@ export const eventStatusLabels: Record<EventStatus, string> = {
   archived: "Archived",
 };
 
+export type VideoClip = {
+  src: string;
+  poster: string;
+  title: string;
+  width: number;
+  height: number;
+};
+
 export type EventRecord = {
   slug: string;
   title: string;
@@ -38,6 +46,8 @@ export type EventRecord = {
   featured: boolean;
   coverImage: string | null;
   coverAlt: string;
+  // Shown on the event's own page, under its details.
+  promoVideo?: VideoClip;
 };
 
 export type ArtistRecord = {
@@ -68,13 +78,7 @@ export type ArchiveRecord = {
     height: number;
   }>;
   coverImageIndex: number;
-  videos?: Array<{
-    src: string;
-    poster: string;
-    title: string;
-    width: number;
-    height: number;
-  }>;
+  videos?: VideoClip[];
   featured?: boolean;
   featureImageIndices?: number[];
   photoCredit: string | null;
