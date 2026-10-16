@@ -7,6 +7,7 @@ Place approved source media outside the public route, then export web-ready asse
 - Keep meaningful alt text in the content record, not in the filename.
 - Do not publish an entire full-resolution event gallery. Curate the edit and lazy-load below the fold.
 - Record photographer credit and usage approval before adding an archive gallery entry.
+- Event promo films live in `events/` as `<event>-promo-1080p.mp4` with a full-size `-poster.webp`, load only on play, and keep a source note in `docs/media/`.
 
 ## Current Figma exports
 

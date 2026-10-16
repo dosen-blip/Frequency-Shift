@@ -110,7 +110,7 @@ Use the smallest useful set of skills, but always include both Git coordination 
 
 - Runtime: React 19, TypeScript, Next-compatible routes, vinext, and Vite.
 - The existing Sites project is identified by `.openai/hosting.json`. Reuse its opaque `project_id`; never create a replacement project because a tool lookup was inconvenient.
-- `content/events.ts` is the authoritative event list. Its helpers decide upcoming versus past from each event's end time and label ticket buttons from its status; `lineup` holds the billed names exactly as supplied. Never hand-move past events.
+- `content/events.ts` is the authoritative event list. Its helpers decide upcoming versus past from each event's end time and label ticket buttons from its status; `lineup` holds the billed names exactly as supplied; an optional `promoVideo` plays under the details on that event's own page. Never hand-move past events.
 - `content/archives.ts` is the authoritative archive editorial record.
 - `content/archive-media.ts` maps archive galleries to responsive assets.
 - `content/artists.ts` is the artist record.
