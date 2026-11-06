@@ -10,6 +10,7 @@ test("exports the public routes and GitHub Pages control files", async () => {
   const expectedFiles = [
     "index.html",
     "events/frequency-shift-014/index.html",
+    "events/frequency-in-the-garage/index.html",
     "events/frequency-fest/index.html",
     "events/world-cup/index.html",
     "events/frequency-shift-005/index.html",

@@ -31,6 +31,32 @@ function archivedEvent(slug: string, details: Partial<EventRecord> = {}): EventR
 
 export const events: EventRecord[] = [
   {
+    slug: "frequency-in-the-garage",
+    title: "Frequency in the Garage",
+    summary:
+      "Our last night of 2026: a UK garage rave at GRIDWRKS, teamed up with Moose’s Garage.",
+    description: [
+      "We’re teaming up with Moose’s Garage for Frequency in the Garage, our last Frequency Shift of 2026. We’re closing out the year at GRIDWRKS with a UK garage rave night: heavy basslines, nonstop energy, and the Frequency community together one more time.",
+      "On the lineup: Justus Walker, FASTR B2B Boukine, Moose B2B Seb B, and Caploch.",
+      "Join us at 221 Rideau Street in Ottawa on Friday, November 20 from 10 PM to 2:30 AM. Doors open at 10 PM; you must be 19+ and bring valid ID. Tickets are on sale now through Eventbrite, and they’re limited.",
+    ],
+    dateLabel: "November 20, 2026 · 10 PM–2:30 AM",
+    startsAt: "2026-11-20T22:00:00-05:00",
+    endsAt: "2026-11-21T02:30:00-05:00",
+    venue: "GRIDWRKS · 221 Rideau St",
+    city: "Ottawa, Canada",
+    status: "tickets-live",
+    ticketUrl:
+      "https://www.eventbrite.ca/e/frequency-shift-x-mooses-garage-tickets-2004491756804?aff=ebdssbdestsearch",
+    genre: "UK garage",
+    lineup: ["Justus Walker", "FASTR B2B Boukine", "Moose B2B Seb B", "Caploch"],
+    artistSlugs: [],
+    featured: true,
+    coverImage: "/media/events/frequency-in-the-garage.webp",
+    coverAlt:
+      "Pink and yellow Frequency in the Garage poster for November 20 at GRIDWRKS: a cartoon moose between two speakers above the lineup.",
+  },
+  {
     slug: "frequency-shift-014",
     title: "Frequency Shift 014",
     summary:
@@ -51,7 +77,7 @@ export const events: EventRecord[] = [
     genre: "Dark tech house",
     lineup: ["Barry", "Balla B2B Evander", "Sean Vincent", "Tev.N"],
     artistSlugs: [],
-    featured: true,
+    featured: false,
     coverImage: "/media/events/frequency-shift-014.webp",
     coverAlt:
       "Black and pink Frequency Shift poster for October 16 at GRIDWRKS, featuring Barry, Balla B2B Evander, Sean Vincent, and Tev.N.",
