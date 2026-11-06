@@ -1,6 +1,6 @@
 # Release handoff: Frequency in the Garage (2026-11-06)
 
-Prepared and verified locally on `content/garage-event-2026-11-06`, branched from `origin/main` at `7e92e80` (the published state). Publication is the GitHub Pages workflow (`.github/workflows/pages.yml`) that runs on every push to `main`.
+Prepared and verified locally on `content/garage-event-2026-11-06`, branched from `origin/main` at `7e92e80` (the published state). Publication is the GitHub Pages workflow (`.github/workflows/pages.yml`) that runs on every push to `main`. Pushed to `main` by Claude at the client's request; the first Pages deploy of `69a4ecb` stalled in GitHub's file sync and timed out twice, so this note's commit triggers a fresh deployment.
 
 ## What ships
 
