@@ -6127,12 +6127,12 @@ html.has-room :is(.home-memory__grid figure, .archive-gallery figure, .archive-f
 
 /* Light on the glass ---------------------------------------------------------
    The cursor is a small light held over the glass (public/glass-light.js places
-   it on every pane within reach). On the face: a hot core, split by the glass
-   into a pink fringe and a cyan one; a fainter image from the glass's back face;
-   a long thin streak that tilts as the light crosses the pane; and a soft
-   brightening round it. On the rim: the edge nearest the light catches it, from
-   before the light is over the pane; and the far edge glows where light carried
-   inside the glass comes out. Added light only (screen), so text stays put. */
+   it on every pane within reach). The face shows a soft pool in the room's own
+   colour, a gentle core stretched along the pane and split pink and cyan across
+   it, and a faint second image off the glass's back face; the rim nearest the
+   light catches it and bleeds a little way in, and the far rim glows where light
+   carried through the glass comes out. Each piece is drawn once at a fixed size
+   and only moved and faded, so the light never repaints the pane. */
 .glint-host {
   position: relative;
 }
@@ -6142,7 +6142,7 @@ html.has-room :is(.home-memory__grid figure, .archive-gallery figure, .archive-f
   inset: -1px;
   z-index: 3;
   border-radius: inherit;
-  mix-blend-mode: screen;
+  contain: strict;
   opacity: 0;
   pointer-events: none;
   transition: opacity 420ms ease;
@@ -6150,111 +6150,24 @@ html.has-room :is(.home-memory__grid figure, .archive-gallery figure, .archive-f
 
 .glint.is-lit {
   opacity: 1;
-  transition-duration: 160ms;
+  transition-duration: 180ms;
 }
 
 html:not(.has-room) .glint {
   display: none;
 }
 
-.glint__face {
+.glint__clip,
+.glint__ring {
   position: absolute;
   inset: 0;
   overflow: hidden;
   border-radius: inherit;
-  background:
-    radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.6), rgba(255, 238, 248, 0.3) 0.5rem, rgba(255, 238, 248, 0) 1.6rem),
-    radial-gradient(
-      circle at calc(var(--gx) - var(--sx)) calc(var(--gy) - var(--sy)),
-      rgba(255, 60, 170, 0.36),
-      rgba(255, 60, 170, 0) 3.4rem
-    ),
-    radial-gradient(
-      circle at calc(var(--gx) + var(--sx)) calc(var(--gy) + var(--sy)),
-      rgba(40, 200, 255, 0.32),
-      rgba(40, 200, 255, 0) 3.4rem
-    ),
-    radial-gradient(
-      circle at calc(var(--gx) + var(--bx)) calc(var(--gy) + var(--by)),
-      rgba(200, 238, 255, 0.24),
-      rgba(200, 238, 255, 0) 1.2rem
-    ),
-    radial-gradient(ellipse 24rem 15rem at var(--gx) var(--gy), rgba(255, 170, 222, 0.1), rgba(255, 170, 222, 0) 70%);
-  opacity: var(--face, 0);
 }
 
-/* light caught by the nearest edge, bleeding into the glass from it */
-.glint__edge {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  border-radius: inherit;
-  opacity: var(--spill, 0);
-}
-
-.glint__edge::before {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle 4.5rem at var(--gx) var(--gy), rgba(255, 215, 240, 0.85), rgba(255, 215, 240, 0) 100%),
-    radial-gradient(circle 9rem at var(--gx) var(--gy), rgba(255, 50, 165, 0.7), rgba(255, 50, 165, 0.2) 55%, rgba(255, 50, 165, 0) 100%),
-    radial-gradient(circle 15rem at var(--gx) var(--gy), rgba(40, 200, 255, 0.28), rgba(40, 200, 255, 0) 100%);
-  content: "";
-}
-
-/* the streak: a long thin line of light through the core, with a finer cyan one
-   off the other face, fading out along its length */
-.glint__streak {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 44rem;
-  height: 9rem;
-  background:
-    linear-gradient(
-      180deg,
-      transparent 42%,
-      rgba(255, 255, 255, 0.14) 48.6%,
-      rgba(255, 255, 255, 0.32) 50%,
-      rgba(255, 255, 255, 0.14) 51.4%,
-      transparent 58%
-    ),
-    linear-gradient(180deg, transparent 61%, rgba(143, 227, 255, 0.13) 64.5%, transparent 68%);
-  -webkit-mask-image: radial-gradient(closest-side, #000, rgba(0, 0, 0, 0.5) 38%, transparent);
-  mask-image: radial-gradient(closest-side, #000, rgba(0, 0, 0, 0.5) 38%, transparent);
-  transform: translate(calc(var(--gx) - 50%), calc(var(--gy) - 50%)) rotate(var(--tilt, -24deg));
-  will-change: transform;
-}
-
-.glint__rim {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  filter:
-    drop-shadow(0 0 1.5px #fff)
-    drop-shadow(0 0 0.4rem #ff32a5)
-    drop-shadow(0 0 1.2rem rgba(255, 50, 165, 0.7))
-    drop-shadow(0 0 2rem rgba(40, 200, 255, 0.45));
-  opacity: var(--rim, 0);
-}
-
-.glint__rim::before {
-  position: absolute;
-  inset: 0;
-  padding: 2.5px;
-  border-radius: inherit;
-  background:
-    radial-gradient(
-      circle 11rem at var(--gx) var(--gy),
-      #fff,
-      #fff 6%,
-      #ffc8e8 16%,
-      #ff3ca8 36%,
-      rgba(40, 200, 255, 0.8) 62%,
-      rgba(40, 200, 255, 0) 86%
-    ),
-    radial-gradient(circle 8rem at var(--ox) var(--oy), rgb(143 227 255 / calc(0.75 * var(--far, 0))), rgb(143 227 255 / 0) 75%);
-  content: "";
+/* the rim: a ring two pixels wide, the pieces of light seen only through it */
+.glint__ring {
+  padding: 2px;
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
@@ -6263,4 +6176,76 @@ html:not(.has-room) .glint {
     linear-gradient(#000 0 0) content-box,
     linear-gradient(#000 0 0);
   mask-composite: exclude;
+}
+
+/* each piece is centred on its own origin; the script moves it there */
+.glint i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  opacity: 0;
+}
+
+.glint.is-lit i {
+  will-change: transform, opacity;
+}
+
+/* where the light falls: a wide soft pool in the colour of the air */
+.glint__pool {
+  --size: 30rem;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--room-mix) 20%, transparent),
+    color-mix(in srgb, var(--room-mix) 7%, transparent) 45%,
+    transparent
+  );
+}
+
+/* the core, turned so its long side lies along the pane's edge: warm white, a
+   pink fringe on the side away from the middle and a cyan one toward it */
+.glint__core {
+  --size: 7rem;
+  background:
+    radial-gradient(ellipse 18% 30% at 50% 50%, rgba(255, 250, 253, 0.75), rgba(255, 236, 248, 0.22) 55%, transparent),
+    radial-gradient(ellipse 26% 40% at 58% 50%, rgba(255, 60, 170, 0.3), transparent),
+    radial-gradient(ellipse 26% 40% at 42% 50%, rgba(40, 200, 255, 0.26), transparent);
+}
+
+/* the back face's fainter image */
+.glint__ghost {
+  --size: 2.6rem;
+  background: radial-gradient(closest-side, rgba(205, 240, 255, 0.32), transparent);
+}
+
+/* light caught by the nearest edge, bleeding into the glass */
+.glint__spill {
+  --size: 18rem;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 210, 238, 0.42),
+    rgba(255, 50, 165, 0.24) 30%,
+    rgba(40, 200, 255, 0.08) 65%,
+    transparent
+  );
+}
+
+.glint__rim {
+  --size: 20rem;
+  background: radial-gradient(
+    closest-side,
+    #fff,
+    #ffd0ea 12%,
+    #ff3ca8 34%,
+    rgba(40, 200, 255, 0.75) 62%,
+    transparent
+  );
+}
+
+.glint__far {
+  --size: 16rem;
+  background: radial-gradient(closest-side, rgba(143, 227, 255, 0.85), rgba(143, 227, 255, 0.3) 45%, transparent);
 }
