@@ -30,6 +30,10 @@ test("exports the public routes and GitHub Pages control files", async () => {
     "404.html",
     ".nojekyll",
     "static-pages.js",
+    "laser-hero.js",
+    "laser-room/laser-room.js",
+    "media/laser-room/floor-albedo.webp",
+    "media/laser-room/floor-surface-phone.webp",
     "sitemap.xml",
   ];
 
@@ -47,6 +51,10 @@ test("prefixes internal routes and assets with the project site path", async () 
   assert.match(archive, /href="\/Frequency-Shift\/archive\/techno-special\/"/);
   assert.match(homepage, /src="\/Frequency-Shift\/static-pages\.js"/);
   assert.match(homepage, /data-static-pages-runtime/);
+  assert.match(homepage, /src="\/Frequency-Shift\/laser-hero\.js"/);
+  // the other pages' rooms: the same loader, and the stage that names the room
+  assert.match(archive, /src="\/Frequency-Shift\/laser-hero\.js"/);
+  assert.match(archive, /data-laser-stage[^>]*data-room="archive"/);
   assert.doesNotMatch(homepage, /data-static-pages-navigation/);
   assert.doesNotMatch(homepage, /\/Frequency-Shift\/>/);
   assert.doesNotMatch(archive, /\/Frequency-Shift\/>/);

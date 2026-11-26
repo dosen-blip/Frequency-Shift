@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { RoomStage } from "@/components/room-stage";
 import { getArchiveForEvent } from "@/content/archives";
 import { eventEndTime, events, getEvent, isEventPast, ticketLabel } from "@/content/events";
 import { eventStatusLabels } from "@/content/types";
@@ -29,6 +30,7 @@ export default async function EventPage({ params }: EventPageProps) {
 
   return (
     <article className="page-shell">
+      <RoomStage room="event" />
       <p className="eyebrow" data-reveal="up">{statusLabel}</p>
       <div className="detail-grid">
         <div className="detail-content">

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { primaryNavigation } from "@/content/site";
 import { getNextEvent } from "@/content/events";
 
@@ -25,20 +25,14 @@ function isRouteActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
+// On a phone the header is the wordmark and the next event; the pages are in the dock along the bottom of the
+// screen (components/site-dock.tsx).
 export function SiteHeader() {
   const pathname = normalizePathname(usePathname() ?? "/");
   const [isScrolled, setIsScrolled] = useState(false);
-  const [openMenuPath, setOpenMenuPath] = useState<string | null>(null);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const isMenuOpen = openMenuPath === pathname;
 
   useEffect(() => {
     document.documentElement.classList.add("nav-enhanced");
-  }, []);
-
-  const closeMenu = useCallback((restoreFocus = false) => {
-    setOpenMenuPath(null);
-    if (restoreFocus) window.requestAnimationFrame(() => menuButtonRef.current?.focus());
   }, []);
 
   useEffect(() => {
@@ -60,26 +54,11 @@ export function SiteHeader() {
     };
   }, []);
 
-  useEffect(() => {
-    if (!isMenuOpen) return;
-
-    document.body.classList.add("nav-open");
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") closeMenu(true);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.classList.remove("nav-open");
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [closeMenu, isMenuOpen]);
-
   const latestActive = pathname === nextEventHref;
 
   return (
     <header
-      className={`site-header${isScrolled ? " is-scrolled" : ""}${isMenuOpen ? " is-menu-open" : ""}`}
+      className={`site-header${isScrolled ? " is-scrolled" : ""}`}
     >
       <Link
         className={`wordmark${pathname === "/" ? " is-active" : ""}`}
@@ -89,14 +68,14 @@ export function SiteHeader() {
       >
         <img
           className="wordmark__mark"
-          src="/media/brand/fs-icon-vector.svg"
+          src="/media/brand/fs-icon-neon.svg"
           alt=""
           width="400"
           height="400"
         />
         <img
           className="wordmark__type"
-          src="/media/brand/frequency-shift-wordmark-vector.svg"
+          src="/media/brand/frequency-shift-wordmark-neon.svg"
           alt=""
           width="1456"
           height="103"
@@ -121,68 +100,6 @@ export function SiteHeader() {
       >
         Next event
       </Link>
-      <div className={`mobile-nav${isMenuOpen ? " is-open" : ""}`}>
-        <button
-          ref={menuButtonRef}
-          className="mobile-nav__toggle"
-          type="button"
-          aria-controls="mobile-navigation-panel"
-          aria-expanded={isMenuOpen}
-          onClick={() => setOpenMenuPath((openPath) => (openPath === pathname ? null : pathname))}
-        >
-          {isMenuOpen ? "Close" : "Menu"}
-        </button>
-        <button
-          className="mobile-nav__backdrop"
-          type="button"
-          aria-label="Close navigation"
-          aria-hidden={!isMenuOpen}
-          tabIndex={-1}
-          onClick={() => closeMenu(true)}
-        />
-        <nav
-          id="mobile-navigation-panel"
-          className="mobile-nav__panel"
-          aria-label="Mobile navigation"
-          aria-hidden={!isMenuOpen}
-        >
-          {primaryNavigation.map((item, index) => {
-            const active = isRouteActive(pathname, item.href);
-            return (
-              <Link
-                className={active ? "is-active" : undefined}
-                href={item.href}
-                key={item.href}
-                aria-current={active ? "page" : undefined}
-                tabIndex={isMenuOpen ? 0 : -1}
-                onClick={() => closeMenu(false)}
-                style={{ "--nav-index": index } as React.CSSProperties}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-        </nav>
-      </div>
-      <details className="mobile-nav-fallback">
-        <summary>Menu</summary>
-        <nav className="mobile-nav-fallback__panel" aria-label="Mobile navigation fallback">
-          {primaryNavigation.map((item) => {
-            const active = isRouteActive(pathname, item.href);
-            return (
-              <Link
-                className={active ? "is-active" : undefined}
-                href={item.href}
-                key={item.href}
-                aria-current={active ? "page" : undefined}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
-          <Link href={nextEventHref}>Next event</Link>
-        </nav>
-      </details>
     </header>
   );
 }

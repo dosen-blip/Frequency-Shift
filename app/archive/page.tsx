@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ArchiveCard } from "@/components/archive-card";
 import { PageHeader } from "@/components/page-header";
+import { RoomStage } from "@/components/room-stage";
 import { archives } from "@/content/archives";
 
 const firstNight = [...archives].sort((a, b) => a.dateIso.localeCompare(b.dateIso))[0];
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 export default function ArchiveIndexPage() {
   return (
     <div className="page-shell">
+      <RoomStage room="archive" />
       <PageHeader
         eyebrow={`Archive / ${archives.length} nights${since ? ` since ${since}` : ""}`}
         title="Archive"

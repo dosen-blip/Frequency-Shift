@@ -121,7 +121,10 @@ Use the smallest useful set of skills, but always include both Git coordination 
 - `app/globals.css` contains the shared visual system, layout, breakpoints, spacing, colour, typography, and motion.
 - Typography: Fraunces headlines (`--font-display`), Instrument Sans body and subheads (`--font-body`), DM Mono dates and labels (`--font-mono`), self-hosted in `public/media/fonts/` with their OFL licences. Do not add fonts from external services.
 - Labels carry facts (dates, venues, counts, edition codes), never atmospheric filler such as "transmission" or "signal".
-- Neon glow is reserved for the hero sign, the footer sign, the mouse cursor dot, and a restrained hover glow on cards and buttons.
+- Neon glow is reserved for the hero sign, the footer sign, the mouse cursor dot, a restrained hover glow on cards and buttons, and the neon signs inside the laser room.
+- The laser room (`components/laser-room/`, three.js, built separately by `vite.laser-room.config.ts` into `laser-room/laser-room.js` and started by `public/laser-hero.js`) is the full-screen 3D club room behind every page. The home page has the FS sign and the full light show; every other page hangs its own neon sign (`rooms.ts`) along the same wall with fewer beams. Calm a page by using fewer beams, never by dimming the whole room. The room picks one steady frame rate per visit (`PACE` in `scene.ts`) and keeps the picture sharp before chasing a higher rate. `?laser-debug` shows a live readout.
+- In the static export, the top menu links (and the phone dock) pan the room's camera sideways along the wall to the next page instead of a normal page load (`travel.ts`, `pan.ts`). On phones, `components/site-dock.tsx` is the navigation: a dock along the bottom laid out like that wall.
+- `app/laser-lab/` and its `/laser-lab` route are a local-only dev-server lab and are never exported.
 - `components/next-event-bar.tsx` renders the floating next-event bar; it hides itself once the event ends and, on the home page, waits until the visitor scrolls past the hero.
 - `public/static-pages.js` is the hand-written runtime for the static export, which ships no React. Mirror any client-component behaviour there and stay inside the size budgets in `tests/pages-export.test.mjs`.
 - `public/media/README.md` contains the media rules.

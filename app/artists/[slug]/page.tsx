@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { RoomStage } from "@/components/room-stage";
 import { artists, getArtist } from "@/content/artists";
 
 type ArtistPageProps = { params: Promise<{ slug: string }> };
@@ -21,6 +22,7 @@ export default async function ArtistPage({ params }: ArtistPageProps) {
 
   return (
     <article className="page-shell">
+      <RoomStage room="artist" />
       <p className="eyebrow" data-reveal="up">Artist</p>
       <div className="detail-grid">
         <div className="detail-content">

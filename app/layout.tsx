@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { NeonCursor } from "@/components/neon-cursor";
 import { NextEventBar } from "@/components/next-event-bar";
 import { SiteFooter } from "@/components/site-footer";
+import { SiteDock } from "@/components/site-dock";
 import { SiteHeader } from "@/components/site-header";
 import { SiteMotion } from "@/components/site-motion";
 import { siteConfig } from "@/content/site";
@@ -50,7 +51,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    // the hero's launch script marks <html> before React hydrates it (see components/home-hero.tsx)
+    <html lang="en" suppressHydrationWarning>
       <body>
         <SiteMotion />
         <a className="skip-link" href="#main-content">
@@ -61,6 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           {children}
         </main>
         <SiteFooter />
+        <SiteDock />
         <NextEventBar />
         <NeonCursor />
       </body>

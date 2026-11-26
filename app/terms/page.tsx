@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
+import { RoomStage } from "@/components/room-stage";
 
 export const metadata: Metadata = {
   title: "Terms",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 export default function TermsPage() {
   return (
     <div className="page-shell">
+      <RoomStage room="legal" />
       <PageHeader
         eyebrow="Site information"
         title="Terms"

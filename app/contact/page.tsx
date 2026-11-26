@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
+import { RoomStage } from "@/components/room-stage";
 import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -29,6 +30,7 @@ const enquiries = [
 export default function ContactPage() {
   return (
     <div className="page-shell contact-page">
+      <RoomStage room="contact" />
       <PageHeader
         eyebrow="Bookings / Partners / Press"
         title="Contact"

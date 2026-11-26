@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RoomStage } from "@/components/room-stage";
 
 export const metadata = {
   title: "Page not found",
@@ -7,6 +8,7 @@ export const metadata = {
 export default function NotFoundPage() {
   return (
     <div className="page-shell">
+      <RoomStage room="lost" />
       <p className="eyebrow" data-reveal="up">Error 404</p>
       <div className="detail-grid">
         <h1 className="detail-title" data-reveal="clip">Nothing here.</h1>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { RoomStage } from "@/components/room-stage";
 import { archives, getArchive } from "@/content/archives";
 
 type ArchivePageProps = { params: Promise<{ slug: string }> };
@@ -22,6 +23,7 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
 
   return (
     <article className="page-shell">
+      <RoomStage room="night" />
       <header className="archive-detail-hero">
         <div>
           <p className="eyebrow" data-reveal="up">Archive / {entry.dateLabel}</p>

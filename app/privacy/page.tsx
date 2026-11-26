@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
+import { RoomStage } from "@/components/room-stage";
 import { siteConfig } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 export default function PrivacyPage() {
   return (
     <div className="page-shell">
+      <RoomStage room="legal" />
       <PageHeader
         eyebrow="Site information"
         title="Privacy"

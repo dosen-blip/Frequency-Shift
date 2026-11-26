@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/page-header";
+import { RoomStage } from "@/components/room-stage";
 
 export const metadata: Metadata = {
   title: "About",
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="page-shell about-page">
+      <RoomStage room="about" />
       <PageHeader
         eyebrow="About / Ottawa"
         title="About"

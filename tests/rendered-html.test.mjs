@@ -46,7 +46,8 @@ test("server-renders the Frequency Shift homepage", async () => {
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
   assert.match(html, /For the love of house\./);
-  assert.match(html, /Frequency in the Garage/);
+  // no night is on sale after Frequency in the Garage (20 Nov 2026): the home page points to Instagram
+  assert.match(html, /Follow Frequency Shift on Instagram for the next date\./);
   assert.match(html, /frequency-shift-wordmark-neon\.svg/);
   assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
   assert.match(
@@ -60,12 +61,37 @@ test("server-renders the Frequency Shift homepage", async () => {
   assert.match(html, /neon-wordmark__layer--ambient/);
   assert.match(html, /neon-wordmark__layer--bloom/);
   assert.doesNotMatch(html, /neon-glow\.png/);
-  assert.match(html, /hero-crowd-960\.webp/);
-  assert.match(html, /hero-crowd-1440\.webp/);
-  assert.match(html, /hero-crowd\.webp/);
+  // the hero is the laser room now: no crowd photo, a stage for the scene, its loader and the launch flag
+  assert.doesNotMatch(html, /hero-crowd/);
+  assert.match(html, /class="home-hero__stage" data-laser-stage/);
+  assert.match(html, /src="\/laser-hero\.js"/);
+  assert.match(html, /classList\.add\("is-launching"\)/);
   assert.match(html, /In case you/);
   assert.match(html, /Skip to content/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+});
+
+test("gives every other page a laser room of its own", async () => {
+  // each page names its room on a stage, leaves a band for that room's neon, and carries the loader; the
+  // wordmark's power-on stays the home page's
+  const rooms = {
+    "/events": "events",
+    "/events/frequency-in-the-garage": "event",
+    "/archive": "archive",
+    "/archive/techno-special": "night",
+    "/about": "about",
+    "/contact": "contact",
+    "/privacy": "legal",
+    "/terms": "legal",
+  };
+  for (const [path, room] of Object.entries(rooms)) {
+    const html = await (await render(path)).text();
+    assert.match(html, new RegExp(`class="room-stage" data-laser-stage[^>]*data-room="${room}"`), path);
+    assert.match(html, /class="room-mark" style="--room-aspect:/, path);
+    assert.match(html, /src="\/laser-hero\.js"/, path);
+    assert.match(html, /classList\.add\("expects-room"\)/, path);
+    assert.doesNotMatch(html, /is-launching/, path);
+  }
 });
 
 test("keeps the neon hover field broad and its flicker trail persistent", async () => {
@@ -195,7 +221,7 @@ test("lists the full past-night history once, newest first, using archive names"
   assert.ok(list, "Expected the past-night listing");
   const names = [...list.matchAll(/class="past-events__name">([^<]+)<\/span>/g)].map((match) => match[1]);
   assert.deepEqual(names, [
-    "Frequency Shift 014", "Frequency Shift: Boat Special", "Techno Special", "The Experiment",
+    "Frequency in the Garage", "Frequency Shift 014", "Frequency Shift: Boat Special", "Techno Special", "The Experiment",
     "Frequency Fest Vol. 1", "World Cup", "Frequency Shift 005", "Solstice",
     "Dopamine", "Frequency Shift 004", "Frequency Shift 003", "Frequency Shift 002",
     "Frequency Shift 001",
@@ -205,7 +231,7 @@ test("lists the full past-night history once, newest first, using archive names"
   assert.match(list, /31 May 2025/);
   assert.match(list, /href="\/archive\/frequency-shift-002"/);
   assert.match(list, /href="\/archive\/frequency-shift-005"[\s\S]*?past-events__action">Details/);
-  assert.doesNotMatch(list, /Frequency in the Garage|Invalid Date/);
+  assert.doesNotMatch(list, /Invalid Date/);
 
   for (const slug of ["frequency-fest", "world-cup", "frequency-shift-005", "solstice", "dopamine", "frequency-shift-004", "frequency-shift-003", "frequency-shift-002", "frequency-shift-001"]) {
     const detail = await render(`/events/${slug}`);
@@ -280,9 +306,7 @@ test("renders collective-voice editorial and event facts", async () => {
   assert.match(homepageHtml, /Ottawa’s underground,/);
   assert.match(homepageHtml, /on its own frequency/);
   assert.match(homepageHtml, /freedom, self-expression, and a community/i);
-  assert.match(homepageHtml, /Frequency in the Garage/);
-  assert.match(homepageHtml, /frequency-in-the-garage\.webp/);
-  assert.match(homepageHtml, /frequency-shift-x-mooses-garage-tickets-2004491756804\?aff=ebdssbdestsearch/);
+  assert.doesNotMatch(homepageHtml, /frequency-shift-x-mooses-garage-tickets-2004491756804/);
   assert.doesNotMatch(homepageHtml, /frequency-shift-014-tickets-2002572255524/);
   assert.doesNotMatch(homepageHtml, /href="\/events\/boat-party"/);
   assert.doesNotMatch(homepageHtml, /events\/september-4/);
@@ -290,10 +314,8 @@ test("renders collective-voice editorial and event facts", async () => {
   const eventsPage = await render("/events");
   const eventsHtml = await eventsPage.text();
   assert.match(eventsHtml, /Frequency in the Garage/);
-  assert.match(eventsHtml, /November 20, 2026/);
-  assert.match(eventsHtml, /frequency-in-the-garage\.webp/);
-  assert.match(eventsHtml, /frequency-shift-x-mooses-garage-tickets-2004491756804\?aff=ebdssbdestsearch/);
-  assert.match(eventsHtml, /GRIDWRKS · 221 Rideau St, Ottawa, Canada/);
+  assert.match(eventsHtml, /20 Nov 2026/);
+  assert.doesNotMatch(eventsHtml, /frequency-shift-x-mooses-garage-tickets-2004491756804/);
   assert.doesNotMatch(eventsHtml, /Location to be announced|Details soon/i);
 
   // The promo lives on its event's own page, at full resolution, loading only on play.
@@ -342,15 +364,15 @@ test("renders collective-voice editorial and event facts", async () => {
   assert.match(garageHtml, /10 PM to 2:30 AM/);
   assert.match(garageHtml, /19\+ and bring valid ID/);
   assert.match(garageHtml, /Tickets are on sale now/);
-  assert.match(garageHtml, /Tickets live/);
+  assert.match(garageHtml, /Past event/);
   assert.match(garageHtml, /<li>Caploch<\/li>/);
-  assert.match(garageHtml, /frequency-shift-x-mooses-garage-tickets-2004491756804\?aff=ebdssbdestsearch/);
-  assert.match(garageHtml, /data-event-end="2026-11-21T02:30:00-05:00"/);
+  assert.doesNotMatch(garageHtml, /frequency-shift-x-mooses-garage-tickets-2004491756804/);
+  assert.doesNotMatch(garageHtml, /data-event-end=/);
 
   // Labels carry facts, not filler.
   assert.doesNotMatch(homepageHtml, /Next transmission|FS \/ LIVE|>Signal<|>Room</);
-  assert.match(homepageHtml, /Fri 20 Nov 2026/);
-  assert.match(homepageHtml, /class="next-bar"/);
+  // with nothing on sale there is no floating next-event bar
+  assert.doesNotMatch(homepageHtml, /class="next-bar"/);
 
   const about = await render("/about");
   const aboutHtml = await about.text();

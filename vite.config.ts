@@ -55,6 +55,66 @@ function localGlassLab() {
   };
 }
 
+// The laser room lab: a dev-only page for building and judging the WebGL hero layer by layer. Like the glass
+// lab, it is served by middleware and never built into the site.
+function localLaserLab() {
+  return {
+    name: "frequency-shift-local-laser-lab",
+    apply: "serve" as const,
+    configureServer(server: import("vite").ViteDevServer) {
+      server.middlewares.use(async (request, response, next) => {
+        const pathname = new URL(request.url ?? "/", "http://localhost").pathname
+          .replace(/\/+$/, "") || "/";
+        // frames the lab posts for judging away from a visible browser (see __snap in the lab), saved to a temp folder
+        if (pathname === "/laser-lab/snapshot" && request.method === "POST") {
+          const { mkdir, writeFile } = await import("node:fs/promises");
+          const { join } = await import("node:path");
+          const { tmpdir } = await import("node:os");
+          const chunks: Buffer[] = [];
+          for await (const chunk of request) chunks.push(chunk as Buffer);
+          const name = (new URL(request.url ?? "", "http://localhost").searchParams.get("name") ?? "frame")
+            .replace(/[^\w.-]/g, "_");
+          const dir = process.env.LASER_LAB_SNAPSHOTS ?? join(tmpdir(), "laser-lab");
+          await mkdir(dir, { recursive: true });
+          const data = Buffer.concat(chunks).toString().replace(/^data:image\/\w+;base64,/, "");
+          const file = join(dir, `${name}.jpg`);
+          await writeFile(file, Buffer.from(data, "base64"));
+          response.setHeader("Content-Type", "text/plain");
+          response.end(file);
+          return;
+        }
+        if (pathname !== "/laser-lab") {
+          next();
+          return;
+        }
+
+        try {
+          const source = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Laser Room Lab</title>
+  </head>
+  <body>
+    <div id="laser-lab-root"></div>
+    <script type="module" src="/app/laser-lab/dev-entry.ts"></script>
+  </body>
+</html>`;
+          const html = await server.transformIndexHtml(request.url ?? "/laser-lab", source);
+          response.statusCode = 200;
+          response.setHeader("Content-Type", "text/html; charset=utf-8");
+          response.setHeader("Cache-Control", "no-store");
+          response.end(html);
+        } catch (error) {
+          next(error);
+        }
+      });
+    },
+  };
+}
+
 const localBindingConfig = {
   main: "./worker/index.ts",
   compatibility_flags: ["nodejs_compat"],
@@ -101,6 +161,7 @@ export default defineConfig(async () => {
       : undefined,
     plugins: [
       localGlassLab(),
+      localLaserLab(),
       vinext(),
       sites(),
       cloudflare({

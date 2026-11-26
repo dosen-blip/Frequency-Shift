@@ -4479,3 +4479,1520 @@ html.has-neon-cursor * {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* Laser room hero ------------------------------------------------------------
+   The WebGL room (components/laser-room) fills the whole first screen: the stage
+   reaches up behind the see-through header. The page's own neon lockup stays in
+   place, hidden, as the scene's anchor and as the fallback. */
+
+.route-hero.home-hero {
+  overflow: visible;
+}
+
+.home-hero__stage {
+  position: absolute;
+  inset: -4.5rem 0 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #050506;
+  pointer-events: none;
+}
+
+.laser-room__canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.home-hero.has-laser .neon-lockup {
+  visibility: hidden;
+}
+
+/* With the room lit, the veil only eases the hero into the page below. */
+.home-hero.has-laser .home-hero__veil {
+  background: linear-gradient(180deg, transparent 78%, #050506 100%);
+}
+
+body:has(.home-hero.has-laser) .site-header:not(.is-scrolled) {
+  border-bottom-color: rgba(235, 115, 193, 0.1);
+  background: rgba(5, 5, 6, 0.28);
+}
+
+/* The sign sits large in the middle of the screen; the words and buttons sit
+   in the band below it. The box runs from the very top of the screen, behind
+   the see-through header, so the sign is centred on the screen itself; on a
+   short screen the sign gets smaller so the words and both buttons still fit
+   above the bottom edge (the band below the sign is about 9rem, and the band
+   above it is kept as tall). */
+.home-hero__content {
+  align-self: stretch;
+  grid-template-rows: 1fr auto 1fr;
+  min-height: 100svh;
+  margin-top: -4.5rem;
+  padding: clamp(0.75rem, 3vh, 2rem) var(--content-pad);
+}
+
+.home-hero .neon-lockup {
+  grid-row: 2;
+  width: min(84vw, 80rem, calc((100svh - 4.5rem) * 1.3), calc((100svh - 22rem) * 2.1));
+}
+
+.home-hero__footer {
+  display: grid;
+  grid-row: 3;
+  align-self: end;
+  justify-items: center;
+  padding-top: 1.5rem;
+}
+
+.home-hero__footer .home-hero__actions {
+  margin-top: clamp(1.4rem, 3vh, 2.2rem);
+}
+
+@media (width <= 760px) {
+  .home-hero__stage {
+    inset: -4.25rem 0 0;
+  }
+
+  .home-hero__content {
+    padding-bottom: 3.5rem;
+  }
+
+  .home-hero .neon-lockup {
+    width: min(86vw, 34rem);
+  }
+
+  .home-hero .neon-logo {
+    width: 66%;
+  }
+}
+
+/* Launch: the room powers on full screen before the page arrives. */
+html.is-launching {
+  overflow: hidden;
+}
+
+html.is-launching .site-header,
+html.is-launching .home-hero__footer,
+html.is-launching .home-hero__scroll,
+html.is-launching .next-bar {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.is-launching .site-header {
+  transform: translateY(-0.75rem);
+}
+
+html.is-launching .home-hero__footer {
+  transform: translateY(1.25rem);
+}
+
+html.is-launching .home-hero .neon-lockup {
+  visibility: hidden;
+}
+
+html.is-launching .home-hero__mantra {
+  animation: none !important;
+}
+
+html.is-landing .site-header,
+html.is-landing .home-hero__footer,
+html.is-landing .home-hero__scroll {
+  transition:
+    opacity 900ms ease,
+    transform 1200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+html.is-landing .site-header {
+  transition-delay: 350ms;
+}
+
+html.is-landing .home-hero__footer {
+  transition-delay: 700ms;
+}
+
+html.is-landing .home-hero__scroll {
+  transition-delay: 1300ms;
+}
+
+/* The whole room -------------------------------------------------------------
+   The laser room stays behind the entire home page: the stage is fixed to the
+   screen and the page's scroll carries the camera down the room, one shot per
+   section (components/laser-room/scene.ts, SHOTS). The page takes its light
+   from the show, two ways, both cheap enough to leave the frame to the room:
+
+   - what changes slowly (the sign's light, the air's colour, how far the
+     camera has turned to the floor) the scene writes as --room-* on <html>,
+     and only when it has moved enough to see (0..1 each; see mount.ts
+     lightThePage). Every glow that reads one is drawn again when it is
+     written, so nothing here may read a value that changes every frame.
+   - the beat is a fixed tempo, so its pulses are animations: each glow that
+     hits on the beat is its own layer, drawn once at its brightest, and only
+     its opacity moves (the beat-* keyframes below, one bar long). They run
+     once the show does (`room-live`), and the scene keeps them in step with
+     its own clock (mount.ts beatClock).
+
+   `has-room` is set once the room is running, so a browser without it keeps
+   the page's own dark ground. */
+
+@property --room-sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+:root {
+  /* the show's two beam colours (show.ts MAGENTA and CYAN); the site's cyan
+     is the laser's own */
+  --laser-pink: #ff1f8f;
+  --laser-cyan: #1ec8ff;
+  --cyan: var(--laser-cyan);
+  --tube-core: #ffe0f3;
+  --room-sign: 0.8;
+  --room-lasers: 0.4;
+  --room-pink: 0.5;
+  --room-travel: 0;
+  /* the colour of the air right now: pink and cyan in the show's mix */
+  --room-mix: color-mix(in oklab, var(--laser-pink) calc(var(--room-pink) * 100%), var(--laser-cyan));
+  /* one bar at the show's 124 BPM */
+  --room-bar-time: 1935ms;
+}
+
+/* The beat, one bar (four beats) to a loop. Each hit lands at once and dies
+   away as the scene's own does: a beat's over about a tenth of a second
+   (beat-hit), the bar's first beat over a quarter (the larger share of
+   beat-pulse, which carries both). beat-line is the section lines' own: they
+   brighten on every beat and thicken on the bar. Opacity and transform only,
+   so a pulse costs no drawing. */
+@keyframes beat-hit {
+  0% { opacity: 1; }
+  2% { opacity: 0.67; }
+  5% { opacity: 0.368; }
+  10% { opacity: 0.135; }
+  16% { opacity: 0.041; }
+  24.99% { opacity: 0; }
+  25% { opacity: 1; }
+  27% { opacity: 0.67; }
+  30% { opacity: 0.368; }
+  35% { opacity: 0.135; }
+  41% { opacity: 0.041; }
+  49.99% { opacity: 0; }
+  50% { opacity: 1; }
+  52% { opacity: 0.67; }
+  55% { opacity: 0.368; }
+  60% { opacity: 0.135; }
+  66% { opacity: 0.041; }
+  74.99% { opacity: 0; }
+  75% { opacity: 1; }
+  77% { opacity: 0.67; }
+  80% { opacity: 0.368; }
+  85% { opacity: 0.135; }
+  91% { opacity: 0.041; }
+  99.99% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes beat-pulse {
+  0% { opacity: 1; }
+  2% { opacity: 0.77; }
+  5% { opacity: 0.534; }
+  10% { opacity: 0.308; }
+  16% { opacity: 0.171; }
+  24.99% { opacity: 0.074; }
+  25% { opacity: 0.524; }
+  27% { opacity: 0.365; }
+  30% { opacity: 0.215; }
+  35% { opacity: 0.094; }
+  41% { opacity: 0.039; }
+  49.99% { opacity: 0.01; }
+  50% { opacity: 0.46; }
+  52% { opacity: 0.31; }
+  55% { opacity: 0.172; }
+  60% { opacity: 0.065; }
+  66% { opacity: 0.021; }
+  74.99% { opacity: 0; }
+  75% { opacity: 0.451; }
+  77% { opacity: 0.303; }
+  80% { opacity: 0.166; }
+  85% { opacity: 0.062; }
+  91% { opacity: 0.019; }
+  99.99% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes beat-line {
+  0% { opacity: 1; transform: scaleY(1.2); }
+  2% { opacity: 0.868; transform: scaleY(1.111); }
+  5% { opacity: 0.747; transform: scaleY(1.002); }
+  10% { opacity: 0.654; transform: scaleY(0.87); }
+  16% { opacity: 0.616; transform: scaleY(0.767); }
+  24.99% { opacity: 0.6; transform: scaleY(0.681); }
+  25% { opacity: 1; transform: scaleY(0.681); }
+  27% { opacity: 0.868; transform: scaleY(0.669); }
+  30% { opacity: 0.747; transform: scaleY(0.654); }
+  35% { opacity: 0.654; transform: scaleY(0.636); }
+  41% { opacity: 0.616; transform: scaleY(0.623); }
+  49.99% { opacity: 0.6; transform: scaleY(0.611); }
+  50% { opacity: 1; transform: scaleY(0.611); }
+  52% { opacity: 0.868; transform: scaleY(0.609); }
+  55% { opacity: 0.747; transform: scaleY(0.607); }
+  60% { opacity: 0.654; transform: scaleY(0.605); }
+  66% { opacity: 0.616; transform: scaleY(0.603); }
+  74.99% { opacity: 0.6; transform: scaleY(0.601); }
+  75% { opacity: 1; transform: scaleY(0.601); }
+  77% { opacity: 0.868; transform: scaleY(0.601); }
+  80% { opacity: 0.747; transform: scaleY(0.601); }
+  85% { opacity: 0.654; transform: scaleY(0.601); }
+  91% { opacity: 0.616; transform: scaleY(0.6); }
+  99.99% { opacity: 0.6; transform: scaleY(0.6); }
+  100% { opacity: 1; transform: scaleY(1.2); }
+}
+
+.home-hero .home-hero__stage {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 100lvh;
+}
+
+/* a veil over the room that deepens once the hero is behind you, so words
+   further down sit on darker air */
+html.has-room .home-hero__stage::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 45%, transparent 0 30%, rgba(2, 2, 5, 0.55) 100%),
+    rgba(2, 2, 5, 0.18);
+  content: "";
+  opacity: clamp(0, var(--room-travel), 1);
+  pointer-events: none;
+}
+
+html.has-room .site-main > section:not(.home-hero),
+html.has-room .site-footer {
+  position: relative;
+  z-index: 1;
+  border-top: 0;
+  background: transparent;
+}
+
+html.has-room .home-hero.has-laser .home-hero__veil {
+  background: none;
+}
+
+/* the hero's words leave with the camera, so the sign never passes behind them */
+html.has-room .home-hero__content,
+html.has-room:not(.is-launching) .home-hero__scroll {
+  opacity: clamp(0, 1 - var(--room-travel) * 2.4, 1);
+}
+
+/* Laser lines: the sections' hairlines become a beam seen edge on, brightest
+   in the middle, its colour the show's, swelling on the beat. A hot spot runs
+   along each one, a bar at a time. */
+html.has-room .home-section-index {
+  position: relative;
+  padding-top: 1.1rem;
+  border-top: 0;
+  color: rgba(242, 239, 233, 0.7);
+}
+
+html.has-room .home-section-index::before,
+html.has-room .home-section-index::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  content: "";
+  pointer-events: none;
+}
+
+html.has-room .home-section-index::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--laser-pink) 12%,
+    var(--tube-core) 50%,
+    var(--laser-cyan) 88%,
+    transparent
+  );
+  box-shadow:
+    0 0 4px var(--laser-pink),
+    0 0 14px color-mix(in srgb, var(--room-mix) 80%, transparent),
+    0 0 42px color-mix(in srgb, var(--room-mix) 55%, transparent),
+    0 0 90px color-mix(in srgb, var(--laser-pink) 30%, transparent);
+  opacity: 0.6;
+  transform: scaleY(0.6);
+}
+
+html.room-live .home-section-index::before {
+  animation: beat-line var(--room-bar-time) linear infinite;
+}
+
+html.has-room .home-section-index::after {
+  background: radial-gradient(closest-side, #fff, color-mix(in srgb, var(--room-mix) 70%, transparent) 40%, transparent);
+  height: 0.6rem;
+  margin-top: -0.25rem;
+  width: 9rem;
+  right: auto;
+  filter: blur(1px);
+  animation: room-run calc(var(--room-bar-time) * 2) linear infinite;
+}
+
+@keyframes room-run {
+  from {
+    transform: translateX(-10rem);
+  }
+  to {
+    transform: translateX(calc(100vw - var(--content-pad) * 2));
+  }
+}
+
+html.has-room .home-section-index span:first-child {
+  color: #ff9fd6;
+  text-shadow:
+    0 0 0.35em rgba(255, 31, 143, 0.9),
+    0 0 1.2em rgba(255, 31, 143, 0.5);
+}
+
+html.has-room .home-section-index span + span {
+  color: #a9ecff;
+  text-shadow: 0 0 0.6em rgba(30, 200, 255, 0.7);
+}
+
+/* Headings: lit by the room, a pink rim that breathes with the sign. Their
+   glow holds steady through the bar: a glow on lettering can only pulse by
+   being drawn again, every frame, and big blurred type is the dearest thing
+   on the page to draw. */
+html.has-room .home-event__content h2,
+html.has-room .home-memory__heading h2,
+html.has-room .home-manifesto h2 {
+  color: #fff6fb;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0.08em rgba(255, 214, 240, 0.75),
+    0 0 0.32em rgba(235, 115, 193, calc(0.35 + 0.35 * var(--room-sign))),
+    0 0 0.9em rgba(197, 72, 240, 0.3),
+    0 0.04em 0.6em rgba(0, 0, 0, 0.9);
+}
+
+/* the manifesto's second line is a tube of its own */
+html.has-room .home-manifesto h2 span {
+  color: #ffbde4;
+  text-shadow:
+    0 0 1px #fff,
+    0 0 0.05em #ffd0ec,
+    0 0 0.14em var(--signal),
+    0 0 0.42em var(--signal),
+    0 0 0.9em rgba(197, 72, 240, 0.66),
+    0 0 1.8em rgba(255, 31, 143, 0.4);
+}
+
+/* a revealed heading's clip opens past its box, or it would cut the glow off at
+   the letters' edges (a dark box round the words) */
+.motion-enabled.has-room [data-reveal="clip"].is-revealed {
+  clip-path: inset(-1.5em -1.5em -1.5em -1.5em);
+}
+
+/* Glass panels: words further down sit on smoked glass that the room lights
+   from behind, its edge catching the show's colour */
+html.has-room .home-event__content,
+html.has-room .home-manifesto__copy,
+html.has-room .home-event .empty-state {
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 1.4rem;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.07), transparent 38%),
+    linear-gradient(180deg, rgba(14, 6, 18, 0.58), rgba(4, 3, 8, 0.72));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 2.5rem color-mix(in srgb, var(--room-mix) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 18%, transparent),
+    0 0 1.5rem color-mix(in srgb, var(--room-mix) 28%, transparent),
+    0 2.5rem 6rem -1.5rem rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(18px) saturate(1.5);
+  backdrop-filter: blur(18px) saturate(1.5);
+}
+
+/* the panel's edge on the beat: its rim brightens on every beat, and its glow
+   swells out on the bar */
+html.has-room .home-event__content::after,
+html.has-room .home-manifesto__copy::after,
+html.has-room .home-event .empty-state::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 37%, transparent),
+    0 0 3.5rem color-mix(in srgb, var(--room-mix) 28%, transparent);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.room-live .home-event__content::after,
+html.room-live .home-manifesto__copy::after,
+html.room-live .home-event .empty-state::after {
+  animation: beat-pulse var(--room-bar-time) linear infinite;
+}
+
+html.has-room .home-manifesto__copy,
+html.has-room .home-event .empty-state {
+  position: relative;
+}
+
+html.has-room .home-event__content {
+  min-height: 0;
+  align-self: start;
+  padding: clamp(1.6rem, 3vw, 2.6rem);
+}
+
+html.has-room .home-manifesto__copy {
+  padding: clamp(1.5rem, 2.6vw, 2.2rem);
+}
+
+html.has-room .home-event .empty-state {
+  max-width: 40rem;
+  padding: clamp(1.5rem, 3vw, 2.4rem);
+  color: #fff3fa;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-variation-settings: var(--display-axes);
+  line-height: 1.2;
+  text-shadow: 0 0 0.4em rgba(235, 115, 193, 0.6);
+}
+
+html.has-room .home-event__facts dt {
+  color: #8fe3ff;
+  text-shadow: 0 0 0.6em rgba(30, 200, 255, 0.6);
+}
+
+html.has-room .home-event__summary,
+html.has-room .home-manifesto__copy p {
+  color: rgba(255, 244, 250, 0.84);
+}
+
+/* The poster stands on the wet floor: lit from the front by the sign, its
+   reflection running away below it, its edge taking the beams */
+html.has-room .home-event__visual {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 35%, transparent),
+    0 0 1.2rem color-mix(in srgb, var(--room-mix) calc(40% + 30% * var(--room-lasers)), transparent),
+    0 0 6rem color-mix(in srgb, var(--signal) 28%, transparent),
+    0 3rem 6rem -2rem rgba(0, 0, 0, 0.9);
+  -webkit-box-reflect: below 1.4rem linear-gradient(transparent 62%, rgba(255, 255, 255, 0.2));
+}
+
+/* the poster's glow on the beat, in place of the older hover bloom (every
+   state named, so that bloom's own animation never lands on this layer) */
+html.has-room .home-event__visual:is(*, :hover, :focus-visible, .is-mobile-neon-active)::before {
+  inset: 0;
+  border-radius: var(--neon-surface-radius);
+  background: none;
+  box-shadow: 0 0 2.8rem color-mix(in srgb, var(--room-mix) 55%, transparent);
+  filter: none;
+  opacity: 0;
+  transform: none;
+  animation: none;
+}
+
+html.room-live .home-event__visual:is(*, :hover, :focus-visible, .is-mobile-neon-active)::before {
+  animation: beat-hit var(--room-bar-time) linear infinite;
+}
+
+/* a beam crossing the poster's face, once a bar */
+html.has-room .home-event__visual::after,
+html.has-room .home-memory__grid figure::after {
+  z-index: 3;
+  border: 0;
+  background: linear-gradient(
+    100deg,
+    transparent 38%,
+    color-mix(in srgb, var(--room-mix) 30%, transparent) 46%,
+    rgba(255, 255, 255, 0.4) 50%,
+    color-mix(in srgb, var(--room-mix) 30%, transparent) 54%,
+    transparent 62%
+  );
+  background-size: 300% 100%;
+  content: "";
+  mix-blend-mode: screen;
+  opacity: calc(0.35 + 0.5 * var(--room-lasers));
+  pointer-events: none;
+  animation: room-scan calc(var(--room-bar-time) * 2) linear infinite;
+}
+
+@keyframes room-scan {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -20% 0;
+  }
+}
+
+html.has-room .home-event__visual:hover,
+html.has-room .home-event__visual:focus-visible {
+  border-color: rgba(255, 190, 230, 0.6);
+  box-shadow:
+    0 0 0 1px var(--signal),
+    0 0 0.15rem #fff,
+    0 0 1.6rem color-mix(in srgb, var(--room-mix) 80%, transparent),
+    0 0 5rem color-mix(in srgb, var(--signal) 55%, transparent),
+    0 3rem 6rem -2rem rgba(0, 0, 0, 0.9);
+}
+
+html.has-room .home-event__visual:hover::after,
+html.has-room .home-event__visual:focus-visible::after {
+  opacity: 1;
+  animation-duration: calc(var(--room-bar-time) / 2);
+}
+
+/* Archive photos hang in the room: dark-edged prints, lit where the beams
+   cross them */
+html.has-room .home-memory__grid {
+  padding-bottom: 1rem;
+}
+
+html.has-room .home-memory__grid figure {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.9rem;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 22%, transparent),
+    0 0 1rem color-mix(in srgb, var(--room-mix) 30%, transparent),
+    0 2rem 4rem -1.5rem rgba(0, 0, 0, 0.9);
+  /* the glow on the beat is a layer of its own, outside the print: so the
+     print no longer clips what is in it, and the photo keeps to its frame by
+     its own clip (which opens as it grows under the pointer, by as much) */
+  overflow: visible;
+}
+
+html.has-room .home-memory__grid img {
+  clip-path: inset(0 round calc(0.9rem - 1px));
+  transition:
+    filter 500ms ease,
+    transform 700ms var(--motion-ease),
+    clip-path 700ms var(--motion-ease);
+}
+
+html.has-room .home-memory__grid figure:hover img {
+  clip-path: inset(1.22% round calc(0.9rem - 1px));
+}
+
+html.has-room .home-memory__grid figure::before {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow: 0 0 2.2rem color-mix(in srgb, var(--room-mix) 34%, transparent);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.room-live .home-memory__grid figure::before {
+  animation: beat-hit var(--room-bar-time) linear infinite;
+}
+
+html.has-room .home-memory__grid figure:nth-child(2n)::after {
+  animation-delay: calc(var(--room-bar-time) * -0.5);
+}
+
+html.has-room .home-memory__grid figure:nth-child(3n)::after {
+  animation-delay: calc(var(--room-bar-time) * -1.2);
+}
+
+html.has-room .home-memory__grid img {
+  filter: saturate(1.08) contrast(1.06) brightness(calc(0.82 + 0.18 * var(--room-sign)));
+}
+
+html.has-room .home-memory__grid figure:hover {
+  border-color: rgba(160, 230, 255, 0.55);
+  box-shadow:
+    0 0 0 1px var(--laser-cyan),
+    0 0 0.12rem #fff,
+    0 0 1.8rem color-mix(in srgb, var(--laser-cyan) 70%, transparent),
+    0 0 4.5rem color-mix(in srgb, var(--room-mix) 50%, transparent);
+}
+
+/* Buttons. The main action is a lit tube: a pink tube inside smoked glass,
+   humming with the room, striking on like the sign when you reach for it. */
+html.has-room .button::after,
+html.has-room .header-cta::after,
+html.has-room .button--light::before {
+  display: none;
+}
+
+/* A button's glow on the beat: a layer under it, drawn at its brightest, in
+   place of the older hover layers (the class is doubled, and every state
+   named, so those layers' own hover animations never land on this one). */
+html.has-room.has-room :is(.button--solid, .button--ghost, .header-cta):is(*, :hover, :focus-visible, .is-active, .is-mobile-neon-active)::before {
+  inset: 0;
+  z-index: -1;
+  width: auto;
+  height: auto;
+  border-radius: inherit;
+  background: none;
+  box-shadow:
+    0 0 1.4rem rgba(255, 31, 143, 0.6),
+    0 0 3.8rem rgba(197, 72, 240, 0.45);
+  filter: none;
+  opacity: 0;
+  transform: none;
+  transition: none;
+  animation: none;
+  pointer-events: none;
+}
+
+html.has-room.has-room .button--ghost:is(*, :hover, :focus-visible, .is-mobile-neon-active)::before {
+  box-shadow: 0 0 1.2rem rgba(30, 200, 255, 0.32);
+}
+
+html.room-live.has-room :is(.button--solid, .header-cta):is(*, :hover, :focus-visible, .is-active, .is-mobile-neon-active)::before {
+  animation: beat-pulse var(--room-bar-time) linear infinite;
+}
+
+html.room-live.has-room .button--ghost:is(*, :hover, :focus-visible, .is-mobile-neon-active)::before {
+  animation: beat-hit var(--room-bar-time) linear infinite;
+}
+
+html.has-room .button--solid,
+html.has-room .header-cta {
+  border: 1.5px solid #ffa8db;
+  background:
+    radial-gradient(120% 160% at 50% -10%, rgba(255, 150, 215, 0.45), transparent 55%),
+    linear-gradient(180deg, rgba(120, 18, 88, 0.55), rgba(30, 4, 26, 0.7));
+  color: #fff6fc;
+  text-shadow:
+    0 0 0.3em rgba(255, 200, 236, 0.95),
+    0 0 0.9em rgba(255, 31, 143, 0.8);
+  box-shadow:
+    inset 0 0 0.35rem rgba(255, 220, 242, 0.85),
+    inset 0 0 1.4rem rgba(235, 115, 193, 0.5),
+    0 0 0.12rem #fff,
+    0 0 0.7rem rgba(255, 31, 143, 0.6),
+    0 0 2.2rem rgba(197, 72, 240, 0.38),
+    0 0 5rem rgba(235, 115, 193, 0.22);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  backdrop-filter: blur(10px) saturate(1.4);
+}
+
+html.has-room .button--solid:hover,
+html.has-room .button--solid:focus-visible,
+html.has-room .header-cta:hover,
+html.has-room .header-cta:focus-visible,
+html.has-room .header-cta.is-active {
+  border-color: #fff;
+  background:
+    radial-gradient(120% 160% at 50% -10%, rgba(255, 190, 232, 0.7), transparent 60%),
+    linear-gradient(180deg, rgba(190, 30, 130, 0.7), rgba(60, 6, 48, 0.75));
+  color: #fff;
+  box-shadow:
+    inset 0 0 0.4rem #fff,
+    inset 0 0 1.6rem rgba(255, 150, 215, 0.75),
+    0 0 0.2rem #fff,
+    0 0 1.2rem rgba(255, 31, 143, 0.95),
+    0 0 3.2rem rgba(197, 72, 240, 0.7),
+    0 0 7rem rgba(255, 31, 143, 0.4);
+  transform: translateY(-2px);
+  animation: room-strike 620ms linear both;
+}
+
+/* the sign's own way of coming on: a stutter, a catch, then steady */
+@keyframes room-strike {
+  0% {
+    filter: brightness(0.55);
+  }
+  10% {
+    filter: brightness(1.7);
+  }
+  16% {
+    filter: brightness(0.6);
+  }
+  28% {
+    filter: brightness(1.5);
+  }
+  34% {
+    filter: brightness(0.85);
+  }
+  52%,
+  100% {
+    filter: brightness(1.12);
+  }
+}
+
+/* The second action is a laser edge: dark glass with a beam running round it,
+   a bar a lap; reaching for it speeds the beam up and lights the edge */
+html.has-room .button--ghost {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(rgba(6, 6, 14, 0.62), rgba(6, 6, 14, 0.62)) padding-box,
+    conic-gradient(
+        from var(--room-sweep),
+        transparent 0 58%,
+        var(--laser-cyan) 72%,
+        #fff 76%,
+        var(--laser-pink) 82%,
+        transparent 92%
+      )
+      border-box,
+    linear-gradient(rgba(170, 230, 255, 0.28), rgba(255, 160, 220, 0.28)) border-box;
+  color: #e6f8ff;
+  text-shadow: 0 0 0.6em rgba(30, 200, 255, 0.65);
+  box-shadow:
+    0 0 0.6rem rgba(30, 200, 255, 0.22),
+    inset 0 0 1rem rgba(30, 200, 255, 0.12);
+  -webkit-backdrop-filter: blur(10px) saturate(1.4);
+  backdrop-filter: blur(10px) saturate(1.4);
+  animation: room-lap calc(var(--room-bar-time) * 2) linear infinite;
+}
+
+@keyframes room-lap {
+  to {
+    --room-sweep: 360deg;
+  }
+}
+
+html.has-room .button--ghost:hover,
+html.has-room .button--ghost:focus-visible {
+  border-color: transparent;
+  color: #fff;
+  text-shadow:
+    0 0 0.3em #fff,
+    0 0 0.9em var(--laser-cyan);
+  box-shadow:
+    0 0 0.15rem #fff,
+    0 0 1.2rem rgba(30, 200, 255, 0.75),
+    0 0 3.5rem rgba(30, 200, 255, 0.4),
+    inset 0 0 1.4rem rgba(30, 200, 255, 0.3);
+  transform: translateY(-2px);
+  animation-duration: calc(var(--room-bar-time) / 2);
+}
+
+/* one focus ring everywhere in the room: a cyan beam */
+html.has-room :focus-visible {
+  outline: 2px solid var(--laser-cyan);
+  outline-offset: 4px;
+  box-shadow: 0 0 1.2rem rgba(30, 200, 255, 0.7);
+}
+
+/* Text links: a laser underline that runs */
+html.has-room .home-manifesto .text-link {
+  padding-bottom: 0.35rem;
+  border-bottom: 0;
+  background:
+    linear-gradient(90deg, transparent, #fff, transparent) no-repeat,
+    linear-gradient(90deg, var(--laser-pink), var(--laser-cyan)) no-repeat;
+  background-position:
+    -3rem 100%,
+    0 100%;
+  background-size:
+    3rem 2px,
+    100% 2px;
+  color: #fff3fa;
+  text-shadow: 0 0 0.6em rgba(255, 31, 143, 0.6);
+  filter: drop-shadow(0 0 0.35rem rgba(255, 31, 143, 0.55));
+  animation: room-underline var(--room-bar-time) linear infinite;
+}
+
+@keyframes room-underline {
+  to {
+    background-position:
+      calc(100% + 3rem) 100%,
+      0 100%;
+  }
+}
+
+/* The top menu: smoked glass over the room, its lower edge a beam */
+html.has-room .site-header,
+html.has-room .site-header.is-scrolled,
+html.has-room body:has(.home-hero.has-laser) .site-header:not(.is-scrolled) {
+  border-bottom-color: transparent;
+  background: rgba(4, 3, 8, calc(0.2 + 0.35 * min(1, var(--room-travel))));
+  box-shadow:
+    0 1px 0 color-mix(in srgb, var(--room-mix) 25%, transparent),
+    0 0.5rem 2rem -0.75rem color-mix(in srgb, var(--room-mix) 45%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.5);
+  backdrop-filter: blur(16px) saturate(1.5);
+}
+
+/* its lower edge on the beat */
+html.has-room .site-header::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 1px;
+  background: color-mix(in srgb, var(--room-mix) 60%, transparent);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.room-live .site-header::after {
+  animation: beat-hit var(--room-bar-time) linear infinite;
+}
+
+html.has-room .site-nav a {
+  text-shadow: 0 0 0.8em color-mix(in srgb, var(--room-mix) 55%, transparent);
+}
+
+html.has-room .home-hero__scroll {
+  color: #bff0ff;
+  filter: drop-shadow(0 0 0.4rem var(--laser-cyan)) drop-shadow(0 0 1.2rem rgba(30, 200, 255, 0.5));
+}
+
+/* The page ends in the room, looking down at the fog and the lasers, not
+   back at the sign: the footer's flat neon wordmark steps aside (its name
+   stays for screen readers), leaving open floor above the footer's links. */
+html.has-room .footer-brand {
+  min-height: 0;
+  margin-bottom: clamp(5rem, 16vh, 10rem);
+}
+
+html.has-room .footer-brand .neon-lockup--footer {
+  display: none;
+}
+
+/* The footer's foot: the back of the room */
+html.has-room .footer-bottom {
+  border-top: 0;
+  box-shadow: 0 -1px 0 color-mix(in srgb, var(--room-mix) 45%, transparent);
+}
+
+html.has-room .footer-links a {
+  text-shadow: 0 0 0.8em color-mix(in srgb, var(--room-mix) 55%, transparent);
+}
+
+/* Reveals by light: photos and the poster are found by a beam sweeping across
+   them rather than sliding in. The mask only lives for the sweep (an animation
+   with no forward fill), so the glow and reflection outside the box come back
+   once it has passed. Its image is the same in every keyframe; only its
+   position moves. */
+.motion-enabled.has-room [data-reveal="media"].is-reveal-pending,
+.motion-enabled.has-room [data-reveal="media"].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+.motion-enabled.has-room [data-reveal="media"].is-reveal-pending {
+  -webkit-mask-image: linear-gradient(100deg, #000 46%, transparent 54%);
+  mask-image: linear-gradient(100deg, #000 46%, transparent 54%);
+  -webkit-mask-size: 260% 100%;
+  mask-size: 260% 100%;
+  -webkit-mask-position: 100% 0;
+  mask-position: 100% 0;
+}
+
+.motion-enabled.has-room [data-reveal="media"].is-revealed {
+  animation: room-find 1100ms cubic-bezier(0.3, 0.7, 0.2, 1) var(--reveal-delay) backwards;
+}
+
+@keyframes room-find {
+  from {
+    -webkit-mask-image: linear-gradient(100deg, #000 46%, transparent 54%);
+    mask-image: linear-gradient(100deg, #000 46%, transparent 54%);
+    -webkit-mask-size: 260% 100%;
+    mask-size: 260% 100%;
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  to {
+    -webkit-mask-image: linear-gradient(100deg, #000 46%, transparent 54%);
+    mask-image: linear-gradient(100deg, #000 46%, transparent 54%);
+    -webkit-mask-size: 260% 100%;
+    mask-size: 260% 100%;
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.has-room .home-section-index::after,
+  html.has-room .home-event__visual::after,
+  html.has-room .home-memory__grid figure::after,
+  html.has-room .button--ghost,
+  html.has-room .home-manifesto .text-link {
+    animation: none;
+  }
+}
+
+/* The header's sign: the same neon tubes as the hero's, small. They strike on
+   as the page loads (the artwork's own flicker), then glow: a pale hot core,
+   pink round it, violet further out. In the laser room the glow breathes with
+   the sign's light. */
+.wordmark__mark,
+.wordmark__type {
+  --sign-glow: 1;
+  filter:
+    drop-shadow(0 0 0.05rem rgba(255, 224, 243, 0.85))
+    drop-shadow(0 0 calc(0.28rem * var(--sign-glow)) rgba(235, 115, 193, 0.8))
+    drop-shadow(0 0 calc(0.8rem * var(--sign-glow)) rgba(197, 72, 240, 0.42));
+}
+
+html.has-room .wordmark__mark,
+html.has-room .wordmark__type {
+  --sign-glow: calc(0.8 + 0.3 * var(--room-sign));
+}
+
+.wordmark:hover .wordmark__mark,
+.wordmark:hover .wordmark__type,
+.wordmark:focus-visible .wordmark__mark,
+.wordmark:focus-visible .wordmark__type {
+  --sign-glow: 1.45;
+}
+
+/* The other pages' rooms -------------------------------------------------------
+   Every page that is not the home page sits in a room of its own (see
+   components/room-stage.tsx and components/laser-room/rooms.ts): the same
+   wall, floor, fog and lasers, with that page's own neon hung in the band
+   above its heading (the monogram and the wordmark are the home page's alone).
+   The stage is fixed behind the whole page. `expects-room` is set before the
+   first paint, so the band is there from the start; `has-room` once the room
+   is running, which is when the page gives up its own ground for it. The
+   panels here are smoked glass without a blur behind them: a blur over a
+   moving picture is redrawn every frame, and these pages are mostly panel. */
+/* Going from one page to the next, the old page fades into the new one (where
+   the browser can), so the rooms change like a cut in the dark, not a blank
+   flash. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+.room-stage {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: 100lvh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.room-stage .laser-room__canvas {
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+.room-stage.is-live .laser-room__canvas {
+  opacity: 1;
+}
+
+/* a veil over the room, so words sit on darker air: more of it once the
+   neon is behind you */
+html.has-room .room-stage::after {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 85% 75% at 50% 40%, transparent 0 28%, rgba(2, 2, 5, 0.74) 100%),
+    rgba(2, 2, 5, 0.16);
+  content: "";
+  opacity: calc(0.5 + 0.5 * clamp(0, var(--room-travel), 1));
+}
+
+.room-band {
+  display: none;
+}
+
+html:is(.expects-room, .has-room) .room-band {
+  /* a share of the screen's height, and on a narrow screen of its width (so a
+     phone's band is lower); no breakpoint of its own */
+  --band: clamp(6rem, min(27vh, 36vw), 15rem);
+  display: flex;
+  height: var(--band);
+  margin-bottom: clamp(2rem, 7vh, 5rem);
+  align-items: center;
+  justify-content: center;
+}
+
+.room-mark {
+  width: min(100%, calc(var(--band) * var(--room-aspect, 2.7)));
+  aspect-ratio: var(--room-aspect, 2.7);
+}
+
+/* the stage sits under the page (z-index -1): the page's own grounds step aside
+   for it, and <html> keeps the dark behind the room */
+html.has-room .page-shell,
+html.has-room body:has(.room-stage) {
+  background: none;
+}
+
+/* Headings and labels: lit by the room, like the home page's */
+html.has-room .page-title,
+html.has-room .detail-title,
+html.has-room .split-section h2,
+html.has-room .past-events__title,
+html.has-room .archive-summary {
+  color: #fff6fb;
+  text-shadow:
+    0 0 1px rgba(255, 255, 255, 0.9),
+    0 0 0.08em rgba(255, 214, 240, 0.75),
+    0 0 0.32em color-mix(in srgb, var(--room-mix) calc(40% + 30% * var(--room-sign)), transparent),
+    0 0 0.9em color-mix(in srgb, var(--laser-pink) 32%, transparent),
+    0 0.04em 0.6em rgba(0, 0, 0, 0.9);
+}
+
+html.has-room .archive-summary {
+  text-shadow:
+    0 0 0.4em color-mix(in srgb, var(--room-mix) 45%, transparent),
+    0 0.04em 0.6em rgba(0, 0, 0, 0.9);
+}
+
+html.has-room .page-shell .eyebrow {
+  color: color-mix(in srgb, var(--laser-pink) 55%, #fff);
+  text-shadow:
+    0 0 0.35em color-mix(in srgb, var(--laser-pink) 90%, transparent),
+    0 0 1.2em color-mix(in srgb, var(--laser-pink) 50%, transparent);
+}
+
+html.has-room .page-intro {
+  color: rgba(255, 244, 250, 0.88);
+  text-shadow: 0 0.05em 0.8em rgba(0, 0, 0, 0.95);
+}
+
+html.has-room .detail-meta dt,
+html.has-room .archive-provenance dt {
+  color: color-mix(in srgb, var(--laser-cyan) 60%, #fff);
+  text-shadow: 0 0 0.6em color-mix(in srgb, var(--laser-cyan) 60%, transparent);
+}
+
+/* Panels: the pages' reading and their facts sit on smoked glass, its edge in
+   the room's colour, brightening on the beat */
+html.has-room .page-shell .prose,
+html.has-room .page-shell .empty-state,
+html.has-room .past-events__list,
+html.has-room .detail-grid > aside,
+html.has-room .archive-detail-hero .detail-meta,
+html.has-room .archive-detail-layout > aside {
+  position: relative;
+  padding: clamp(1.4rem, 2.6vw, 2.2rem);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 1.4rem;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.06), transparent 38%),
+    linear-gradient(180deg, rgba(14, 6, 18, 0.78), rgba(4, 3, 8, 0.86));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 2.5rem color-mix(in srgb, var(--room-mix) 8%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 18%, transparent),
+    0 0 1.5rem color-mix(in srgb, var(--room-mix) 24%, transparent),
+    0 2.5rem 6rem -1.5rem rgba(0, 0, 0, 0.85);
+}
+
+html.has-room .page-shell .prose::after,
+html.has-room .page-shell .empty-state::after,
+html.has-room .past-events__list::after,
+html.has-room .detail-grid > aside::after,
+html.has-room .archive-detail-hero .detail-meta::after,
+html.has-room .archive-detail-layout > aside::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 37%, transparent),
+    0 0 3.5rem color-mix(in srgb, var(--room-mix) 26%, transparent);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.room-live .page-shell .prose::after,
+html.room-live .page-shell .empty-state::after,
+html.room-live .past-events__list::after,
+html.room-live .detail-grid > aside::after,
+html.room-live .archive-detail-hero .detail-meta::after,
+html.room-live .archive-detail-layout > aside::after {
+  animation: beat-pulse var(--room-bar-time) linear infinite;
+}
+
+html.has-room .page-shell .empty-state {
+  color: #fff3fa;
+}
+
+html.has-room .past-events__list {
+  padding-block: clamp(0.6rem, 1.2vw, 1rem);
+}
+
+/* Rules between sections: a beam seen edge on, as on the home page */
+html.has-room .page-shell .section--rule,
+html.has-room .detail-grid,
+html.has-room .archive-detail-layout {
+  position: relative;
+  border-top: 0;
+}
+
+html.has-room .page-shell .section--rule::before,
+html.has-room .page-shell > .detail-grid::before,
+html.has-room .archive-detail-layout::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--laser-pink) 12%,
+    var(--tube-core) 50%,
+    var(--laser-cyan) 88%,
+    transparent
+  );
+  box-shadow:
+    0 0 4px var(--laser-pink),
+    0 0 14px color-mix(in srgb, var(--room-mix) 80%, transparent),
+    0 0 42px color-mix(in srgb, var(--room-mix) 55%, transparent);
+  content: "";
+  opacity: 0.6;
+  pointer-events: none;
+  transform: scaleY(0.6);
+}
+
+html.has-room .page-shell > .eyebrow + .detail-grid::before {
+  content: none;
+}
+
+html.room-live .page-shell .section--rule::before,
+html.room-live .page-shell > .detail-grid::before,
+html.room-live .archive-detail-layout::before {
+  animation: beat-line var(--room-bar-time) linear infinite;
+}
+
+/* Cards: prints and posters hung in the room, their edges in its colour and
+   their glow on the beat (a layer of its own, in place of the older hover
+   bloom, every state named so that bloom's animation never lands on it) */
+html.has-room .event-card,
+html.has-room .archive-card > a {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 32%, transparent),
+    0 0 1.2rem color-mix(in srgb, var(--room-mix) 38%, transparent),
+    0 3rem 6rem -2rem rgba(0, 0, 0, 0.9);
+}
+
+html.has-room .event-card:is(*, :hover, :focus-within, .is-mobile-neon-active)::before,
+html.has-room .archive-card > a:is(*, :hover, :focus-visible, .is-mobile-neon-active)::before {
+  inset: 0;
+  border-radius: inherit;
+  background: none;
+  box-shadow: 0 0 2.8rem color-mix(in srgb, var(--room-mix) 50%, transparent);
+  filter: none;
+  opacity: 0;
+  transform: none;
+  animation: none;
+}
+
+html.room-live .event-card:is(*, :hover, :focus-within, .is-mobile-neon-active)::before,
+html.room-live .archive-card > a:is(*, :hover, :focus-visible, .is-mobile-neon-active)::before {
+  animation: beat-hit var(--room-bar-time) linear infinite;
+}
+
+html.has-room .event-card:hover,
+html.has-room .event-card:focus-within,
+html.has-room .archive-card > a:hover,
+html.has-room .archive-card > a:focus-visible {
+  border-color: rgba(255, 190, 230, 0.6);
+  box-shadow:
+    0 0 0 1px var(--laser-pink),
+    0 0 0.15rem #fff,
+    0 0 1.6rem color-mix(in srgb, var(--room-mix) 80%, transparent),
+    0 0 5rem color-mix(in srgb, var(--laser-pink) 45%, transparent),
+    0 3rem 6rem -2rem rgba(0, 0, 0, 0.9);
+}
+
+/* A night's photographs and films: prints with a lit edge */
+html.has-room .archive-gallery figure,
+html.has-room .archive-films video {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--room-mix) 22%, transparent),
+    0 0 1rem color-mix(in srgb, var(--room-mix) 28%, transparent),
+    0 2rem 4rem -1.5rem rgba(0, 0, 0, 0.9);
+}
+
+/* One room, the whole site through ---------------------------------------------
+   On the static site the room lives in a stage of its own, outside every page
+   (public/laser-hero.js), so it outlives them: going from one page to another,
+   the next page is put in place of this one and the camera travels along the
+   room's wall to it (components/laser-room/travel.ts). A page's own stage is
+   then only a marker naming its room, and its veil is the room's. */
+.room-host {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: 100lvh;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+html.room-hosted [data-laser-stage] {
+  display: none;
+}
+
+html.room-hosted body,
+html.room-hosted .home-hero {
+  background: none;
+}
+
+/* another page's room fades up as it starts; the home page's powers on from black */
+html.room-hosted:not([data-room="home"]) .room-host .laser-room__canvas {
+  opacity: 0;
+  transition: opacity 900ms ease;
+}
+
+html.room-hosted:not([data-room="home"]) .room-host.is-live .laser-room__canvas {
+  opacity: 1;
+}
+
+/* the veils over the room: the home page's deepens once the hero is behind
+   you; the other pages' is always a little there, so words sit on darker air.
+   They cross over while the camera travels from one kind of page to the other. */
+.room-host::before,
+.room-host::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+}
+
+.room-host::before {
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 45%, transparent 0 30%, rgba(2, 2, 5, 0.55) 100%),
+    rgba(2, 2, 5, 0.18);
+}
+
+.room-host::after {
+  background:
+    radial-gradient(ellipse 85% 75% at 50% 40%, transparent 0 28%, rgba(2, 2, 5, 0.74) 100%),
+    rgba(2, 2, 5, 0.16);
+}
+
+html.has-room[data-room="home"] .room-host::before {
+  opacity: clamp(0, var(--room-travel), 1);
+}
+
+html.has-room:not([data-room="home"]) .room-host::after {
+  opacity: calc(0.68 + 0.32 * clamp(0, var(--room-travel), 1));
+}
+
+html.is-travelling .room-host::before,
+html.is-travelling .room-host::after {
+  transition: opacity 600ms ease;
+}
+
+/* the page being left, held where it was on the screen while it slides away */
+.page-held {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+html.is-travelling,
+html.is-travelling body {
+  overflow-x: clip;
+}
+
+/* The phone's dock -------------------------------------------------------------
+   On a phone the pages are in a dock along the bottom of the screen, in thumb's
+   reach (components/site-dock.tsx), laid out like the room's wall: a rail with a
+   tick for each page's bay, and a bar of laser light over the page you are at.
+   Going to another page the light runs along the rail with the camera
+   (travel.ts adds `.dock__beam` for the move); a swipe along the dock goes to the
+   page beside this one. */
+.dock {
+  display: none;
+}
+
+@media (width <= 760px) {
+  .site-header .header-cta {
+    display: inline-flex;
+    min-height: 2.15rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.62rem;
+    justify-self: end;
+  }
+
+  .dock {
+    position: fixed;
+    right: max(0.6rem, env(safe-area-inset-right));
+    bottom: max(0.6rem, env(safe-area-inset-bottom));
+    left: max(0.6rem, env(safe-area-inset-left));
+    z-index: 45;
+    display: block;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.25rem;
+    /* smoked glass: small enough that blurring the room behind it costs little */
+    background: rgba(6, 5, 9, 0.72);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    backdrop-filter: blur(16px) saturate(1.3);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--laser-pink) 12%, transparent),
+      0 1rem 2.5rem -0.75rem rgba(0, 0, 0, 0.95);
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dock__rail {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  /* the wall */
+  .dock__rail::before {
+    position: absolute;
+    top: 0.6rem;
+    right: 6%;
+    left: 6%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2) 10%, rgba(255, 255, 255, 0.2) 90%, transparent);
+    content: "";
+  }
+
+  .dock a {
+    position: relative;
+    display: grid;
+    min-height: 3.5rem;
+    padding: 1.1rem 0 0.5rem;
+    color: rgba(255, 255, 255, 0.56);
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    place-items: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 300ms ease;
+  }
+
+  /* each page's bay */
+  .dock a::before {
+    position: absolute;
+    top: 0.42rem;
+    left: 50%;
+    width: 1px;
+    height: 0.38rem;
+    background: rgba(255, 255, 255, 0.28);
+    content: "";
+  }
+
+  .dock a.is-active {
+    color: #fff;
+    text-shadow: 0 0 0.7em color-mix(in srgb, var(--laser-pink) 85%, transparent);
+  }
+
+  .dock a:focus-visible {
+    outline: 2px solid var(--laser-cyan);
+    outline-offset: -4px;
+    border-radius: 0.9rem;
+  }
+
+  /* the camera: laser light on the rail over the page you are at; a page
+     deeper in a section has it a little to the right of its section's stop */
+  .dock a.is-active::after,
+  .dock__beam {
+    position: absolute;
+    top: calc(0.6rem - 1.5px);
+    left: calc(50% - 1.2rem);
+    width: 2.4rem;
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--laser-pink), var(--laser-cyan));
+    box-shadow:
+      0 0 0.45rem var(--laser-pink),
+      0 0 1.4rem color-mix(in srgb, var(--laser-pink) 60%, transparent);
+    content: "";
+  }
+
+  .dock a.is-deep::after {
+    left: calc(50% + 0.35rem);
+    width: 1.5rem;
+  }
+
+  .dock__beam {
+    left: 0;
+    pointer-events: none;
+    transform-origin: 50% 50%;
+  }
+
+  html.is-travelling .dock a.is-active::after {
+    opacity: 0;
+  }
+
+  html:not(.is-travelling) .dock__beam {
+    display: none;
+  }
+
+  /* room for the dock under the page, and over it for what else sits at the
+     bottom of the screen */
+  body {
+    padding-bottom: calc(4.8rem + env(safe-area-inset-bottom));
+  }
+
+  .next-bar {
+    bottom: calc(max(0.6rem, env(safe-area-inset-bottom)) + 4.6rem);
+  }
+
+  /* centred on the screen above the dock, from the top of the screen (behind
+     the header); a short phone shrinks the sign so the words and buttons stay
+     clear of the dock */
+  .home-hero__content {
+    margin-top: -4.25rem;
+    padding-top: 0.5rem;
+    padding-bottom: calc(6.25rem + env(safe-area-inset-bottom));
+  }
+
+  .home-hero .neon-lockup {
+    width: min(86vw, 34rem, calc((100svh - 24rem) * 1.05));
+  }
+
+  /* the hero's two buttons side by side, so the hero fits over the dock */
+  .home-hero__actions {
+    width: min(100%, 23rem);
+    flex-direction: row;
+  }
+
+  .home-hero__actions .button {
+    min-width: 0;
+    min-height: 2.9rem;
+    padding-inline: 0.6rem;
+    flex: 1 1 0;
+    font-size: 0.6rem;
+  }
+
+  /* the dock is the way on from here: the arrow would sit on it */
+  .home-hero__scroll {
+    display: none;
+  }
+
+  html.is-launching .dock {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1rem);
+  }
+
+  html.is-landing .dock {
+    transition:
+      opacity 900ms ease 450ms,
+      transform 1200ms cubic-bezier(0.22, 1, 0.36, 1) 450ms;
+  }
+}
+
+/* The other pages are for reading, so they are calmer than the home page (their
+   rooms are too: see components/laser-room/rooms.ts). Their panels, lines and
+   cards keep a steady glow instead of pulsing on the beat. */
+html.room-live:not([data-room="home"]) :is(.page-shell .prose, .page-shell .empty-state, .past-events__list, .detail-grid > aside, .archive-detail-hero .detail-meta, .archive-detail-layout > aside)::after,
+html.room-live:not([data-room="home"]) :is(.event-card, .archive-card > a):is(*, :hover, :focus-within, :focus-visible, .is-mobile-neon-active)::before {
+  animation: none;
+  opacity: 0.3;
+}
+
+html.room-live:not([data-room="home"]) :is(.page-shell .section--rule, .page-shell > .detail-grid, .archive-detail-layout)::before {
+  animation: none;
+  opacity: 0.6;
+}

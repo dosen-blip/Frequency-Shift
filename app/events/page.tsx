@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { EventCard } from "@/components/event-card";
 import { PageHeader } from "@/components/page-header";
+import { RoomStage } from "@/components/room-stage";
 import { getArchiveForEvent } from "@/content/archives";
 import { formatEventDate, getPastEvents, getUpcomingEvents } from "@/content/events";
 import { siteConfig } from "@/content/site";
@@ -17,6 +18,7 @@ export default function EventsPage() {
 
   return (
     <div className="page-shell">
+      <RoomStage room="events" />
       <PageHeader
         eyebrow={`Events / ${upcoming.length} upcoming`}
         title="Events"

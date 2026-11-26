@@ -110,6 +110,10 @@ export function SiteMotion() {
       hasPlayedHero.current = true;
     }
 
+    // The laser room behind the home hero starts itself on a full page load; after a client-side navigation it
+    // needs asking (and it lets a scene from a page that has gone go).
+    (window as Window & { frequencyShiftLaserHero?: () => void }).frequencyShiftLaserHero?.();
+
     // Touch devices get the same visual hierarchy without scroll-bound motion.
     // This keeps the main thread free for image decoding and navigation.
     if (
