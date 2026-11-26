@@ -6231,14 +6231,16 @@ html:not(.has-room) .glint {
   );
 }
 
+/* the core: wide and soft, no blunt hot spot, easing out like real glow */
 .glint__core {
-  --size: 6rem;
+  --size: 11rem;
   background: radial-gradient(
     closest-side,
-    #fff,
-    rgba(255, 245, 251, 0.85) 10%,
-    rgba(255, 220, 240, 0.4) 30%,
-    rgba(255, 200, 232, 0.1) 60%,
+    rgba(255, 246, 252, 0.5),
+    rgba(255, 236, 248, 0.38) 12%,
+    rgba(255, 222, 242, 0.22) 30%,
+    rgba(255, 208, 236, 0.1) 55%,
+    rgba(255, 200, 232, 0.03) 80%,
     transparent
   );
 }
@@ -6246,15 +6248,15 @@ html:not(.has-room) .glint {
 /* the core's colours parted by the glass, along the line from the middle of the
    pane to the light: pink on the far side of the core, cyan on the near */
 .glint__fringe {
-  --size: 9rem;
+  --size: 13rem;
   background:
-    radial-gradient(closest-side at 60% 50%, rgba(255, 50, 165, 0.55), rgba(255, 50, 165, 0.15) 55%, transparent),
-    radial-gradient(closest-side at 40% 50%, rgba(40, 200, 255, 0.5), rgba(40, 200, 255, 0.14) 55%, transparent);
+    radial-gradient(closest-side at 58% 50%, rgba(255, 50, 165, 0.36), rgba(255, 50, 165, 0.14) 45%, rgba(255, 50, 165, 0.04) 75%, transparent),
+    radial-gradient(closest-side at 42% 50%, rgba(40, 200, 255, 0.32), rgba(40, 200, 255, 0.12) 45%, rgba(40, 200, 255, 0.03) 75%, transparent);
 }
 
 .glint__ghost {
-  --size: 2.4rem;
-  background: radial-gradient(closest-side, rgba(215, 243, 255, 0.5), rgba(215, 243, 255, 0.12) 50%, transparent);
+  --size: 3.4rem;
+  background: radial-gradient(closest-side, rgba(215, 243, 255, 0.3), rgba(215, 243, 255, 0.08) 55%, transparent);
 }
 
 /* through the slab: a fan of light from the core to the far side, its colours
