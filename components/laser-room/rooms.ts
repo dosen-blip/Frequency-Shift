@@ -12,7 +12,7 @@ import type { SignLayout } from "./sign";
 // A room is its neon (shape and colours), the two colours of its lasers, the looks its show runs through and how
 // fast, and the move the scroll carries the camera through. scene.ts plays it; mount.ts puts it behind the page.
 
-export type RoomName = "events" | "event" | "archive" | "night" | "about" | "artist" | "contact" | "legal" | "lost";
+export type RoomName = "events" | "event" | "archive" | "night" | "sets" | "about" | "artist" | "contact" | "legal" | "lost";
 
 type Draw = (c: CanvasRenderingContext2D, x: number, y: number, w: number, h: number) => void;
 
@@ -113,6 +113,18 @@ const beacon: Draw = (c, x, y, w, h) => {
   }
 };
 
+/** record: a ring with the dot lit inside it */
+const record: Draw = (c, x, y, w, h) => {
+  const cx = x + w / 2;
+  const cy = y + h / 2;
+  c.beginPath();
+  c.arc(cx, cy, h / 2 - (h * T) / 2, 0, Math.PI * 2);
+  tube(c, h, T);
+  c.beginPath();
+  c.arc(cx, cy, h * 0.22, 0, Math.PI * 2);
+  c.fill();
+};
+
 /** pause: two bars */
 const pause: Draw = (c, x, y, w, h) => {
   const bar = w * 0.3;
@@ -211,6 +223,21 @@ const ROOMS_AS_DRAWN: Record<RoomName, Room> = {
     ownColours: true,
   },
   // the sound: a wave running from pink to cyan, a slow wide show, and the camera rises over the floor
+  // the recorded sets: record, in a hot red-pink, single beams sweeping slowly like a camera panning the floor
+  sets: {
+    art: record,
+    aspect: 1,
+    look: {
+      tube: [0xff2d6f, 0xff4fa8],
+      light: [1, 0.12, 0.4],
+      lasers: [PINK, CYAN],
+      order: order(["scan", 8], ["fan", 8], ["tunnel", 4]),
+      tempo: 0.5,
+      path: { tilt: 0.6, back: 0.8 },
+      rigs: ["flank", "floor"],
+    },
+    cards: [[".sets-soon", 0.4]],
+  },
   about: {
     art: wave,
     aspect: 4.2,

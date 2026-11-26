@@ -15,7 +15,7 @@ import { primaryNavigation } from "@/content/site";
 // Plain links: without the room, or without scripts, it is an ordinary menu that is always there.
 //
 // Each stop is a plain, familiar icon drawn as a line of neon: a house, a calendar for events, a Polaroid for the
-// archive's photographs, an "i" for About and an envelope for Contact. The page you are at is lit in its room's
+// archive's photographs, a video for the recorded sets, an "i" for About and an envelope for Contact. The page you are at is lit in its room's
 // colour; the page's name is there for screen readers.
 
 const ICONS: Record<string, ReactNode> = {
@@ -32,6 +32,12 @@ const ICONS: Record<string, ReactNode> = {
       <rect x="4.5" y="2.5" width="15" height="19" rx="1.5" />
       <rect x="7" y="5" width="10" height="10.5" rx="0.5" />
     </g>
+  ),
+  "/sets": (
+    <>
+      <rect x="2.5" y="5" width="19" height="14" rx="3" />
+      <path d="M10 9.3v5.4l4.6-2.7z" />
+    </>
   ),
   "/about": (
     <>

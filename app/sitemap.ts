@@ -5,7 +5,7 @@ import { events } from "@/content/events";
 import { siteConfig } from "@/content/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["", "/events", "/archive", "/about", "/contact", "/privacy", "/terms"];
+  const staticRoutes = ["", "/events", "/archive", "/sets", "/about", "/contact", "/privacy", "/terms"];
   const routes = [
     ...staticRoutes,
     ...events.map((event) => `/events/${event.slug}`),

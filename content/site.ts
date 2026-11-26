@@ -14,6 +14,7 @@ export const siteConfig = {
 export const primaryNavigation = [
   { label: "Events", href: "/events" },
   { label: "Archive", href: "/archive" },
+  { label: "Sets", href: "/sets" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ] as const;

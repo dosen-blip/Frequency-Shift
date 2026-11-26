@@ -20,7 +20,7 @@ import type { LaserRoom } from "./scene";
 // ordinary page load.
 
 /** the site's sections, left to right along the wall; each section's own pages follow it */
-const WALL = ["", "events", "archive", "about", "artists", "contact", "privacy", "terms"];
+const WALL = ["", "events", "archive", "sets", "about", "artists", "contact", "privacy", "terms"];
 
 type Ctx = {
   scene: LaserRoom;
