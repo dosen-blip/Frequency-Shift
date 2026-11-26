@@ -5808,7 +5808,7 @@ html.is-travelling body {
 /* The phone's dock -------------------------------------------------------------
    On a phone the pages are in a dock along the bottom of the screen, in thumb's
    reach (components/site-dock.tsx), in the order they hang along the room's
-   wall: a neon icon for each, and a bar of laser light under the page you are
+   wall: a familiar icon for each, and a bar of laser light under the page you are
    at. Going to another page the light runs to it with the camera (travel.ts
    adds `.dock__beam` for the move); a swipe along the dock goes to the page
    beside this one. */
@@ -5851,8 +5851,8 @@ html.is-travelling body {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  /* each stop is its page's neon in miniature (see site-dock.tsx), unlit until
-     you are there, then lit in its room's colour */
+  /* each stop is a familiar icon drawn as neon (see site-dock.tsx), unlit
+     until you are there, then lit in its room's colour */
   .dock a {
     --tube: var(--laser-pink);
     --halo: var(--tube);

@@ -14,21 +14,36 @@ import { primaryNavigation } from "@/content/site";
 //
 // Plain links: without the room, or without scripts, it is an ordinary menu that is always there.
 //
-// Each stop is a small neon icon, the same piece of neon that page hangs on the room's wall (rooms.ts): fast-forward
-// for Events, rewind for the archive, the shifting wave for About, a signal going out for Contact, and a house for
-// home. The page you are at is lit in its room's colour; the page's name is there for screen readers.
+// Each stop is a plain, familiar icon drawn as a line of neon: a house, a calendar for events, a Polaroid for the
+// archive's photographs, an "i" for About and an envelope for Contact. The page you are at is lit in its room's
+// colour; the page's name is there for screen readers.
 
 const ICONS: Record<string, ReactNode> = {
-  "/": <path d="M3.5 11.5 12 4.5l8.5 7M6.5 9.5v10h11v-10" />,
-  "/events": <path d="M2.5 7v10l5.5-5zM9.5 7v10l5.5-5zM16.5 7v10l5.5-5z" />,
-  "/archive": <path d="M21.5 7v10L16 12zM14.5 7v10L9 12zM7.5 7v10L2 12z" />,
+  "/": <path d="M3.5 11 12 4l8.5 7M6 9.5V20h12V9.5M10 20v-5h4v5" />,
+  "/events": (
+    <>
+      <rect x="3.5" y="5.5" width="17" height="15" rx="2.5" />
+      <path d="M3.5 10h17M8 3.5v4M16 3.5v4" />
+      <circle cx="12" cy="15" r="1.2" fill="currentColor" stroke="none" />
+    </>
+  ),
+  "/archive": (
+    <g transform="rotate(-7 12 12)">
+      <rect x="4.5" y="2.5" width="15" height="19" rx="1.5" />
+      <rect x="7" y="5" width="10" height="10.5" rx="0.5" />
+    </g>
+  ),
   "/about": (
-    <path d="M2 12 2.5 11.7 3 11.2 3.5 10.6 4 9.8 4.5 9 5 8.2 5.5 7.5 6 6.9 6.5 6.5 7 6.5 7.5 6.9 8 7.7 8.5 8.9 9 10.5 9.5 12.4 10 14.4 10.5 16.2 11 17.6 11.5 18.4 12 18.4 12.5 17.4 13 15.6 13.5 13.2 14 10.5 14.5 8.1 15 6.4 15.5 5.9 16 6.7 16.5 8.7 17 11.4 17.5 14.1 18 16.2 18.5 17 19 16.3 19.5 14.4 20 12 20.5 10 21 9.1 21.5 9.7 22 12" />
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 11v5.5" />
+      <circle cx="12" cy="7.9" r="1.1" fill="currentColor" stroke="none" />
+    </>
   ),
   "/contact": (
     <>
-      <circle cx="12" cy="12" r="1.3" fill="currentColor" />
-      <path d="M15.2 9.95a3.8 3.8 0 0 1 0 4.1M8.8 14.05a3.8 3.8 0 0 1 0-4.1M18.07 8.52a7 7 0 0 1 0 6.96M5.93 15.48a7 7 0 0 1 0-6.96M21.09 7.38a10.2 10.2 0 0 1 0 9.24M2.91 16.62a10.2 10.2 0 0 1 0-9.24" />
+      <rect x="3" y="5.5" width="18" height="13" rx="2" />
+      <path d="m3.5 7 8.5 6.5L20.5 7" />
     </>
   ),
 };
