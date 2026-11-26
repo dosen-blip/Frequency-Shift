@@ -6031,3 +6031,96 @@ html.room-live:not([data-room="home"]) :is(.page-shell .section--rule, .page-she
   animation: none;
   opacity: 0.6;
 }
+
+/* Glass, the buttons' way ------------------------------------------------------
+   Panels, cards, photographs, the phone dock and the next-event bar share the
+   call-to-action buttons' material: dark smoked glass with a pink sheen from
+   above and a cyan one from below, a rim that runs from pink to cyan, and a soft
+   glow in both. Hovering a card lights it the way the main button lights. No new
+   blur layers: the glass is painted, so it costs the room nothing. */
+:root {
+  --glass-rim: linear-gradient(
+    135deg,
+    #ffa8db,
+    rgba(255, 190, 230, 0.32) 30%,
+    rgba(170, 230, 255, 0.24) 68%,
+    #8fe3ff
+  );
+  --glass-sheen-pink: radial-gradient(110% 80% at 10% -15%, rgba(255, 120, 200, 0.3), transparent 58%);
+  --glass-sheen-cyan: radial-gradient(90% 70% at 100% 115%, rgba(30, 200, 255, 0.22), transparent 62%);
+  --glass-base: linear-gradient(180deg, rgba(26, 6, 30, 0.74), rgba(6, 3, 12, 0.84));
+  --glass-glow:
+    inset 0 1px 0 rgba(255, 236, 248, 0.38),
+    inset 0 0 1.6rem rgba(235, 115, 193, 0.18),
+    inset 0 -0.8rem 2rem -1rem rgba(30, 200, 255, 0.22),
+    0 0 0.1rem rgba(255, 220, 242, 0.6),
+    -0.5rem -0.4rem 1.6rem -0.4rem rgba(255, 31, 143, 0.42),
+    0.5rem 0.4rem 1.6rem -0.4rem rgba(30, 200, 255, 0.34),
+    0 0 3.5rem rgba(197, 72, 240, 0.16);
+  /* for photographs and cards, whose pictures would cover a painted rim: a pink
+     edge up and to the left, a cyan one down and to the right, glowing out */
+  --glass-edges:
+    -1px -1px 0 #ffa8db,
+    1px 1px 0 #8fe3ff,
+    -0.5rem -0.4rem 1.6rem -0.4rem rgba(255, 31, 143, 0.5),
+    0.5rem 0.4rem 1.6rem -0.4rem rgba(30, 200, 255, 0.42);
+}
+
+html.has-room
+  :is(
+    .home-event__content,
+    .home-manifesto__copy,
+    .home-event .empty-state,
+    .page-shell .prose,
+    .page-shell .empty-state,
+    .past-events__list,
+    .detail-grid > aside,
+    .archive-detail-hero .detail-meta,
+    .archive-detail-layout > aside
+  ) {
+  border: 1px solid transparent;
+  background:
+    var(--glass-sheen-pink) padding-box,
+    var(--glass-sheen-cyan) padding-box,
+    var(--glass-base) padding-box,
+    var(--glass-rim) border-box;
+  box-shadow:
+    var(--glass-glow),
+    0 2.5rem 6rem -1.5rem rgba(0, 0, 0, 0.85);
+}
+
+html.has-room :is(.event-card, .archive-card > a) {
+  border-color: rgba(255, 220, 240, 0.16);
+  box-shadow:
+    var(--glass-edges),
+    0 3rem 6rem -2rem rgba(0, 0, 0, 0.9);
+}
+
+html.has-room :is(.event-card:hover, .event-card:focus-within, .archive-card > a:hover, .archive-card > a:focus-visible) {
+  border-color: #ffd9f1;
+  box-shadow:
+    -1px -1px 0 #ffa8db,
+    1px 1px 0 #8fe3ff,
+    0 0 0.15rem #fff,
+    -0.5rem -0.5rem 2rem -0.4rem rgba(255, 31, 143, 0.75),
+    0.5rem 0.5rem 2rem -0.4rem rgba(30, 200, 255, 0.6),
+    0 0 5rem rgba(197, 72, 240, 0.3),
+    0 3rem 6rem -2rem rgba(0, 0, 0, 0.9);
+}
+
+html.has-room :is(.home-memory__grid figure, .archive-gallery figure, .archive-films video, .home-event__visual) {
+  box-shadow: var(--glass-edges);
+}
+
+.dock,
+.next-bar {
+  border: 1px solid transparent;
+  background:
+    var(--glass-sheen-pink) padding-box,
+    var(--glass-sheen-cyan) padding-box,
+    linear-gradient(180deg, rgba(14, 5, 18, 0.82), rgba(5, 3, 10, 0.88)) padding-box,
+    var(--glass-rim) border-box;
+  box-shadow:
+    var(--glass-glow),
+    0 1rem 2.5rem -0.75rem rgba(0, 0, 0, 0.95);
+}
