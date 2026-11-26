@@ -1,19 +1,19 @@
 // Light on the glass. The site's panels, cards, buttons, dock and event bar are glass ("Glass, the buttons' way" in
 // app/globals.css); the cursor is a small light held over them. This places that light on every pane within reach,
-// and the styles under "Light on the glass" draw what a pane of glass does with it:
+// and the styles under "Light on the glass" draw what a slab of glass does with it:
 //
-//   - its face: a soft pool where the light falls, in the room's own colour; a gentle core, a little stretched
-//     along the pane's edge the way a bevelled pane stretches a reflection, its colours split pink and cyan across
-//     it, turned to point from the middle of the pane to the light; and a fainter second image from the glass's
-//     back face, nearer the middle
-//   - its edge: the rim nearest the light catches it, from before the light is over the pane, and the light it
-//     catches bleeds a little way in; while the light is over the pane, the far rim glows where light carried
-//     inside the glass comes out
+//   - on its face: a pool where the light falls, a hot core, colour fringes round the core turned toward the light,
+//     and a fainter second image off the back face
+//   - through it: light that enters the slab travels on through it and fans out, pink to cyan, toward the far side
+//     (dispersion), coming out as a glow on the far edge
+//   - on its edges: the bevel nearest the light catches it as a crisp bright line, glowing out past the edge and in
+//     across the glass, its colours parted along the edge; the far bevel catches the light that came through
 //
-// Every piece is drawn once, at a fixed size, and only moved and faded after that (transform and opacity), so the
-// light costs the screen nothing to repaint however large the pane. The light follows the pointer with a little
-// weight, as a reflection slides on glass. Mice and trackpads only, never touch. Plain script: it runs in the
-// static export, which ships no React.
+// Light reaching a pane from just off its edge still lights that edge and still crosses the glass, so panes catch
+// the light before the cursor is over them. Everything is drawn once at a fixed size and then only moved, turned,
+// stretched and faded (transform and opacity), so the light never repaints a pane however large. The light glides
+// after the pointer on a critically damped spring, as a reflection slides on glass. Mice and trackpads only, never
+// touch. Plain script: it runs in the static export, which ships no React.
 (function () {
   var fine = window.matchMedia && matchMedia("(hover: hover) and (pointer: fine)");
   if (!fine || !fine.matches) return;
@@ -35,10 +35,11 @@
     ".dock",
     ".next-bar",
   ].join(",");
-  var REACH = 170; // px beyond a pane at which its rim starts to catch the light
-  var FACE_REACH = 30; // px beyond a pane at which its face stops showing the light
-  var FOLLOW_MS = 60; // how long the light takes to catch up with the pointer (time constant)
-  var PIECES = ["pool", "core", "ghost", "spill", "rim", "far"];
+  var REACH = 190; // px beyond a pane at which its edge starts to catch the light
+  var FACE_REACH = 28; // px beyond a pane at which its face stops showing the light
+  var OUT = 26; // px the glint reaches past the pane for the glow outside its edge (matches --glint-out)
+  var FAN = 420; // px: the length the fan is drawn at (matches .glint__fan's width)
+  var SPRING = 26; // rad/s: the light's spring; higher follows tighter
 
   var reduce = matchMedia("(prefers-reduced-motion: reduce)");
   var panes = [];
@@ -60,28 +61,90 @@
     root.className = "glint";
     root.setAttribute("aria-hidden", "true");
     root.innerHTML =
-      '<span class="glint__clip"><i class="glint__pool"></i><i class="glint__spill"></i>' +
-      '<i class="glint__ghost"></i><i class="glint__core"></i></span>' +
-      '<span class="glint__ring"><i class="glint__rim"></i><i class="glint__far"></i></span>';
+      '<span class="glint__outer"><i class="glint__outer-near" data-p="outer"></i><i class="glint__outer-far" data-p="farOuter"></i></span>' +
+      '<span class="glint__face"><i class="glint__pool" data-p="pool"></i><i class="glint__fan" data-p="fan"></i>' +
+      '<i class="glint__fringe" data-p="fringe"></i><i class="glint__core" data-p="core"></i><i class="glint__ghost" data-p="ghost"></i></span>' +
+      '<span class="glint__inner"><i class="glint__inner-near" data-p="inner"></i><i class="glint__inner-far" data-p="farInner"></i></span>' +
+      '<span class="glint__bevel"><i class="glint__edge-near" data-p="edge"></i><i class="glint__edge-far" data-p="farEdge"></i></span>';
     if (getComputedStyle(el).position === "static") el.classList.add("glint-host");
     el.appendChild(root);
-    g = { root: root };
-    for (var i = 0; i < PIECES.length; i++) g[PIECES[i]] = root.querySelector(".glint__" + PIECES[i]).style;
+    g = { root: root, w: -1, h: -1 };
+    var pieces = root.querySelectorAll("i");
+    for (var i = 0; i < pieces.length; i++) g[pieces[i].getAttribute("data-p")] = pieces[i].style;
     el.__glint = g;
     return g;
+  }
+
+  // The soft bands just inside and just outside a pane's edge, as masks drawn to its exact shape: a blurred
+  // rounded rectangle cut by a sharp one. Drawn once per pane size, so the edges never show seams at the corners
+  // and cost nothing while the light moves.
+  function svg(w, h, body) {
+    return (
+      'url("data:image/svg+xml,' +
+      encodeURIComponent(
+        "<svg xmlns='http://www.w3.org/2000/svg' width='" + w + "' height='" + h + "' viewBox='0 0 " + w + " " + h + "'>" + body + "</svg>",
+      ) +
+      '")'
+    );
+  }
+
+  function n(v) {
+    return Math.max(0, v).toFixed(1);
+  }
+
+  function shape(el, g, b) {
+    var w = b.width;
+    var h = b.height;
+    var short = Math.min(w, h);
+    var r = Math.min(parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0, short / 2);
+    var band = Math.min(20, short * 0.4);
+    var o = OUT;
+    var inner = svg(
+      n(w),
+      n(h),
+      "<defs><filter id='f' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='" +
+        n(band / 2.6) +
+        "'/></filter><mask id='m'><rect width='100%' height='100%' fill='white'/><rect x='" +
+        n(band) + "' y='" + n(band) + "' width='" + n(w - 2 * band) + "' height='" + n(h - 2 * band) +
+        "' rx='" + n(r - band * 0.6) + "' fill='black' filter='url(#f)'/></mask></defs>" +
+        "<rect width='100%' height='100%' fill='white' mask='url(#m)'/>",
+    );
+    var grow = o * 0.2;
+    var outer = svg(
+      n(w + 2 * o),
+      n(h + 2 * o),
+      "<defs><filter id='f' x='-50%' y='-50%' width='200%' height='200%'><feGaussianBlur stdDeviation='" +
+        n(o / 3.2) +
+        "'/></filter><mask id='m'><rect width='100%' height='100%' fill='white'/><rect x='" +
+        o + "' y='" + o + "' width='" + n(w) + "' height='" + n(h) + "' rx='" + n(r) + "' fill='black'/></mask></defs>" +
+        "<rect x='" + n(o - grow) + "' y='" + n(o - grow) + "' width='" + n(w + 2 * grow) + "' height='" + n(h + 2 * grow) +
+        "' rx='" + n(r + grow) + "' fill='white' filter='url(#f)' mask='url(#m)'/>",
+    );
+    var innerStyle = g.root.querySelector(".glint__inner").style;
+    var outerStyle = g.root.querySelector(".glint__outer").style;
+    innerStyle.webkitMaskImage = innerStyle.maskImage = inner;
+    outerStyle.webkitMaskImage = outerStyle.maskImage = outer;
+    g.w = w;
+    g.h = h;
   }
 
   function off(el) {
     if (el.__glint) el.__glint.root.classList.remove("is-lit");
   }
 
-  function at(style, x, y, turn) {
+  function at(style, x, y, turn, stretch) {
     style.transform =
-      "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px,0)" + (turn === undefined ? "" : " rotate(" + turn.toFixed(3) + "rad)");
+      "translate(" +
+      x.toFixed(1) +
+      "px," +
+      y.toFixed(1) +
+      "px)" +
+      (turn === undefined ? "" : " rotate(" + turn.toFixed(4) + "rad)") +
+      (stretch === undefined ? "" : " scaleX(" + stretch.toFixed(3) + ")");
   }
 
   function fade(style, v) {
-    style.opacity = v.toFixed(3);
+    style.opacity = Math.max(0, Math.min(1, v)).toFixed(3);
   }
 
   function frame(now) {
@@ -90,7 +153,7 @@
       panes = Array.prototype.slice.call(document.querySelectorAll(SELECTOR));
       dirty = false;
     }
-    var dt = Math.min(64, last ? now - last : 16);
+    var dt = Math.min(0.05, last ? (now - last) / 1000 : 1 / 60);
     last = now;
 
     if (!pointer) {
@@ -99,11 +162,16 @@
       light = null;
       return;
     }
-    if (!light) light = { x: pointer.x, y: pointer.y };
-    var k = reduce.matches ? 1 : 1 - Math.exp(-dt / FOLLOW_MS);
-    light.x += (pointer.x - light.x) * k;
-    light.y += (pointer.y - light.y) * k;
-    var moving = Math.abs(pointer.x - light.x) + Math.abs(pointer.y - light.y) > 0.25;
+    if (!light || reduce.matches) light = { x: pointer.x, y: pointer.y, vx: 0, vy: 0 };
+    else {
+      // a critically damped spring: the light glides after the pointer and settles without overshooting
+      var w = SPRING;
+      light.vx += (w * w * (pointer.x - light.x) - 2 * w * light.vx) * dt;
+      light.vy += (w * w * (pointer.y - light.y) - 2 * w * light.vy) * dt;
+      light.x += light.vx * dt;
+      light.y += light.vy * dt;
+    }
+    var moving = Math.abs(pointer.x - light.x) + Math.abs(pointer.y - light.y) + Math.abs(light.vx) / 60 + Math.abs(light.vy) / 60 > 0.2;
 
     // read every pane's place first, then write, so the page is laid out once per frame
     var vh = innerHeight;
@@ -124,9 +192,11 @@
       var b = near[j][1];
       var dist = near[j][2];
       var g = glint(p);
-      // the light in the glint's own frame (the glint covers the pane's border too: 1px out)
-      var x = light.x - b.left + 1;
-      var y = light.y - b.top + 1;
+      // the edge bands follow the pane's own corners: tell them its radius (again if the pane changes size)
+      if (Math.abs(g.w - b.width) > 0.5 || Math.abs(g.h - b.height) > 0.5) shape(p, g, b);
+      // the light in the pane's own frame (its border box)
+      var x = light.x - b.left;
+      var y = light.y - b.top;
       var hw = b.width / 2;
       var hh = b.height / 2;
       var cx = x - hw;
@@ -134,29 +204,47 @@
       var len = Math.sqrt(cx * cx + cy * cy) || 1;
       var ux = cx / len;
       var uy = cy / len;
-      // how far out from the middle the light is, 0 to 1 at the pane's edge
-      var out = Math.min(1, Math.max(Math.abs(cx) / (hw || 1), Math.abs(cy) / (hh || 1)));
+      var turn = Math.atan2(uy, ux);
+      // how far out from the middle the light is: 0 in the middle, 1 at the edge, more beyond it
+      var out = Math.max(Math.abs(cx) / (hw || 1), Math.abs(cy) / (hh || 1));
       var inside = dist === 0;
+      var edgeOn = Math.min(1, out);
       var face = inside ? 1 : Math.max(0, 1 - dist / FACE_REACH);
       var t = 1 - dist / REACH;
-      var rim = inside ? 0.45 + 0.55 * out * out : t * t * (3 - 2 * t);
-      var turn = Math.atan2(uy, ux);
+      var reach = t * t * (3 - 2 * t);
+      // the near bevel: brightest as the light grazes it, from either side
+      var bevel = inside ? 0.65 + 0.35 * edgeOn : reach;
+      // where light that came in near the pointer leaves the slab: straight on through the middle, at the far edge
+      var sx = Math.abs(ux) * hh > Math.abs(uy) * hw ? hw / Math.abs(ux || 1) : hh / Math.abs(uy || 1);
+      var fx = hw - ux * sx;
+      var fy = hh - uy * sx;
+      var span = Math.sqrt((fx - x) * (fx - x) + (fy - y) * (fy - y));
+      // light carried through the glass: more the further off-centre it enters, and some even from just outside
+      var through = inside ? 0.25 + 0.75 * edgeOn : 0.8 * reach;
 
       at(g.pool, x, y);
-      at(g.core, x, y, turn);
-      // the back face's image: nearer the middle, further off the more slanted the light comes in
-      at(g.ghost, x - ux * (8 + 16 * out), y - uy * (8 + 16 * out));
-      at(g.spill, x, y);
-      at(g.rim, x, y);
-      // light carried inside the glass comes out on the far side, through the middle
-      at(g.far, hw - ux * hw * 1.05 + 1, hh - uy * hh * 1.05 + 1);
-      // a reflection grows stronger toward the pane's edge, where the glass is seen more nearly edge-on
-      fade(g.pool, face * (0.7 + 0.3 * out));
-      fade(g.core, face * (0.6 + 0.4 * out));
-      fade(g.ghost, face * 0.8);
-      fade(g.spill, inside ? 0.3 * out : rim);
-      fade(g.rim, rim);
-      fade(g.far, inside ? 0.25 + 0.6 * out : 0);
+      at(g.core, x, y);
+      at(g.fringe, x, y, turn);
+      at(g.ghost, x - ux * (6 + 18 * edgeOn), y - uy * (6 + 18 * edgeOn));
+      at(g.fan, x, y, Math.atan2(fy - y, fx - x), span / FAN);
+      at(g.edge, x, y, turn);
+      at(g.inner, x, y, turn);
+      at(g.outer, x + OUT, y + OUT, turn);
+      at(g.farEdge, fx, fy);
+      at(g.farInner, fx, fy);
+      at(g.farOuter, fx + OUT, fy + OUT);
+
+      fade(g.pool, face * (0.75 + 0.25 * edgeOn));
+      fade(g.core, face);
+      fade(g.fringe, face * (0.25 + 0.75 * edgeOn));
+      fade(g.ghost, face * 0.85);
+      fade(g.fan, through);
+      fade(g.edge, bevel);
+      fade(g.inner, bevel);
+      fade(g.outer, bevel);
+      fade(g.farEdge, through);
+      fade(g.farInner, through * 0.85);
+      fade(g.farOuter, through * 0.7);
       if (!g.root.classList.contains("is-lit")) g.root.classList.add("is-lit");
       nowLit.push(p);
     }
