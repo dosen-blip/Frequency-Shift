@@ -46,8 +46,9 @@ test("server-renders the Frequency Shift homepage", async () => {
   const html = await response.text();
   assert.match(html, /<title>Frequency Shift — Ottawa, Canada<\/title>/i);
   assert.match(html, /For the love of house\./);
-  // no night is on sale after Frequency in the Garage (20 Nov 2026): the home page points to Instagram
-  assert.match(html, /Follow Frequency Shift on Instagram for the next date\./);
+  // no night is on sale after Frequency in the Garage (20 Nov 2026): the section under the hero is one line
+  assert.match(html, /<p class="empty-state" data-reveal="up">Upcoming events will show up here\.<\/p>/);
+  assert.doesNotMatch(html, /<span>Next event<\/span>/);
   assert.match(html, /frequency-shift-wordmark-neon\.svg/);
   assert.match(html, /frequency-shift-wordmark-neon-mobile\.svg/);
   assert.match(

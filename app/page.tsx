@@ -26,17 +26,19 @@ export default function HomePage() {
       <section
         id="next-event"
         className="home-event"
-        aria-labelledby="next-event-title"
+        aria-labelledby={featuredEvent ? "next-event-title" : undefined}
+        aria-label={featuredEvent ? undefined : "Upcoming events"}
       >
-        <div className="home-section-index" data-reveal="up">
-          <span>Next event</span>
-          {featuredEvent ? (
+        {/* with nothing on sale the section is just the one line below, without its "Next event" label */}
+        {featuredEvent ? (
+          <div className="home-section-index" data-reveal="up">
+            <span>Next event</span>
             <span>
               {formatEventDate(featuredEvent.startsAt, { weekday: true })}
               {featuredEvent.venue ? ` / ${featuredEvent.venue.split(" · ")[0]}` : ""}
             </span>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
         {featuredEvent ? (
           <div className="home-event__layout">
             <Link
@@ -102,7 +104,7 @@ export default function HomePage() {
           </div>
         ) : (
           <p className="empty-state" data-reveal="up">
-            Follow Frequency Shift on Instagram for the next date.
+            Upcoming events will show up here.
           </p>
         )}
       </section>
