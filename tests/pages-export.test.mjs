@@ -31,6 +31,7 @@ test("exports the public routes and GitHub Pages control files", async () => {
     ".nojekyll",
     "static-pages.js",
     "laser-hero.js",
+    "glass-light.js",
     "laser-room/laser-room.js",
     "media/laser-room/floor-albedo.webp",
     "media/laser-room/floor-surface-phone.webp",
@@ -52,6 +53,7 @@ test("prefixes internal routes and assets with the project site path", async () 
   assert.match(homepage, /src="\/Frequency-Shift\/static-pages\.js"/);
   assert.match(homepage, /data-static-pages-runtime/);
   assert.match(homepage, /src="\/Frequency-Shift\/laser-hero\.js"/);
+  assert.match(homepage, /src="\/Frequency-Shift\/glass-light\.js"/);
   // the other pages' rooms: the same loader, and the stage that names the room
   assert.match(archive, /src="\/Frequency-Shift\/laser-hero\.js"/);
   assert.match(archive, /data-laser-stage[^>]*data-room="archive"/);

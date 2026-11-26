@@ -6124,3 +6124,143 @@ html.has-room :is(.home-memory__grid figure, .archive-gallery figure, .archive-f
     var(--glass-glow),
     0 1rem 2.5rem -0.75rem rgba(0, 0, 0, 0.95);
 }
+
+/* Light on the glass ---------------------------------------------------------
+   The cursor is a small light held over the glass (public/glass-light.js places
+   it on every pane within reach). On the face: a hot core, split by the glass
+   into a pink fringe and a cyan one; a fainter image from the glass's back face;
+   a long thin streak that tilts as the light crosses the pane; and a soft
+   brightening round it. On the rim: the edge nearest the light catches it, from
+   before the light is over the pane; and the far edge glows where light carried
+   inside the glass comes out. Added light only (screen), so text stays put. */
+.glint-host {
+  position: relative;
+}
+
+.glint {
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 420ms ease;
+}
+
+.glint.is-lit {
+  opacity: 1;
+  transition-duration: 160ms;
+}
+
+html:not(.has-room) .glint {
+  display: none;
+}
+
+.glint__face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at var(--gx) var(--gy), rgba(255, 255, 255, 0.6), rgba(255, 238, 248, 0.3) 0.5rem, rgba(255, 238, 248, 0) 1.6rem),
+    radial-gradient(
+      circle at calc(var(--gx) - var(--sx)) calc(var(--gy) - var(--sy)),
+      rgba(255, 60, 170, 0.36),
+      rgba(255, 60, 170, 0) 3.4rem
+    ),
+    radial-gradient(
+      circle at calc(var(--gx) + var(--sx)) calc(var(--gy) + var(--sy)),
+      rgba(40, 200, 255, 0.32),
+      rgba(40, 200, 255, 0) 3.4rem
+    ),
+    radial-gradient(
+      circle at calc(var(--gx) + var(--bx)) calc(var(--gy) + var(--by)),
+      rgba(200, 238, 255, 0.24),
+      rgba(200, 238, 255, 0) 1.2rem
+    ),
+    radial-gradient(ellipse 24rem 15rem at var(--gx) var(--gy), rgba(255, 170, 222, 0.1), rgba(255, 170, 222, 0) 70%);
+  opacity: var(--face, 0);
+}
+
+/* light caught by the nearest edge, bleeding into the glass from it */
+.glint__edge {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  opacity: var(--spill, 0);
+}
+
+.glint__edge::before {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 4.5rem at var(--gx) var(--gy), rgba(255, 215, 240, 0.85), rgba(255, 215, 240, 0) 100%),
+    radial-gradient(circle 9rem at var(--gx) var(--gy), rgba(255, 50, 165, 0.7), rgba(255, 50, 165, 0.2) 55%, rgba(255, 50, 165, 0) 100%),
+    radial-gradient(circle 15rem at var(--gx) var(--gy), rgba(40, 200, 255, 0.28), rgba(40, 200, 255, 0) 100%);
+  content: "";
+}
+
+/* the streak: a long thin line of light through the core, with a finer cyan one
+   off the other face, fading out along its length */
+.glint__streak {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 44rem;
+  height: 9rem;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 42%,
+      rgba(255, 255, 255, 0.14) 48.6%,
+      rgba(255, 255, 255, 0.32) 50%,
+      rgba(255, 255, 255, 0.14) 51.4%,
+      transparent 58%
+    ),
+    linear-gradient(180deg, transparent 61%, rgba(143, 227, 255, 0.13) 64.5%, transparent 68%);
+  -webkit-mask-image: radial-gradient(closest-side, #000, rgba(0, 0, 0, 0.5) 38%, transparent);
+  mask-image: radial-gradient(closest-side, #000, rgba(0, 0, 0, 0.5) 38%, transparent);
+  transform: translate(calc(var(--gx) - 50%), calc(var(--gy) - 50%)) rotate(var(--tilt, -24deg));
+  will-change: transform;
+}
+
+.glint__rim {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  filter:
+    drop-shadow(0 0 1.5px #fff)
+    drop-shadow(0 0 0.4rem #ff32a5)
+    drop-shadow(0 0 1.2rem rgba(255, 50, 165, 0.7))
+    drop-shadow(0 0 2rem rgba(40, 200, 255, 0.45));
+  opacity: var(--rim, 0);
+}
+
+.glint__rim::before {
+  position: absolute;
+  inset: 0;
+  padding: 2.5px;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      circle 11rem at var(--gx) var(--gy),
+      #fff,
+      #fff 6%,
+      #ffc8e8 16%,
+      #ff3ca8 36%,
+      rgba(40, 200, 255, 0.8) 62%,
+      rgba(40, 200, 255, 0) 86%
+    ),
+    radial-gradient(circle 8rem at var(--ox) var(--oy), rgb(143 227 255 / calc(0.75 * var(--far, 0))), rgb(143 227 255 / 0) 75%);
+  content: "";
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}

@@ -66,6 +66,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteDock />
         <NextEventBar />
         <NeonCursor />
+        {/* the cursor as a light on the site's glass (mouse and trackpad only) */}
+        <script src="/glass-light.js" defer />
       </body>
     </html>
   );
