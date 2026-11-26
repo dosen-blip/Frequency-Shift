@@ -20,7 +20,6 @@ export default function EventsPage() {
     <div className="page-shell">
       <RoomStage room="events" />
       <PageHeader
-        eyebrow={`Events / ${upcoming.length} upcoming`}
         title="Events"
         intro="Our upcoming nights, collaborations, and ticket links."
       />

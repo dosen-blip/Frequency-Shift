@@ -26,7 +26,6 @@ export default async function ArchivePage({ params }: ArchivePageProps) {
       <RoomStage room="night" />
       <header className="archive-detail-hero">
         <div>
-          <p className="eyebrow" data-reveal="up">Archive / {entry.dateLabel}</p>
           <h1 className="detail-title">{entry.title}</h1>
         </div>
         <dl className="detail-meta" data-reveal="up" style={{ "--reveal-delay": "90ms" } as React.CSSProperties}>

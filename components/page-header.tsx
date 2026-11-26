@@ -1,12 +1,10 @@
 type PageHeaderProps = {
-  eyebrow: string;
   title: string;
   intro: string;
   motion?: boolean;
 };
 
 export function PageHeader({
-  eyebrow,
   title,
   intro,
   motion = true,
@@ -14,9 +12,6 @@ export function PageHeader({
   return (
     <header className="page-header">
       <div>
-        <p className="eyebrow" data-reveal={motion ? "up" : undefined}>
-          {eyebrow}
-        </p>
         <h1 className="page-title">{title}</h1>
       </div>
       <p

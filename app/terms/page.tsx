@@ -12,7 +12,6 @@ export default function TermsPage() {
     <div className="page-shell">
       <RoomStage room="legal" />
       <PageHeader
-        eyebrow="Site information"
         title="Terms"
         intro="A short guide to event information, tickets, media, and external links."
       />

@@ -12,7 +12,6 @@ export default function AboutPage() {
     <div className="page-shell about-page">
       <RoomStage room="about" />
       <PageHeader
-        eyebrow="About / Ottawa"
         title="About"
         intro="We’ve been putting on house and techno nights in Ottawa since May 31, 2025."
         motion={false}

@@ -119,13 +119,6 @@ a {
   outline-offset: 3px;
 }
 
-/* after a move between pages the new page's heading takes the focus
-   (components/laser-room/travel.ts), so keyboard and screen reader users start
-   there; it is not a control, so it shows no ring */
-h1[tabindex="-1"]:focus {
-  outline: none;
-}
-
 button,
 input,
 textarea,
@@ -5283,6 +5276,15 @@ html.has-room :focus-visible {
   outline: 2px solid var(--laser-cyan);
   outline-offset: 4px;
   box-shadow: 0 0 1.2rem rgba(30, 200, 255, 0.7);
+}
+
+/* after a move between pages the new page's heading takes the focus
+   (components/laser-room/travel.ts), so keyboard and screen reader users start
+   there; it is not a control, so it shows no ring or glow (phone Safari counts
+   that focus as visible). Stronger than the ring above on purpose. */
+html main h1[tabindex="-1"]:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 /* Text links: a laser underline that runs */

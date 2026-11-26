@@ -32,7 +32,6 @@ export default function ContactPage() {
     <div className="page-shell contact-page">
       <RoomStage room="contact" />
       <PageHeader
-        eyebrow="Bookings / Partners / Press"
         title="Contact"
         intro="For bookings, collaborations, media, or an idea for the next room, send us a message."
       />

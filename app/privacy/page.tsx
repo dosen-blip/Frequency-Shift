@@ -13,7 +13,6 @@ export default function PrivacyPage() {
     <div className="page-shell">
       <RoomStage room="legal" />
       <PageHeader
-        eyebrow="Site information"
         title="Privacy"
         intro="A plain-language note on what this website does—and does not—collect."
       />
