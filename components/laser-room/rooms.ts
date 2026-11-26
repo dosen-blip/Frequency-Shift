@@ -236,7 +236,7 @@ const ROOMS_AS_DRAWN: Record<RoomName, Room> = {
       path: { tilt: 0.6, back: 0.8 },
       rigs: ["flank", "floor"],
     },
-    cards: [[".sets-soon", 0.4]],
+    cards: [],
   },
   about: {
     art: wave,

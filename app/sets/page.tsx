@@ -7,20 +7,18 @@ export const metadata: Metadata = {
   description: "Full recordings of the sets from Frequency Shift nights.",
 };
 
-// Recorded sets from our nights. Until the first ones are uploaded, the page is a lit "Coming soon" sign, set in
-// capitals with the wide spacing of the FREQUENCY SHIFT sign and glowing in its pink.
+// Recorded sets from our nights. Until the first ones are uploaded, the page is its title, marked "(coming soon)",
+// with one line under it.
 export default function SetsPage() {
   return (
     <div className="page-shell sets-page">
       <RoomStage room="sets" />
       <PageHeader
         title="Sets"
+        note="(coming soon)"
         intro="Full recordings of the sets from our nights. We’ll be uploading them here."
         motion={false}
       />
-      <section className="sets-soon" aria-label="Sets coming soon">
-        <p className="sets-soon__sign">Coming soon</p>
-      </section>
     </div>
   );
 }

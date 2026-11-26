@@ -197,7 +197,7 @@ test("renders the primary public routes", async () => {
     ["/events", /Our upcoming nights/],
     ["/archive", /Frequency Shift 001/],
     ["/archive/frequency-shift-001", /frequency-shift-001-01\.webp/],
-    ["/sets", /Coming soon/],
+    ["/sets", /<h1 class="page-title">Sets(<!-- -->)? <span class="page-title__note">\(coming soon\)<\/span><\/h1>/],
     ["/about", /Built for the dancefloor/],
     ["/contact", /send us a message/i],
     ["/events/the-experiment", /Yaan, Valium, Seb B, Balla/],
