@@ -314,14 +314,14 @@ export function installTravel({ scene, base, first, bayOf, signal }: Ctx) {
   }
 
   // ------------------------------------------------------------------ the dock (phones)
-  // Where the dock's light is: over the stop of the page you are at, a little to the right of it on a page deeper
-  // in its section, and off the right end of the rail on the small print (whose bays are further along the wall).
+  // Where the dock's light is: under the stop of the page you are at (or its section's, on a page deeper in it), and
+  // off the right end of the dock on the small print (whose bays are further along the wall).
   function dockLight(): number | null {
     const rail = document.querySelector<HTMLElement>(".dock__rail");
     if (!rail || !rail.offsetWidth) return null;
     const stop = rail.querySelector<HTMLElement>("a.is-active");
     if (!stop) return rail.offsetWidth + 24;
-    return stop.offsetLeft + stop.offsetWidth / 2 + (stop.classList.contains("is-deep") ? 0.35 * 16 + 12 : 0);
+    return stop.offsetLeft + stop.offsetWidth / 2;
   }
   /** the light runs along the rail with the camera, stretching with its speed, as the room smears */
   function runDock(from: number | null, to: number | null, t0: number): Animation[] {
@@ -334,7 +334,7 @@ export function installTravel({ scene, base, first, bayOf, signal }: Ctx) {
       beam.setAttribute("aria-hidden", "true");
       rail.append(beam);
     }
-    const half = 19; // half the light's width (2.4rem)
+    const half = 8; // half the light's width (1rem)
     const move = beam.animate(
       // (`translate`, not `transform`: the streak's `scale` would scale a transform's move with it)
       { translate: [`${from - half}px 0`, `${to - half}px 0`] },

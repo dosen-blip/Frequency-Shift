@@ -119,6 +119,13 @@ a {
   outline-offset: 3px;
 }
 
+/* after a move between pages the new page's heading takes the focus
+   (components/laser-room/travel.ts), so keyboard and screen reader users start
+   there; it is not a control, so it shows no ring */
+h1[tabindex="-1"]:focus {
+  outline: none;
+}
+
 button,
 input,
 textarea,
@@ -5800,11 +5807,11 @@ html.is-travelling body {
 
 /* The phone's dock -------------------------------------------------------------
    On a phone the pages are in a dock along the bottom of the screen, in thumb's
-   reach (components/site-dock.tsx), laid out like the room's wall: a rail with a
-   tick for each page's bay, and a bar of laser light over the page you are at.
-   Going to another page the light runs along the rail with the camera
-   (travel.ts adds `.dock__beam` for the move); a swipe along the dock goes to the
-   page beside this one. */
+   reach (components/site-dock.tsx), in the order they hang along the room's
+   wall: a neon icon for each, and a bar of laser light under the page you are
+   at. Going to another page the light runs to it with the camera (travel.ts
+   adds `.dock__beam` for the move); a swipe along the dock goes to the page
+   beside this one. */
 .dock {
   display: none;
 }
@@ -5844,46 +5851,54 @@ html.is-travelling body {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  /* the wall */
-  .dock__rail::before {
-    position: absolute;
-    top: 0.6rem;
-    right: 6%;
-    left: 6%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2) 10%, rgba(255, 255, 255, 0.2) 90%, transparent);
-    content: "";
-  }
-
+  /* each stop is its page's neon in miniature (see site-dock.tsx), unlit until
+     you are there, then lit in its room's colour */
   .dock a {
+    --tube: var(--laser-pink);
+    --halo: var(--tube);
     position: relative;
     display: grid;
     min-height: 3.5rem;
-    padding: 1.1rem 0 0.5rem;
-    color: rgba(255, 255, 255, 0.56);
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.42);
     place-items: center;
     text-decoration: none;
-    text-transform: uppercase;
-    transition: color 300ms ease;
+    transition:
+      color 300ms ease,
+      filter 300ms ease;
   }
 
-  /* each page's bay */
-  .dock a::before {
-    position: absolute;
-    top: 0.42rem;
-    left: 50%;
-    width: 1px;
-    height: 0.38rem;
-    background: rgba(255, 255, 255, 0.28);
-    content: "";
+  .dock a[data-stop="events"] {
+    --tube: #1ec8ff;
+  }
+
+  .dock a[data-stop="archive"] {
+    --tube: #d08bff;
+  }
+
+  /* the wave runs from pink to cyan on its wall */
+  .dock a[data-stop="about"] {
+    --tube: #ff4fa8;
+    --halo: var(--laser-cyan);
+  }
+
+  .dock a[data-stop="contact"] {
+    --tube: #ff4fa8;
+  }
+
+  .dock__icon {
+    width: 1.45rem;
+    height: 1.45rem;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.6;
   }
 
   .dock a.is-active {
-    color: #fff;
-    text-shadow: 0 0 0.7em color-mix(in srgb, var(--laser-pink) 85%, transparent);
+    color: color-mix(in srgb, var(--tube) 40%, #fff);
+    filter: drop-shadow(0 0 1.5px var(--tube)) drop-shadow(0 0 6px color-mix(in srgb, var(--halo) 80%, transparent));
   }
 
   .dock a:focus-visible {
@@ -5892,26 +5907,23 @@ html.is-travelling body {
     border-radius: 0.9rem;
   }
 
-  /* the camera: laser light on the rail over the page you are at; a page
-     deeper in a section has it a little to the right of its section's stop */
+  /* a short bar of laser light under the page you are at; it runs to the next
+     stop with the camera when you move */
   .dock a.is-active::after,
   .dock__beam {
     position: absolute;
-    top: calc(0.6rem - 1.5px);
-    left: calc(50% - 1.2rem);
-    width: 2.4rem;
-    height: 3px;
-    border-radius: 3px;
+    bottom: 0.4rem;
+    left: calc(50% - 0.5rem);
+    width: 1rem;
+    height: 2px;
+    border-radius: 2px;
     background: linear-gradient(90deg, var(--laser-pink), var(--laser-cyan));
-    box-shadow:
-      0 0 0.45rem var(--laser-pink),
-      0 0 1.4rem color-mix(in srgb, var(--laser-pink) 60%, transparent);
+    box-shadow: 0 0 0.4rem var(--laser-pink);
     content: "";
   }
 
   .dock a.is-deep::after {
-    left: calc(50% + 0.35rem);
-    width: 1.5rem;
+    opacity: 0.55;
   }
 
   .dock__beam {
